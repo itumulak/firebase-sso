@@ -43,18 +43,31 @@ class WP_Firebase_Admin {
 		if ( isset( $_GET['page'] ) && $_GET['page'] == self::MENU_SLUG ) {
 			wp_enqueue_style( 'wp_firebase', plugin_dir_url( __FILE__ ) . 'styles/admin.css', [], '', 'all' );
 
+			/** Firebase */
 			wp_register_script( self::JS_FIREBASE, 'https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js', [], '7.15.0', true );
 			wp_register_script( self::JS_FIREBASE_AUTH, 'https://www.gstatic.com/firebasejs/7.15.0/firebase-auth.js', [ self::JS_FIREBASE ], '7.15.0', true );
+			/**  */
+
+            /** Toast */
+			wp_enqueue_script( 'toast', plugin_dir_url( __FILE__ ) . 'js/jquery.toast.min.js', ['jquery'], '', 'true' );
+			wp_enqueue_style( 'toast', plugin_dir_url(__FILE__) . 'styles/jquery.toast.min.css', [], '', 'all' );
+			/**  */
+
+			/** Admin main */
 			wp_enqueue_script( self::JS_MAIN, plugin_dir_url( __FILE__ ) . 'js/admin.js', [
 				'jquery',
+				'toast',
 				self::JS_FIREBASE_AUTH
 			], '1.0.0', 'true' );
+			/**  */
 
+            /** Codemirror */
 			$cm_settings['codeEditor'] = wp_enqueue_code_editor( [ 'type' => 'text/javascript' ] );
 			wp_localize_script( self::JS_MAIN, 'cm_settings', $cm_settings );
 
 			wp_enqueue_script( 'wp-theme-plugin-editor' );
 			wp_enqueue_style( 'wp-codemirror' );
+			/**  */
 		}
 	}
 

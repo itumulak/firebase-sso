@@ -1,7 +1,6 @@
 jQuery(document).ready((_) => {
-    wp.codeEditor.initialize(_('#fancy-textarea'), cm_settings);
-
-    console.log(location.hash);
+    _('#configuration-textarea').val(_.trim(_('#configuration-textarea').val()));
+    wp.codeEditor.initialize(_('#configuration-textarea'), cm_settings);
 
     if (location.hash.substr(1))
         _(`#${location.hash.substr(1)}`).addClass('nav-tab-active');
@@ -11,7 +10,7 @@ jQuery(document).ready((_) => {
     _('.nav-tab-wrapper a').each((index, element) => {
         if ( _(element).hasClass('nav-tab-active') == false )
             _(`#${_(element).attr('id')}-tab`).css('display', 'none');
-    })
+    });
 
     _('.nav-tab').on('click', (element) => {
         _('.nav-tab').removeClass('nav-tab-active');
@@ -19,7 +18,30 @@ jQuery(document).ready((_) => {
 
         _('.tabs-holder .group').css('display', 'none');
         _(`#${_(element.target).attr('id')}-tab`).css('display', 'block');
+    });
 
-        return;
-    })
+    _('#configuration-code').submit((event) => {
+      event.preventDefault();
+
+      const $configuration = _('#configuration-textarea').val();
+
+      _.post(ajaxurl, {action: 'firebase_config', config: $configuration}, (e, textStatus, jqXHR) => {
+          if (e.success == true) {
+
+          }
+      });
+    });
+
+    _('#sign-in-providers-form').submit((event) => {
+      event.preventDefault();
+      const $signInProviders = [];
+
+        _('#sign-in-providers-form input:checked').each((index, element) => {
+            $signInProviders.push(_(element).attr('id'));
+        });
+
+        _.post(ajaxurl, {action: 'firebase_providers', enabled_providers: $signInProviders}, (e, textStatus, jqXHR) => {
+
+        });
+    });
 });

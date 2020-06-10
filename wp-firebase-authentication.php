@@ -65,7 +65,39 @@ class WP_Firebase {
             </h2>
             <div class="tabs-holder">
                 <div id="sign-in-providers-tab" class="group">
-                    hello
+                    <div id="sign-in-providers-list">
+                        <table class="form-table">
+                            <tbody>
+                            <tr>
+                                <th scope="row">
+                                    <label for="email-password">Email/Password</label>
+                                </th>
+                                <td>
+                                    <input type="checkbox" id="email-password" name="sign-in-providers[emailpassword]">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label for="facebook">Facebook</label>
+                                </th>
+                                <td>
+                                    <input type="checkbox" id="facebook" name="sign-in-providers[facebook]">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label for="google">Google</label>
+                                </th>
+                                <td>
+                                    <input type="checkbox" id="google" name="sign-in-providers[google]">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            <button type="submit" class="button button-primary">Save</button>
+                        </p>
+                    </div>
                 </div>
                 <div id="configurations-tab" class="group">
                     <div id="config-textarea-wrapper">

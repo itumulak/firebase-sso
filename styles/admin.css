@@ -2,6 +2,10 @@
     margin: 1em auto;
 }
 
+.form-table label {
+    display: block;
+}
+
 #config-textarea-wrapper {
     width: calc(100% - 18em);
     display: inline-block;
@@ -10,4 +14,10 @@
 #config-description-wrapper {
     width: 16em;
     float: right;
+}
+
+#sign-in-providers-tab {
+    background-color: #FFF;
+    width: 20em;
+    padding: 10px;
 }

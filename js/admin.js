@@ -1,7 +1,4 @@
 jQuery(document).ready((_) => {
-    _('#configuration-textarea').val(_.trim(_('#configuration-textarea').val()));
-    wp.codeEditor.initialize(_('#configuration-textarea'), cm_settings);
-
     if ( location.hash.substr(1) )
         _(`#${location.hash.substr(1)}`).addClass('nav-tab-active');
     else
@@ -20,12 +17,21 @@ jQuery(document).ready((_) => {
         _(`#${_(element.target).attr('id')}-tab`).css('display', 'block');
     });
 
-    _('#configuration-code').submit((event) => {
+    _('#configuration-fields').submit((event) => {
         event.preventDefault();
+        const $configuration = {};
 
-        const $configuration = _('#configuration-textarea').val();
+        _('#configuration-fields input').each((index, element) => {
+            if ( _(element).val() ) {
+                const $key = _(element).attr('id');
+                const $val = _(element).val();
+                $configuration[$key] = $val;
+            }
+        });
 
-        _.post(ajaxurl, { action: 'firebase_config', config: $configuration }, (e, textStatus, jqXHR) => {
+        $configuration.action = 'firebase_config';
+
+        _.post(ajaxurl, $configuration, (e, textStatus, jqXHR) => {
             if ( e.success == true ) {
                 _.toast({
                     heading: 'Success',

@@ -11,11 +11,6 @@
     display: inline-block;
 }
 
-#config-description-wrapper {
-    width: 16em;
-    float: right;
-}
-
 #sign-in-providers-tab {
     background-color: #FFF;
     width: 20em;

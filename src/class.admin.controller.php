@@ -18,10 +18,7 @@ class WP_Firebase_Admin extends WP_Firebase {
 	}
 
 	public function admin_menu() {
-		add_menu_page( 'WP Firebase', 'WP Firebase', 'manage_options', self::MENU_SLUG, [
-			$this,
-			'admin_page'
-		], '', 9 );
+		add_menu_page( 'WP Firebase', 'WP Firebase', 'manage_options', self::MENU_SLUG, [$this, 'admin_page'], '', 9 );
 	}
 
 	public function admin_scripts() {
@@ -66,7 +63,7 @@ class WP_Firebase_Admin extends WP_Firebase {
                 <div id="sign-in-providers-tab" class="group">
                     <div id="sign-in-providers-list">
                         <form id="sign-in-providers-form">
-							<?php $enabledProviders = $this->get_providers(); ?>
+							<?php $enabledProviders = self::get_providers(); ?>
                             <table class="form-table">
                                 <tbody>
                                 <tr>
@@ -114,7 +111,7 @@ class WP_Firebase_Admin extends WP_Firebase {
                             <h1>Firebase Configurations</h1>
                             <p>Get a copy, and paste your <a target="_blank" href="https://firebase.google.com/docs/web/setup?authuser=0#config-object">Firebase config object</a> found at your project settings.</p>
 	                        <?php
-	                        $config       = $this->get_config();
+	                        $config       = self::get_config();
 	                        $configFields = [
 		                        'apiKey'             => 'API Key',
 		                        'authDomain'         => 'Authorized Domain',
@@ -153,31 +150,31 @@ class WP_Firebase_Admin extends WP_Firebase {
 		<?php
 	}
 
-	public function ajax_save_config() {
+	public static function ajax_save_config() {
 		$config = $_REQUEST;
 		unset( $config['action'] );
 
 		if ( $config ) {
-			$this->save_config( $config );
+			self::save_config( $config );
 			wp_send_json_success();
 		} else {
 			wp_send_json_error();
 		}
 	}
 
-	private function save_config( $config ) {
+	private static function save_config( $config ) {
 		update_option( self::OPTION_KEY_CONFIG, $config );
 	}
 
-	public function get_config() {
+	public static function get_config() {
 		return get_option( self::OPTION_KEY_CONFIG );
 	}
 
-	public function ajax_save_providers() {
+	public static function ajax_save_providers() {
 		$providers = $_REQUEST['enabled_providers'];
 
 		if ( $providers ) {
-			$this->save_providers( $providers );
+			self::save_providers( $providers );
 			wp_send_json_success();
 
 		} else {
@@ -185,11 +182,11 @@ class WP_Firebase_Admin extends WP_Firebase {
 		}
 	}
 
-	private function save_providers( $providers ) {
+	private static function save_providers( $providers ) {
 		update_option( self::OPTION_KEY_PROVIDERS, $providers );
 	}
 
-	public function get_providers() {
+	public static function get_providers() {
 		return get_option( self::OPTION_KEY_PROVIDERS );
 	}
 }

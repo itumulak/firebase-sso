@@ -2,7 +2,7 @@ jQuery(document).ready((_) => {
     console.log(wp_firebase);
 
     firebase.initializeApp(wp_firebase);
-    firebase.auth().signInWithEmailAndPassword('edden87@gmail.com', 'ian052887!!')
+    firebase.auth().signInWithEmailAndPassword('silverhythem@yahoo.com', 'ian052887!!')
         .then((response) => {
             if (response) {
                 const $userInfo = {
@@ -24,9 +24,6 @@ jQuery(document).ready((_) => {
 
                     }
                 });
-            }
-            else {
-              console.log('what');
             }
         })
         .catch((error) => {

@@ -1,18 +1,33 @@
 <?php
 namespace Firebase;
+use Kreait\Firebase\Factory;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
 class WP_Firebase_Main extends WP_Firebase {
+	private $firebase;
+	private $auth;
+	private $config;
 
 	function __construct() {
+		error_reporting( E_ALL );
+		ini_set( "display_errors", "On" );
+
+
 		add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ] );
 		add_action( 'wp_ajax_firebase_login', [ $this, 'ajax_handle_verification' ] );
 		add_action( 'wp_ajax_nopriv_firebase_login', [ $this, 'ajax_handle_verification' ] );
 		add_action( 'wp_ajax_firebase_error', [ $this, 'ajax_handle_error' ] );
 		add_action( 'wp_ajax_nopriv_firebase_error', [ $this, 'ajax_handle_error' ] );
+
+//		$this->config =
+
+		if ( $this->config ) { // TODO
+			$this->firebase =  (new Factory)->withServiceAccount( (object) $this->config );
+			$this->auth = $this->firebase->createAuth();
+		}
 	}
 
 	public function scripts() {
@@ -113,25 +128,24 @@ class WP_Firebase_Main extends WP_Firebase {
 	 * @return array
 	 */
 	private function email_pass_auth( $user ) {
-		if ( $userId = $this->verify_user( $user['email'] ) )
-		{
-			// Proceed logging in...
-			wp_set_auth_cookie( $userId );
-			$response = [
-				'code' => 200,
-				'message' => 'success'
-			];
-		}
-		else {
+
+		$userId = $this->verify_user( $user['email'] );
+
+		if ( ! $userId ) {
 			// Login exist in Firebase but no wp credentials
 			// Let's create a new user
-			$response = [
-				'code' => 400,
-				'message' => 'failed'
-			];
+			$userId = wp_insert_user(
+				[
+					'user_email' => $user['email'],
+					'user_login' => explode( '@', $user['email'] )[0]
+				]
+			);
 		}
 
-		return $response;
+		// Proceed logging in...
+		wp_set_auth_cookie( $userId );
+
+		return [ 'code' => 200, 'message' => 'success' ];
 	}
 
 	private function google_auth( $response ) {

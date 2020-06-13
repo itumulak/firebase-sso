@@ -16,6 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
+require __DIR__ . '/vendor/autoload.php';
 require_once 'src/class.default.php';
 require_once 'src/class.admin.controller.php';
 require_once 'src/class.main.controller.php';

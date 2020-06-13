@@ -108,19 +108,21 @@ class WP_Firebase_Admin extends WP_Firebase {
                 <div id="configurations-tab" class="group">
                     <div id="config-textarea-wrapper">
                         <form id="configuration-fields">
-                            <h1>Firebase Configurations</h1>
+                            <h1>Service Account Credentials</h1>
                             <p>Get a copy, and paste your <a target="_blank" href="https://firebase.google.com/docs/web/setup?authuser=0#config-object">Firebase config object</a> found at your project settings.</p>
 	                        <?php
 	                        $config       = self::get_config();
 	                        $configFields = [
-		                        'apiKey'             => 'API Key',
-		                        'authDomain'         => 'Authorized Domain',
-		                        'databaseURL'        => 'Database URL',
-		                        'projectId'          => 'Project ID',
-		                        'storageBucket'      => 'Storage Bucket',
-		                        'messangingSenderId' => 'Messaging Sender ID',
-		                        'appId'              => 'App ID',
-		                        'measurementId'      => 'Measurement ID'
+		                        'type'                        => 'Type',
+		                        'project_id'                  => 'Project ID',
+		                        'private_key_id'              => 'Private Key ID',
+		                        'private_key'                 => 'Private Key',
+		                        'client_email'                => 'Client Email',
+		                        'client_id'                   => 'Client ID',
+		                        'auth_uri'                    => 'Auth URI',
+		                        'token_uri'                   => 'Token URI',
+		                        'auth_provider_x509_cert_url' => 'Auth Provider Cert. URL',
+		                        'client_x509_cert_url'        => 'Client Cert. URL'
 	                        ];
 	                        ?>
                             <table class="form-table">
@@ -131,8 +133,14 @@ class WP_Firebase_Admin extends WP_Firebase {
                                             <label for="<?= $key ?>"><?= $label ?></label>
                                         </th>
                                         <td>
-                                            <input name="<?= $key ?>" type="text" id="<?= $key ?>" class="regular-text"
-	                                            <?= array_key_exists($key, $config) ? 'value="'.$config[$key].'"' : '' ?>>
+	                                        <?php if ( $key == 'private_key' ) : ?>
+                                                <textarea name="<?= $key ?>" id="<?= $key ?>" rows="10" cols="40" class="code">
+                                                     <?= array_key_exists( $key, $config ) ? $config[ $key ] : '' ?>
+                                                </textarea>
+                                            <?php else: ?>
+                                                <input name="<?= $key ?>" type="text" id="<?= $key ?>" class="regular-text"
+	                                                <?= array_key_exists( $key, $config ) ? 'value="' . $config[ $key ] . '"' : '' ?>>
+	                                        <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -150,7 +158,7 @@ class WP_Firebase_Admin extends WP_Firebase {
 		<?php
 	}
 
-	public static function ajax_save_config() {
+	public function ajax_save_config() {
 		$config = $_REQUEST;
 		unset( $config['action'] );
 
@@ -170,7 +178,7 @@ class WP_Firebase_Admin extends WP_Firebase {
 		return get_option( self::OPTION_KEY_CONFIG );
 	}
 
-	public static function ajax_save_providers() {
+	public function ajax_save_providers() {
 		$providers = $_REQUEST['enabled_providers'];
 
 		if ( $providers ) {

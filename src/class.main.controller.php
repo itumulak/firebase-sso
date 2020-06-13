@@ -6,28 +6,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-class WP_Firebase_Main extends WP_Firebase {
-	private $firebase;
-	private $auth;
-	private $config;
+class WP_Firebase_Main extends WP_Firebase_Auth {
 
 	function __construct() {
-		error_reporting( E_ALL );
-		ini_set( "display_errors", "On" );
-
-
 		add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ] );
 		add_action( 'wp_ajax_firebase_login', [ $this, 'ajax_handle_verification' ] );
 		add_action( 'wp_ajax_nopriv_firebase_login', [ $this, 'ajax_handle_verification' ] );
 		add_action( 'wp_ajax_firebase_error', [ $this, 'ajax_handle_error' ] );
 		add_action( 'wp_ajax_nopriv_firebase_error', [ $this, 'ajax_handle_error' ] );
+		
+		add_action( 'init', function () {
+			if ( $_REQUEST['testing'] ) {
+				error_reporting( E_ALL );
+				ini_set( "display_errors", "On" );
 
-//		$this->config =
+				$config = WP_Firebase_Admin::get_config();
 
-		if ( $this->config ) { // TODO
-			$this->firebase =  (new Factory)->withServiceAccount( (object) $this->config );
-			$this->auth = $this->firebase->createAuth();
-		}
+				echo '<pre>';
+				print_r($config);
+				echo '</pre>';
+
+				echo '<pre>';
+				print_r( json_encode($config) );
+				echo '</pre>';
+
+				$user = new WP_Firebase_Auth();
+
+				echo '<pre>';
+				print_r($user->auth->signInWithEmailAndPassword('edden87@gmail.com', 'ian052887!!')->data());
+				echo '</pre>';
+
+				echo 'hello world';
+
+				wp_die();
+			}
+		} );
 	}
 
 	public function scripts() {
@@ -47,7 +60,7 @@ class WP_Firebase_Main extends WP_Firebase {
 		$response = $_REQUEST;
 
 		if ( $response ) {
-			$output = $this->handle_verification( $response['user'] );
+			$output = self::handle_verification( $response['user'] );
 
 			if ( $output ) {
 				wp_send_json_success( $output );
@@ -63,97 +76,9 @@ class WP_Firebase_Main extends WP_Firebase {
 		$response = $_REQUEST;
 
 		if ( $response ) {
-			$output = $this->handle_error( $response );
+			$output = self::handle_error( $response );
 			wp_send_json_error( $output );
 		}
-	}
-
-	/**
-	 * Handles sign-in method
-	 * @param $response
-	 */
-	public function handle_verification( $response ) {
-		if ( $response['operationType'] ) {
-			switch ( $response['operationType'] ) {
-				case 'signIn':
-					$response = $this->email_pass_auth( $response );
-					break;
-			}
-		}
-
-		return ['message' => $response['message'], 'status' => $response['code']];
-	}
-
-	/**
-	 * Handles error response
-	 * @param $response
-	 *
-	 * @return array
-	 */
-	public function handle_error( $response ) {
-		$message = '';
-		$status = 400;
-
-		if ( $response['code'] ) {
-			switch ( $response['code'] ) {
-				case 'auth/user-disabled':
-				case 'auth/user-not-found':
-				case 'auth/wrong-password':
-				case 'auth/invalid-email':
-					$message = $response['message'];
-					break;
-				default:
-					$message = 'An error has occured. Please contact admin.';
-			}
-		}
-
-		return ['message' => $message, 'status' => $status];
-	}
-
-	/**
-	 * Verify if email exist
-	 *
-	 * @param $email
-	 *
-	 * @return mixed
-	 */
-	public function verify_user( $email ) {
-		return email_exists( $email );
-	}
-
-	/**
-	 * Sign-in user when verifying email
-	 * @param $user
-	 *
-	 * @return array
-	 */
-	private function email_pass_auth( $user ) {
-
-		$userId = $this->verify_user( $user['email'] );
-
-		if ( ! $userId ) {
-			// Login exist in Firebase but no wp credentials
-			// Let's create a new user
-			$userId = wp_insert_user(
-				[
-					'user_email' => $user['email'],
-					'user_login' => explode( '@', $user['email'] )[0]
-				]
-			);
-		}
-
-		// Proceed logging in...
-		wp_set_auth_cookie( $userId );
-
-		return [ 'code' => 200, 'message' => 'success' ];
-	}
-
-	private function google_auth( $response ) {
-
-	}
-
-	private function facebook_auth( $response ) {
-
 	}
 }
 

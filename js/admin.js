@@ -22,29 +22,35 @@ jQuery(document).ready((_) => {
         const $configuration = {};
 
         _('#configuration-fields input').each((index, element) => {
-            if ( _(element).val() ) {
-                const $key = _(element).attr('id');
-                const $val = _(element).val();
-                $configuration[$key] = $val;
+            const $key = _(element).attr('id');
+
+            if (_(element).is('textarea')) {
+                $configuration[$key] = _(element).text();
             }
+            else {
+                $configuration[$key] = _(element).val();
+            }
+
+            console.log(_(element).val());
         });
 
         $configuration.action = 'firebase_config';
+        console.log($configuration);
 
-        _.post(ajaxurl, $configuration, (e, textStatus, jqXHR) => {
-            if ( e.success == true ) {
-                _.toast({
-                    heading: 'Success',
-                    text: 'Config updated.',
-                    showHideTransition: 'slide',
-                    icon: 'success',
-                    position: {
-                        top: 40,
-                        right: 80
-                    }
-                });
-            }
-        });
+//        _.post(ajaxurl, $configuration, (e, textStatus, jqXHR) => {
+//            if ( e.success == true ) {
+//                _.toast({
+//                    heading: 'Success',
+//                    text: 'Config updated.',
+//                    showHideTransition: 'slide',
+//                    icon: 'success',
+//                    position: {
+//                        top: 40,
+//                        right: 80
+//                    }
+//                });
+//            }
+//        });
     });
 
     _('#sign-in-providers-form').submit((event) => {

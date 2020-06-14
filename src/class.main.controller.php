@@ -1,6 +1,7 @@
 <?php
 namespace Firebase;
 use Kreait\Firebase\Factory;
+use function Sodium\add;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -16,32 +17,9 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		add_action( 'wp_ajax_nopriv_firebase_error', [ $this, 'ajax_handle_error' ] );
 		
 		add_filter( 'authenticate', [$this, 'email_pass_auth'], 10, 3 );
-		add_filter( '$shake_error_codes', 'error_codes', 10);
-		
-//		add_action( 'init', function () {
-//			if ( $_REQUEST['testing'] ) {
-//
-//				error_reporting( E_ALL );
-//				ini_set( "display_errors", "On" );
-//
-//				$firebase = new WP_Firebase_Auth();
-//				$request = $firebase->signInWithEmailAndPassword('edden87@gmail.com', 'sdaaassfsdf');
-//
-//				echo '<pre>';
-//				print_r($request);
-//				echo '</pre>';
-//
-//				echo '<pre>';
-//				print_r(wp_get_current_user()->data->user_email);
-//				echo '</pre>';
-//
-//				echo '<pre>';
-//				print_r( new \WP_Error()->get_error_messages('invalid_email'));
-//				echo '</pre>';
-//
-//				wp_die();
-//			}
-//		} );
+		add_filter( 'wp_login_errors', [$this, 'modify_incorrect_password'], 10, 2);
+//		add_filter( 'shake_error_codes', [$this, 'shake_error_codes'], 10);
+//		add_filter( 'wp_authenticate_user', [$this, 'auth_user'], 10, 2);
 	}
 
 	public function scripts() {
@@ -59,7 +37,7 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 
 	public function email_pass_auth( $user, $emailAddress, $password ) {
 
-		if ( $emailAddress ) {
+		if ( $emailAddress && is_email( $emailAddress ) ) { // Firebase only accepts email address to auth
 			$auth = new WP_Firebase_Auth();
 			$userInfo = $auth->signInWithEmailAndPassword( $emailAddress, $password );
 
@@ -86,23 +64,50 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		return $user;
 	}
 
-	public function shake_error_codes( $error_codes ) {
-		$error_codes[] = 'firebase_error';
+	public function modify_incorrect_password( $errors, $redirect_to ) {
+		if ( isset( $errors->errors['incorrect_password'] ) ) {
+			$tmp = $errors->errors;
 
-		return $error_codes;
+			foreach( $tmp['incorrect_password'] as $index => $msg )
+			{
+				$tmp['incorrect_password'][$index] = __( '<strong>Error</strong>: The password you entered is incorrect or too many attempts.' );
+			}
+
+			$errors->errors = $tmp;
+
+			unset( $tmp );
+		}
+
+		return $errors;
 	}
 
-	public function wp_firebase_error_mapping() {
-		$error_codes = [
-			'EMAIL_NOT_FOUND' => 'invalid_email',
-			'INVALID_EMAIL' => 'invalid_email',
-			'INVALID_PASSWORD' => 'incorrect_password',
-			'MISSING_PASSWORD' => 'empty_password',
-			'TOO_MANY_ATTEMPTS_TRY_LATER' => 'too_many_password_attempt'
-		];
-
-		return $error_codes;
-	}
+//	public function shake_error_codes( $error_codes ) {
+//		$error_codes[] = 'too_many_password_attempt';
+//
+//		return $error_codes;
+//	}
+//
+//	public function auth_user( $user, $password ) {
+//		return new \WP_Error('too_many_password_attempt', __( '<strong>Error</strong>: Too many attempts.'));
+//	}
+//
+//	public function wp_firebase_error_mapping() {
+//		$error_codes = [
+//			'EMAIL_NOT_FOUND' => 'invalid_email',
+//			'INVALID_EMAIL' => 'invalid_email',
+//			'INVALID_PASSWORD' => 'incorrect_password',
+//			'MISSING_PASSWORD' => 'empty_password',
+//			'TOO_MANY_ATTEMPTS_TRY_LATER' => 'too_many_password_attempt'
+//		];
+//
+//		return $error_codes;
+//	}
+//
+//	public function wp_firebase_error_labels() {
+//		$labels = [
+//			'too_many_password_attempt' => __( '<strong>Error</strong>: The password you entered is incorrect or too many attempts.')
+//		];
+//	}
 
 	public function ajax_handle_verification() {
 		$response = $_REQUEST;

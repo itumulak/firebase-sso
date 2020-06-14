@@ -134,9 +134,7 @@ class WP_Firebase_Admin extends WP_Firebase {
                                         </th>
                                         <td>
 	                                        <?php if ( $key == 'private_key' ) : ?>
-                                                <textarea name="<?= $key ?>" id="<?= $key ?>" rows="10" cols="40" class="code">
-                                                     <?= array_key_exists( $key, $config ) ? $config[ $key ] : '' ?>
-                                                </textarea>
+                                                <textarea name="<?= $key ?>" id="<?= $key ?>" rows="10" cols="40" class="code"><?= array_key_exists( $key, $config ) ? trim($config[ $key ]) : '' ?></textarea>
                                             <?php else: ?>
                                                 <input name="<?= $key ?>" type="text" id="<?= $key ?>" class="regular-text"
 	                                                <?= array_key_exists( $key, $config ) ? 'value="' . $config[ $key ] . '"' : '' ?>>

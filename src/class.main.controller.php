@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class WP_Firebase_Main extends WP_Firebase_Auth {
 
+
+
 	function __construct() {
 		add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ] );
 
@@ -20,8 +22,9 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		/** Google */
 		add_action( 'wp_ajax_firebase_google_login', [ $this, 'google_auth_ajax' ] );
 		add_action( 'wp_ajax_nopriv_firebase_google_login', [ $this, 'google_auth_ajax' ] );
-		add_action( 'wp logout', 'google_logout' );
 		/**  */
+
+		add_action( 'wp_logout', [$this, 'delete_cookie'] );
 
 //		add_action( 'wp_ajax_firebase_login', [ $this, 'ajax_handle_verification' ] );
 //		add_action( 'wp_ajax_nopriv_firebase_login', [ $this, 'ajax_handle_verification' ] );
@@ -187,7 +190,12 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	}
 
 	private static function set_cookie() {
-		setcookie( 'wp_firebase', 1, time() + 3600, COOKIEPATH, COOKIE_DOMAIN );
+		setcookie( self::COOKIE, 1, time() + 3600, COOKIEPATH, COOKIE_DOMAIN );
+	}
+
+	public static function delete_cookie() {
+		setcookie( self::COOKIE, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
+		setcookie( self::COOKIE, ' ', time() - YEAR_IN_SECONDS, SITECOOKIEPATH, COOKIE_DOMAIN );
 	}
 }
 

@@ -10,7 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WP_Firebase_Admin extends WP_Firebase {
 
 	function __construct() {
-
 		add_action( 'admin_menu', [ $this, 'admin_menu' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
 		add_action( 'wp_ajax_firebase_config', [ $this, 'ajax_save_config' ] );
@@ -108,40 +107,34 @@ class WP_Firebase_Admin extends WP_Firebase {
                 <div id="configurations-tab" class="group">
                     <div id="config-textarea-wrapper">
                         <form id="configuration-fields">
-                            <h1>Service Account Credentials</h1>
+                            <h1>Firebase Configurations</h1>
                             <p>Get a copy, and paste your <a target="_blank" href="https://firebase.google.com/docs/web/setup?authuser=0#config-object">Firebase config object</a> found at your project settings.</p>
-	                        <?php
-	                        $config       = self::get_config();
-	                        $configFields = [
-		                        'type'                        => 'Type',
-		                        'project_id'                  => 'Project ID',
-		                        'private_key_id'              => 'Private Key ID',
-		                        'private_key'                 => 'Private Key',
-		                        'client_email'                => 'Client Email',
-		                        'client_id'                   => 'Client ID',
-		                        'auth_uri'                    => 'Auth URI',
-		                        'token_uri'                   => 'Token URI',
-		                        'auth_provider_x509_cert_url' => 'Auth Provider Cert. URL',
-		                        'client_x509_cert_url'        => 'Client Cert. URL'
-	                        ];
-	                        ?>
+		                    <?php
+		                    $config       = $this->get_config();
+		                    $configFields = [
+			                    'apiKey'             => 'API Key',
+			                    'authDomain'         => 'Authorized Domain',
+			                    'databaseURL'        => 'Database URL',
+			                    'projectId'          => 'Project ID',
+			                    'storageBucket'      => 'Storage Bucket',
+			                    'messangingSenderId' => 'Messaging Sender ID',
+			                    'appId'              => 'App ID',
+			                    'measurementId'      => 'Measurement ID'
+		                    ];
+		                    ?>
                             <table class="form-table">
                                 <tbody>
-                                <?php foreach ( $configFields as $key => $label ) : ?>
+			                    <?php foreach ( $configFields as $key => $label ) : ?>
                                     <tr>
                                         <th scope="row">
                                             <label for="<?= $key ?>"><?= $label ?></label>
                                         </th>
                                         <td>
-	                                        <?php if ( $key == 'private_key' ) : ?>
-                                                <textarea name="<?= $key ?>" id="<?= $key ?>" rows="10" cols="40" class="code"><?= array_key_exists( $key, $config ) ? trim($config[ $key ]) : '' ?></textarea>
-                                            <?php else: ?>
-                                                <input name="<?= $key ?>" type="text" id="<?= $key ?>" class="regular-text"
-	                                                <?= array_key_exists( $key, $config ) ? 'value="' . $config[ $key ] . '"' : '' ?>>
-	                                        <?php endif; ?>
+                                            <input name="<?= $key ?>" type="text" id="<?= $key ?>" class="regular-text"
+							                    <?= array_key_exists($key, $config) ? 'value="'.$config[$key].'"' : '' ?>>
                                         </td>
                                     </tr>
-                                <?php endforeach; ?>
+			                    <?php endforeach; ?>
 
                                 </tbody>
                             </table>

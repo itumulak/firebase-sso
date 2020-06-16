@@ -19,7 +19,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 error_reporting( E_ALL );
 ini_set( "display_errors", "On" );
 
-require __DIR__ . '/vendor/autoload.php';
 require_once 'src/class.default.php';
 require_once 'src/class.authentication.controller.php';
 require_once 'src/class.admin.controller.php';

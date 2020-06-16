@@ -11,10 +11,22 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 
 	function __construct() {
 		add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ] );
-		add_action( 'wp_ajax_firebase_login', [ $this, 'ajax_handle_verification' ] );
-		add_action( 'wp_ajax_nopriv_firebase_login', [ $this, 'ajax_handle_verification' ] );
-		add_action( 'wp_ajax_firebase_error', [ $this, 'ajax_handle_error' ] );
-		add_action( 'wp_ajax_nopriv_firebase_error', [ $this, 'ajax_handle_error' ] );
+
+		/** Email Sign-in */
+		add_action( 'login_enqueue_scripts', [ $this, 'scripts' ] );
+		add_filter('login_message', [$this, 'signin_auth_buttons']);
+		/**  */
+
+		/** Google */
+		add_action( 'wp_ajax_firebase_google_login', [ $this, 'google_auth_ajax' ] );
+		add_action( 'wp_ajax_nopriv_firebase_google_login', [ $this, 'google_auth_ajax' ] );
+		add_action( 'wp logout', 'google_logout' );
+		/**  */
+
+//		add_action( 'wp_ajax_firebase_login', [ $this, 'ajax_handle_verification' ] );
+//		add_action( 'wp_ajax_nopriv_firebase_login', [ $this, 'ajax_handle_verification' ] );
+//		add_action( 'wp_ajax_firebase_error', [ $this, 'ajax_handle_error' ] );
+//		add_action( 'wp_ajax_nopriv_firebase_error', [ $this, 'ajax_handle_error' ] );
 		
 		add_filter( 'authenticate', [$this, 'email_pass_auth'], 10, 3 );
 		add_filter( 'wp_login_errors', [$this, 'modify_incorrect_password'], 10, 2);
@@ -32,7 +44,10 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		wp_enqueue_script( self::JS_MAIN, plugin_dir_url( __DIR__) . 'js/main.js', ['jquery', self::JS_FIREBASE_AUTH], '', 'true' );
 		wp_localize_script( self::JS_MAIN, 'wp_firebase', WP_Firebase_Admin::get_config() );
 		wp_localize_script( self::JS_MAIN, 'firebase_ajaxurl', admin_url( 'admin-ajax.php' ) );
+
+		wp_enqueue_style( 'firebase_login', plugin_dir_url( __DIR__ ) . 'styles/login.css', [], '', 'all' );
 		/**  */
+
 	}
 
 	public function email_pass_auth( $user, $emailAddress, $password ) {
@@ -43,25 +58,34 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 
 			if ( ! isset( $userInfo['error'] ) )
 			{
-				$userId = email_exists( $userInfo['email'] );
-
-				if ( ! $userId ) {
-					// Login exist in Firebase but no wp credentials
-					// Let's create a new user
-					$userId = wp_insert_user(
-						[
-							'user_email' => $userInfo['email'],
-							'user_login' => explode( '@', $userInfo['email'] )[0],
-							'user_pass' => $password
-						]
-					);
-				}
-
-				$user = get_user_by( 'id', $userId );
+				$user = self::auth_user( $userInfo['email'] );
+				self::set_cookie();
 			}
 		}
 
 		return $user;
+	}
+
+	public function google_auth_ajax() {
+		$token = $_REQUEST['google_token'];
+		$userEmail = $_REQUEST['email'];
+
+		if ( $userEmail ) {
+			$user = self::auth_user( $userEmail );
+
+			if ( ! is_wp_error( $user )) {
+				$redirectUrl = self::login_user( $user->ID );
+
+				wp_send_json_success( [ 'url' => $redirectUrl ] );
+			}
+		}
+
+		wp_send_json_error();
+	}
+
+	public static function signin_auth_buttons( $message ) {
+		return $message .
+		       '<p><button name="wp-firebase-google-sign-in" id="wp-firebase-google-sign-in"><img src="'. plugin_dir_url( __DIR__) . 'img/btn_google_signin_dark_focus_web.png' .'" /></button></p>';
 	}
 
 	public function modify_incorrect_password( $errors, $redirect_to ) {
@@ -134,8 +158,36 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		}
 	}
 
-	public function login( $userId ) {
+	public static function auth_user( $emailAddress, $password = null ) {
+		$userId = email_exists( $emailAddress );
 
+		if ( ! $userId ) {
+			// Login exist in Firebase but no wp credentials
+			// Let's create a new user
+			$userId = wp_insert_user(
+				[
+					'user_email' => $emailAddress,
+					'user_login' => explode( '@', $emailAddress)[0],
+					'user_pass' => $password
+				]
+			);
+		}
+
+		return get_user_by( 'id', $userId );
+	}
+
+	private static function login_user( $userId ) {
+		wp_clear_auth_cookie();
+		wp_set_current_user( $userId );
+		wp_set_auth_cookie( $userId );
+		self::set_cookie();
+
+		// TODO: get redirect url after login
+		return get_admin_url();
+	}
+
+	private static function set_cookie() {
+		setcookie( 'wp_firebase', 1, time() + 3600, COOKIEPATH, COOKIE_DOMAIN );
 	}
 }
 

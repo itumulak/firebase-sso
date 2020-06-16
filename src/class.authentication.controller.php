@@ -11,27 +11,29 @@ class WP_Firebase_Auth extends WP_Firebase {
 	public $auth;
 	public $config;
 
+	public $apiKey;
+	public $endPoint;
+	public $data;
+	const baseUri = 'https://identitytoolkit.googleapis.com/v1/accounts';
+	const signInEmailPassword = ':signInWithPassword';
+
 	public function __construct() {
 		$this->config = WP_Firebase_Admin::get_config();
-
-		if ( $this->config ) {
-			$this->firebase = ( new Factory )->withServiceAccount( WP_Firebase_Admin::get_config() );
-			$this->auth = $this->firebase->createAuth();
-		}
+		$this->apiKey = $this->config['apiKey'];
 	}
 
 	public function signInWithEmailAndPassword( $emailAddress, $password ) {
-		try {
-			$request = $this->auth->signInWithEmailAndPassword( $emailAddress, $password );
-			update_option('wp_firebase_user_data', $request->data());
-			return $request->data();
-		} catch (\Exception $e) {
-			if ( is_array( explode( ':', $e->getMessage() ) ) ) {
-				return [ 'error' => trim( explode( ':', $e->getMessage() )[0] ) ];
-			}
+		$this->data = [
+			'email' => $emailAddress,
+			'password' => $password,
+			'returnSecureToken' => true
+		];
 
-			return [ 'error' => $e->getMessage() ];
-		}
+		return  $this->handle_request( self::signInEmailPassword,  $this->data );
+	}
+
+	public function GoogleAuthProvider( $token, $emailAddress ) {
+
 	}
 
 	/**
@@ -87,38 +89,32 @@ class WP_Firebase_Auth extends WP_Firebase {
 		return email_exists( $email );
 	}
 
-	/**
-	 * Sign-in user when verifying email
-	 * @param $user
-	 *
-	 * @return array
-	 */
-//	private static function email_pass_auth( $user ) {
-//
-//		$userId = self::verify_user( $user['email'] );
-//
-//		if ( ! $userId ) {
-//			// Login exist in Firebase but no wp credentials
-//			// Let's create a new user
-//			$userId = wp_insert_user(
-//				[
-//					'user_email' => $user['email'],
-//					'user_login' => explode( '@', $user['email'] )[0]
-//				]
-//			);
-//		}
-//
-//		// Proceed logging in...
-//		wp_set_auth_cookie( $userId );
-//
-//		return [ 'code' => 200, 'message' => 'success' ];
-//	}
-
 	private static function google_auth( $response ) {
 
 	}
 
 	private static function facebook_auth( $response ) {
 
+	}
+
+	protected function handle_request( $auth, $data = [] ) {
+		$args = [
+			'method' => 'POST',
+			'headers' => [
+				'Content-Type' => 'application/json'
+			],
+			'sslverify' => apply_filters( 'https_local_ssl_verify', false ),
+			'timeout'   => apply_filters( 'http_request_timeout', 600 ),
+			'body' => json_encode( $data )
+		];
+
+		$endPoint = self::baseUri . $auth;
+		$endPoint = add_query_arg( 'key', $this->apiKey, $endPoint );
+		$this->endPoint = $endPoint;
+
+		// Get request response.
+		$response = wp_remote_request( $endPoint, $args );
+
+		return json_decode( $response['body'], true );
 	}
 }

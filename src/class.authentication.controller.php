@@ -16,7 +16,7 @@ class WP_Firebase_Auth extends WP_Firebase {
 	public $data;
 	const baseUri = 'https://identitytoolkit.googleapis.com/v1/accounts';
 	const signInEmailPassword = ':signInWithPassword';
-	const COOKIE = 'wp_firebase';
+	const cookieLogout = 'wp_firebase_logout';
 
 	public function __construct() {
 		$this->config = WP_Firebase_Admin::get_config();

@@ -23,3 +23,13 @@ require_once 'src/class.default.php';
 require_once 'src/class.authentication.controller.php';
 require_once 'src/class.admin.controller.php';
 require_once 'src/class.main.controller.php';
+
+//if ( $_REQUEST['testing'] === 'true' ) {
+//	$request = new WP_Firebase_Auth();
+//
+//	echo '<pre>';
+//	print_r($request->signInWithEmailAndPassword('test@mail.com', 'ian052887!!'));
+//	echo '</pre>';
+//
+//	wp_die();
+//}

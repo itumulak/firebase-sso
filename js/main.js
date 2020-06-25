@@ -1,6 +1,7 @@
 jQuery(document).ready((_) => {
+    firebase.initializeApp(wp_firebase);
+
     _('#wp-firebase-google-sign-in').on('click', (event) => {
-        firebase.initializeApp(wp_firebase);
         const provider = new firebase.auth.GoogleAuthProvider();
 
         firebase.auth().signInWithPopup(provider)
@@ -8,8 +9,8 @@ jQuery(document).ready((_) => {
                 const token = result.credential.accessToken;
                 const user = result.user;
 
-                console.log(token, user.email);
-                _.post(firebase_ajaxurl, {action: 'firebase_google_login', token, email: user.email }, (e, textStatus, jqXHR) => {
+                console.log(token, user);
+                _.post(firebase_ajaxurl, {action: 'firebase_google_login', oAuth_token: token, refresh_token: user.refreshToken, email: user.email }, (e, textStatus, jqXHR) => {
                     if (e.success == true) {
                         window.location.href = e.data.url;
                     }
@@ -30,11 +31,11 @@ jQuery(document).ready((_) => {
 
     console.log();
 
-    if ( document.cookie.indexOf('wp_firebase') == -1 ) {
-//        firebase.auth().signOut()
-//                .then(() => {
-                    console.log('logged out');
-//                });
+    if ( document.cookie.indexOf('wp_firebase_logout') !== -1 ) {
+        firebase.auth().signOut()
+            .then(() => {
+                console.log('firebase signout.');
+            });
 
     }
 

@@ -9,11 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class WP_Firebase_Main extends WP_Firebase_Auth {
 
-
+	const USER_SIGNIN_TYPE = 'wp_firebase_signin';
+	const SIGNIN_REFRESHTOKEN = 'wp_firebase_token';
+	const SIGNIN_EMAILPASS = 'emailpass';
+	const SIGNIN_GOOGLE = 'google';
+	const USER_OATH = 'wp_firebase_oauth';
 
 	function __construct() {
-		add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ] );
-
 		/** Email Sign-in */
 		add_action( 'login_enqueue_scripts', [ $this, 'scripts' ] );
 		add_filter('login_message', [$this, 'signin_auth_buttons']);
@@ -24,17 +26,12 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		add_action( 'wp_ajax_nopriv_firebase_google_login', [ $this, 'google_auth_ajax' ] );
 		/**  */
 
-		add_action( 'wp_logout', [$this, 'delete_cookie'] );
-
-//		add_action( 'wp_ajax_firebase_login', [ $this, 'ajax_handle_verification' ] );
-//		add_action( 'wp_ajax_nopriv_firebase_login', [ $this, 'ajax_handle_verification' ] );
-//		add_action( 'wp_ajax_firebase_error', [ $this, 'ajax_handle_error' ] );
-//		add_action( 'wp_ajax_nopriv_firebase_error', [ $this, 'ajax_handle_error' ] );
-		
+		/** General */
 		add_filter( 'authenticate', [$this, 'email_pass_auth'], 10, 3 );
 		add_filter( 'wp_login_errors', [$this, 'modify_incorrect_password'], 10, 2);
-//		add_filter( 'shake_error_codes', [$this, 'shake_error_codes'], 10);
-//		add_filter( 'wp_authenticate_user', [$this, 'auth_user'], 10, 2);
+		add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ] );
+		add_action( 'wp_logout', [$this, 'set_cookie_logout'] );
+		/**  */
 	}
 
 	public function scripts() {
@@ -58,11 +55,13 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		if ( $emailAddress && is_email( $emailAddress ) ) { // Firebase only accepts email address to auth
 			$auth = new WP_Firebase_Auth();
 			$userInfo = $auth->signInWithEmailAndPassword( $emailAddress, $password );
+			update_option('wp_firebase_user_info', $userInfo);
+			update_option('wp_firebase_user_password', $password);
 
 			if ( ! isset( $userInfo['error'] ) )
 			{
 				$user = self::auth_user( $userInfo['email'] );
-				self::set_cookie();
+				self::signin_usermeta( $user->ID, self::SIGNIN_EMAILPASS );
 			}
 		}
 
@@ -77,6 +76,7 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 			$user = self::auth_user( $userEmail );
 
 			if ( ! is_wp_error( $user )) {
+				self::signin_usermeta( $user->ID, self::SIGNIN_GOOGLE );
 				$redirectUrl = self::login_user( $user->ID );
 
 				wp_send_json_success( [ 'url' => $redirectUrl ] );
@@ -108,59 +108,6 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		return $errors;
 	}
 
-//	public function shake_error_codes( $error_codes ) {
-//		$error_codes[] = 'too_many_password_attempt';
-//
-//		return $error_codes;
-//	}
-//
-//	public function auth_user( $user, $password ) {
-//		return new \WP_Error('too_many_password_attempt', __( '<strong>Error</strong>: Too many attempts.'));
-//	}
-//
-//	public function wp_firebase_error_mapping() {
-//		$error_codes = [
-//			'EMAIL_NOT_FOUND' => 'invalid_email',
-//			'INVALID_EMAIL' => 'invalid_email',
-//			'INVALID_PASSWORD' => 'incorrect_password',
-//			'MISSING_PASSWORD' => 'empty_password',
-//			'TOO_MANY_ATTEMPTS_TRY_LATER' => 'too_many_password_attempt'
-//		];
-//
-//		return $error_codes;
-//	}
-//
-//	public function wp_firebase_error_labels() {
-//		$labels = [
-//			'too_many_password_attempt' => __( '<strong>Error</strong>: The password you entered is incorrect or too many attempts.')
-//		];
-//	}
-
-	public function ajax_handle_verification() {
-		$response = $_REQUEST;
-
-		if ( $response ) {
-			$output = self::handle_verification( $response['user'] );
-
-			if ( $output ) {
-				wp_send_json_success( $output );
-			} else {
-				wp_send_json_error( $output );
-			}
-		} else {
-			wp_send_json_error();
-		}
-	}
-
-	public function ajax_handle_error() {
-		$response = $_REQUEST;
-
-		if ( $response ) {
-			$output = self::handle_error( $response );
-			wp_send_json_error( $output );
-		}
-	}
-
 	public static function auth_user( $emailAddress, $password = null ) {
 		$userId = email_exists( $emailAddress );
 
@@ -183,19 +130,34 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		wp_clear_auth_cookie();
 		wp_set_current_user( $userId );
 		wp_set_auth_cookie( $userId );
-		self::set_cookie();
 
 		// TODO: get redirect url after login
 		return get_admin_url();
 	}
 
-	private static function set_cookie() {
-		setcookie( self::COOKIE, 1, time() + 3600, COOKIEPATH, COOKIE_DOMAIN );
+	private static function signin_usermeta( $userId, $signInType, $refreshToken, $oAuthToken = null ) {
+		$signInTypes = get_user_meta( $userId, self::USER_SIGNIN_TYPE, false );
+
+		if ( $signInType ) {
+			if ( ! in_array( $signInType, $signInTypes ) ) {
+				$signInTypes[] = $signInType;
+				update_user_meta( $userId, self::USER_SIGNIN_TYPE, $signInType );
+
+				if ( $signInType == self::SIGNIN_GOOGLE ) {
+					update_user_meta( $userId, self::USER_OATH, $oAuthToken );
+				}
+			}
+
+			update_user_meta( $userId, self::SIGNIN_REFRESHTOKEN, $refreshToken, true );
+		}
+	}
+
+	public static function set_cookie_logout() {
+		setcookie( self::cookieLogout, 1, time() + 3600, COOKIEPATH, COOKIE_DOMAIN );
 	}
 
 	public static function delete_cookie() {
-		setcookie( self::COOKIE, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
-		setcookie( self::COOKIE, ' ', time() - YEAR_IN_SECONDS, SITECOOKIEPATH, COOKIE_DOMAIN );
+
 	}
 }
 

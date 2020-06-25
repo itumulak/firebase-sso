@@ -51,16 +51,13 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	}
 
 	public function email_pass_auth( $user, $emailAddress, $password ) {
-
-		if ( $emailAddress && is_email( $emailAddress ) ) { // Firebase only accepts email address to auth
+		if ( $emailAddress && is_email( $emailAddress ) && ! email_exists( $emailAddress ) ) { // Firebase only accepts email address to auth
 			$auth = new WP_Firebase_Auth();
 			$userInfo = $auth->signInWithEmailAndPassword( $emailAddress, $password );
-			update_option('wp_firebase_user_info', $userInfo);
-			update_option('wp_firebase_user_password', $password);
 
 			if ( ! isset( $userInfo['error'] ) )
 			{
-				$user = self::auth_user( $userInfo['email'] );
+				$user = self::auth_user( $userInfo['email'], $password );
 				self::signin_usermeta( $user->ID, self::SIGNIN_EMAILPASS );
 			}
 		}
@@ -69,9 +66,6 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	}
 
 	public function google_auth_ajax() {
-		error_reporting( E_ALL );
-		ini_set( "display_errors", "On" );
-
 		$oAuthToken = $_REQUEST['oauth_token'];
 		$refreshToken = $_REQUEST['refresh_token'];
 		$userEmail = $_REQUEST['email'];
@@ -139,7 +133,7 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		return get_admin_url();
 	}
 
-	private static function signin_usermeta( $userId, $signInType, $refreshToken, $oAuthToken = null ) {
+	private static function signin_usermeta( $userId, $signInType, $refreshToken = null, $oAuthToken = null ) {
 		$signInTypes = get_user_meta( $userId, self::USER_SIGNIN_TYPE, false );
 
 		if ( $signInType ) {

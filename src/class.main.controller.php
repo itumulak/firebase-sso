@@ -10,10 +10,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WP_Firebase_Main extends WP_Firebase_Auth {
 
 	const USER_SIGNIN_TYPE = 'wp_firebase_signin';
-	const SIGNIN_REFRESHTOKEN = 'wp_firebase_token';
+	const SIGNIN_REFRESHTOKEN = 'wp_firebase_refresh_token';
+	const SIGNIN_OAUTH = 'wp_firebase_oauth';
 	const SIGNIN_EMAILPASS = 'emailpass';
 	const SIGNIN_GOOGLE = 'google';
-	const USER_OATH = 'wp_firebase_oauth';
 
 	function __construct() {
 		/** Email Sign-in */
@@ -69,14 +69,18 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	}
 
 	public function google_auth_ajax() {
-		$token = $_REQUEST['google_token'];
+		error_reporting( E_ALL );
+		ini_set( "display_errors", "On" );
+
+		$oAuthToken = $_REQUEST['oauth_token'];
+		$refreshToken = $_REQUEST['refresh_token'];
 		$userEmail = $_REQUEST['email'];
 
 		if ( $userEmail ) {
 			$user = self::auth_user( $userEmail );
 
 			if ( ! is_wp_error( $user )) {
-				self::signin_usermeta( $user->ID, self::SIGNIN_GOOGLE );
+				self::signin_usermeta( $user->ID, self::SIGNIN_GOOGLE, $refreshToken, $oAuthToken );
 				$redirectUrl = self::login_user( $user->ID );
 
 				wp_send_json_success( [ 'url' => $redirectUrl ] );
@@ -141,14 +145,14 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		if ( $signInType ) {
 			if ( ! in_array( $signInType, $signInTypes ) ) {
 				$signInTypes[] = $signInType;
-				update_user_meta( $userId, self::USER_SIGNIN_TYPE, $signInType );
+				update_user_meta( $userId, self::USER_SIGNIN_TYPE, $signInTypes );
 
 				if ( $signInType == self::SIGNIN_GOOGLE ) {
-					update_user_meta( $userId, self::USER_OATH, $oAuthToken );
+					update_user_meta( $userId, self::SIGNIN_OAUTH, $oAuthToken );
 				}
 			}
 
-			update_user_meta( $userId, self::SIGNIN_REFRESHTOKEN, $refreshToken, true );
+			update_user_meta( $userId, self::SIGNIN_REFRESHTOKEN, $refreshToken );
 		}
 	}
 

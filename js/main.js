@@ -9,8 +9,8 @@ jQuery(document).ready((_) => {
                 const token = result.credential.accessToken;
                 const user = result.user;
 
-                console.log(token, user);
-                _.post(firebase_ajaxurl, {action: 'firebase_google_login', oAuth_token: token, refresh_token: user.refreshToken, email: user.email }, (e, textStatus, jqXHR) => {
+//                console.log(token, user);
+                _.post(firebase_ajaxurl, {action: 'firebase_google_login', oauth_token: token, refresh_token: user.refreshToken, email: user.email }, (e, textStatus, jqXHR) => {
                     if (e.success == true) {
                         window.location.href = e.data.url;
                     }

@@ -14,6 +14,7 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	const SIGNIN_OAUTH = 'wp_firebase_oauth';
 	const SIGNIN_EMAILPASS = 'emailpass';
 	const SIGNIN_GOOGLE = 'google';
+	const SIGNIN_FACEBOOK = 'facebook';
 
 	function __construct() {
 		/** Email Sign-in */
@@ -24,6 +25,11 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		/** Google */
 		add_action( 'wp_ajax_firebase_google_login', [ $this, 'google_auth_ajax' ] );
 		add_action( 'wp_ajax_nopriv_firebase_google_login', [ $this, 'google_auth_ajax' ] );
+		/**  */
+
+		/** Facebook */
+		add_action( 'wp_ajax_firebase_facebook_login', [ $this, 'facebook_auth_ajax' ] );
+		add_action( 'wp_ajax_nopriv_facebook_google_login', [ $this, 'facebook_auth_ajax' ] );
 		/**  */
 
 		/** General */
@@ -75,6 +81,25 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 
 			if ( ! is_wp_error( $user )) {
 				self::signin_usermeta( $user->ID, self::SIGNIN_GOOGLE, $refreshToken, $oAuthToken );
+				$redirectUrl = self::login_user( $user->ID );
+
+				wp_send_json_success( [ 'url' => $redirectUrl ] );
+			}
+		}
+
+		wp_send_json_error();
+	}
+
+	public function facebook_auth_ajax() {
+		$oAuthToken = $_REQUEST['oauth_token'];
+		$refreshToken = $_REQUEST['refresh_token'];
+		$userEmail = $_REQUEST['email'];
+
+		if ( $userEmail ) {
+			$user = self::auth_user( $userEmail );
+
+			if ( ! is_wp_error( $user )) {
+				self::signin_usermeta( $user->ID, self::SIGNIN_FACEBOOK, $refreshToken, $oAuthToken );
 				$redirectUrl = self::login_user( $user->ID );
 
 				wp_send_json_success( [ 'url' => $redirectUrl ] );
@@ -142,7 +167,7 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 				$signInTypes[] = $signInType;
 				update_user_meta( $userId, self::USER_SIGNIN_TYPE, $signInTypes );
 
-				if ( $signInType == self::SIGNIN_GOOGLE ) {
+				if ( $signInType == self::SIGNIN_GOOGLE || $signInType == self::SIGNIN_FACEBOOK ) {
 					update_user_meta( $userId, self::SIGNIN_OAUTH, $oAuthToken );
 				}
 			}

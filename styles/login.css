@@ -1,7 +1,33 @@
-#wp-firebase-google-sign-in {
-    display: block;
-    margin: 0 auto;
-    background-color: transparent;
-    border: none;
+[type=button]:not(:disabled),
+[type=reset]:not(:disabled),
+[type=submit]:not(:disabled),
+button:not(:disabled) {
     cursor: pointer;
+}
+
+.btn-wrapper {
+    text-align: center;
+}
+
+.btn {
+    font-size: 80%;
+    border-radius: 5rem;
+    letter-spacing: .1rem;
+    font-weight: bold;
+    padding: 1rem;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    margin-bottom: .5rem;
+    width: 90%;
+    border: none;
+}
+
+.btn-google {
+    color: white;
+    background-color: #ea4335;
+}
+
+.btn-facebook {
+    color: white;
+    background-color: #3b5998;
 }

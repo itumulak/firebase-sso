@@ -30,6 +30,8 @@ jQuery(document).ready((_) => {
     _('#wp-firebase-facebook-sign-in').on('click', (event) => {
         const provider = new firebase.auth.FacebookAuthProvider();
 
+        console.log(provider);
+
         firebase.auth().signInWithPopup(provider)
                 .then((result) => {
                     const token = result.credential.accessToken;
@@ -49,6 +51,8 @@ jQuery(document).ready((_) => {
                     var email = error.email;
                     // The firebase.auth.AuthCredential type that was used.
                     var credential = error.credential;
+
+                    console.log(error);
                 })
     });
 

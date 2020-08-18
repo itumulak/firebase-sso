@@ -29,7 +29,7 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 
 		/** Facebook */
 		add_action( 'wp_ajax_firebase_facebook_login', [ $this, 'facebook_auth_ajax' ] );
-		add_action( 'wp_ajax_nopriv_facebook_google_login', [ $this, 'facebook_auth_ajax' ] );
+		add_action( 'wp_ajax_nopriv_firebase_facebook_login', [ $this, 'facebook_auth_ajax' ] );
 		/**  */
 
 		/** General */

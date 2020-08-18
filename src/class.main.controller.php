@@ -110,9 +110,15 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	}
 
 	public static function signin_auth_buttons( $message ) {
-		return $message .
-		       '<p class="btn-wrapper"><button id="wp-firebase-google-sign-in" class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Sign in with Google</button></p>
-			    <p class="btn-wrapper"><button id="wp-firebase-facebook-sign-in" class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><i class="fab fa-facebook-f mr-2"></i> Sign in with Facebook</button></p>';
+		$config = WP_Firebase_Admin::get_providers();
+
+		if (in_array('google', $config))
+			$message .= '<p class="btn-wrapper"><button id="wp-firebase-google-sign-in" class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Sign in with Google</button></p>';
+
+		if (in_array('facebook', $config))
+			$message .= '<p class="btn-wrapper"><button id="wp-firebase-facebook-sign-in" class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><i class="fab fa-facebook-f mr-2"></i> Sign in with Facebook</button></p>';
+
+		return $message;
 	}
 
 	public function modify_incorrect_password( $errors, $redirect_to ) {

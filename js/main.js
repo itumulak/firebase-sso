@@ -28,7 +28,7 @@ jQuery(document).ready((_) => {
     });
 
     _('#wp-firebase-facebook-sign-in').on('click', (event) => {
-        const provider = new firebase.auth.FacebookAuthProvider();
+         const provider = new firebase.auth.FacebookAuthProvider();
 
         console.log(provider);
 

@@ -113,13 +113,7 @@ class WP_Firebase_Admin extends WP_Firebase {
 		                    $config       = $this->get_config();
 		                    $configFields = [
 			                    'apiKey'             => 'API Key',
-			                    'authDomain'         => 'Authorized Domain',
-			                    'databaseURL'        => 'Database URL',
-			                    'projectId'          => 'Project ID',
-			                    'storageBucket'      => 'Storage Bucket',
-			                    'messangingSenderId' => 'Messaging Sender ID',
-			                    'appId'              => 'App ID',
-			                    'measurementId'      => 'Measurement ID'
+			                    'authDomain'         => 'Authorized Domain'
 		                    ];
 		                    ?>
                             <table class="form-table">

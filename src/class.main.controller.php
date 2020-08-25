@@ -32,6 +32,11 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		add_action( 'wp_ajax_nopriv_firebase_facebook_login', [ $this, 'facebook_auth_ajax' ] );
 		/**  */
 
+		/** Firebase error handling */
+		add_action( 'wp_ajax_firebase_handle_error', [$this, 'firebase_auth_error_ajax'] );
+		add_action( 'wp_ajax_nopriv_firebase_handle_error', [$this, 'firebase_auth_error_ajax'] );
+		/**  */
+
 		/** General */
 		add_filter( 'authenticate', [$this, 'email_pass_auth'], 10, 3 );
 		add_filter( 'wp_login_errors', [$this, 'modify_incorrect_password'], 10, 2);
@@ -107,6 +112,15 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		}
 
 		wp_send_json_error();
+	}
+
+	public function firebase_auth_error_ajax() {
+		$errorCode = $_REQUEST['code'];
+
+		if ( $errorCode == 'auth/account-exists-with-different-credential' )
+			wp_send_json_success( [ 'message' => 'Account already in use.' ] );
+		else
+			wp_send_json_error();
 	}
 
 	public static function signin_auth_buttons( $message ) {

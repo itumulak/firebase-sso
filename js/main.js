@@ -9,7 +9,6 @@ jQuery(document).ready((_) => {
                 const token = result.credential.accessToken;
                 const user = result.user;
 
-//                console.log(token, user);
                 _.post(firebase_ajaxurl, {action: 'firebase_google_login', oauth_token: token, refresh_token: user.refreshToken, email: user.email }, (e, textStatus, jqXHR) => {
                     if (e.success == true) {
                         window.location.href = e.data.url;
@@ -29,8 +28,6 @@ jQuery(document).ready((_) => {
 
     _('#wp-firebase-facebook-sign-in').on('click', (event) => {
          const provider = new firebase.auth.FacebookAuthProvider();
-
-        console.log(provider);
 
         firebase.auth().signInWithPopup(provider)
                 .then((result) => {
@@ -52,7 +49,24 @@ jQuery(document).ready((_) => {
                     // The firebase.auth.AuthCredential type that was used.
                     var credential = error.credential;
 
-                    console.log(error);
+                    _.post(firebase_ajaxurl, {action: 'firebase_handle_error', code: error.code}, (e, textStatus, jqXHR) => {
+                        if (e.success == true) {
+                            if (_('#login_error')[0]) {
+                                _('#login_error').text(e.data.message);
+
+                                document.getElementById('loginform').classList.remove('shake');
+
+                                setTimeout(() => {
+                                    _('form#loginform').addClass('shake');
+
+                                }, 1200);
+                            }
+                            else {
+                                _(`<div id="login_error">${e.data.message}</div>`).insertBefore('form#loginform');
+                                _('form#loginform').addClass('shake');
+                            }
+                        }
+                    });
                 })
     });
 

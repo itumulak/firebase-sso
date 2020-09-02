@@ -7,6 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class WP_Firebase
 {
+	/**
+	 * Default Firebase keys.
+	 */
 	const MENU_SLUG = 'wp-firebase';
 	const JS_MAIN = 'wp_firebase_main';
 	const JS_ADMIN = 'wp_firebase_admin';

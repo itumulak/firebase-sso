@@ -1,14 +1,22 @@
 <?php
-
 namespace Firebase;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-
 class WP_Firebase_Admin extends WP_Firebase {
 
+	/**
+	 * WP_Firebase_Admin constructor.
+     *
+     * Build WP Admin.
+     *
+     * @since 1.0.0
+     *
+     * @param void
+     * @return void
+	 */
 	function __construct() {
 		add_action( 'admin_menu', [ $this, 'admin_menu' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
@@ -16,10 +24,20 @@ class WP_Firebase_Admin extends WP_Firebase {
 		add_action( 'wp_ajax_firebase_providers', [ $this, 'ajax_save_providers' ] );
 	}
 
+	/**
+	 * Register Admin Menu
+     *
+     * @since 1.0.0
+	 */
 	public function admin_menu() {
 		add_menu_page( 'WP Firebase', 'WP Firebase', 'manage_options', self::MENU_SLUG, [$this, 'admin_page'], '', 9 );
 	}
 
+	/**
+	 * Register Admin Scripts
+     *
+     * @since 1.0.0
+	 */
 	public function admin_scripts() {
 		if ( isset( $_GET['page'] ) && $_GET['page'] == self::MENU_SLUG ) {
 			/** Toast */
@@ -34,17 +52,14 @@ class WP_Firebase_Admin extends WP_Firebase {
 				'toast'
 			], '1.0.0', 'true' );
 			/**  */
-
-			/** Codemirror */
-//			$cm_settings['codeEditor'] = wp_enqueue_code_editor( [ 'type' => 'text/css' ] );
-//			wp_localize_script( self::JS_ADMIN, 'cm_settings', $cm_settings );
-//
-//			wp_enqueue_script( 'wp-theme-plugin-editor' );
-//			wp_enqueue_style( 'wp-codemirror' );
-			/**  */
 		}
 	}
 
+	/**
+	 * Render Admin Page
+     *
+     * @since 1.0.0
+	 */
 	public function admin_page() {
 		?>
         <!-- Our admin page content should all be inside .wrap -->
@@ -143,6 +158,13 @@ class WP_Firebase_Admin extends WP_Firebase {
 		<?php
 	}
 
+	/**
+	 * Save Firebase Config
+     * Ajax request callback
+	 *
+	 * @return void $data
+	 * @since 1.0.0
+	 */
 	public function ajax_save_config() {
 		$config = $_REQUEST;
 		unset( $config['action'] );
@@ -155,14 +177,33 @@ class WP_Firebase_Admin extends WP_Firebase {
 		}
 	}
 
+	/**
+     * Save Firebase Config
+     *
+	 * @param $config
+     * @since 1.0.0
+	 */
 	private static function save_config( $config ) {
 		update_option( self::OPTION_KEY_CONFIG, $config );
 	}
 
+	/**
+     * Fetch saved Firebase Config
+     *
+	 * @return false|mixed|void
+     * @since 1.0.0
+	 */
 	public static function get_config() {
 		return get_option( self::OPTION_KEY_CONFIG );
 	}
 
+	/**
+	 * Save Firebase Sign-in Providers
+     * Ajax request callback
+     *
+     * @return void $data
+     * @since 1.0.0
+	 */
 	public function ajax_save_providers() {
 		$providers = $_REQUEST['enabled_providers'];
 
@@ -175,10 +216,22 @@ class WP_Firebase_Admin extends WP_Firebase {
 		}
 	}
 
+	/**
+     * Save Firebase Sign-in Providers
+     *
+	 * @param $providers
+     * @since 1.0.0
+	 */
 	private static function save_providers( $providers ) {
 		update_option( self::OPTION_KEY_PROVIDERS, $providers );
 	}
 
+	/**
+     * Fetch saved Sign-in Providers
+     *
+	 * @return false|mixed|void
+     * @since 1.0.0
+	 */
 	public static function get_providers() {
 		return get_option( self::OPTION_KEY_PROVIDERS );
 	}

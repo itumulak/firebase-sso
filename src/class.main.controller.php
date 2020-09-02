@@ -1,7 +1,5 @@
 <?php
 namespace Firebase;
-use Kreait\Firebase\Factory;
-use function Sodium\add;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -16,6 +14,14 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	const SIGNIN_GOOGLE = 'google';
 	const SIGNIN_FACEBOOK = 'facebook';
 
+	/**
+	 * WP_Firebase_Main constructor.
+	 *
+	 * Register AJAX request handling of Firebase Providers.
+	 * Hook single sign-on buttons in the login form.
+	 *
+	 * @since 1.0.0
+	 */
 	function __construct() {
 		/** Email Sign-in */
 		add_action( 'login_enqueue_scripts', [ $this, 'scripts' ] );
@@ -45,6 +51,11 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		/**  */
 	}
 
+	/**
+	 * Register Frontend Scripts
+	 *
+	 * @since 1.0.0
+	 */
 	public function scripts() {
 		/** Firebase */
 		wp_register_script( self::JS_FIREBASE, 'https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js', [], '7.15.0', true );
@@ -61,6 +72,16 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 
 	}
 
+	/**
+	 * Email/Pass Authentication callback.
+	 *
+	 * @param $user
+	 * @param $emailAddress
+	 * @param $password
+	 *
+	 * @return false|\WP_User
+	 * @since 1.0.0
+	 */
 	public function email_pass_auth( $user, $emailAddress, $password ) {
 		if ( $emailAddress && is_email( $emailAddress ) && ! email_exists( $emailAddress ) ) { // Firebase only accepts email address to auth
 			$auth = new WP_Firebase_Auth();
@@ -76,6 +97,12 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		return $user;
 	}
 
+	/**
+	 * Google Authentication AJAX callback
+	 *
+	 * @return void $data
+	 * @since  1.0.0
+	 */
 	public function google_auth_ajax() {
 		$oAuthToken = $_REQUEST['oauth_token'];
 		$refreshToken = $_REQUEST['refresh_token'];
@@ -95,6 +122,12 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		wp_send_json_error();
 	}
 
+	/**
+	 * Facebook Authentication AJAX callback
+	 *
+	 * @return void $data
+	 * @since 1.0.0
+	 */
 	public function facebook_auth_ajax() {
 		$oAuthToken = $_REQUEST['oauth_token'];
 		$refreshToken = $_REQUEST['refresh_token'];
@@ -114,6 +147,12 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		wp_send_json_error();
 	}
 
+	/**
+	 * Firebase Authentucation Error AJAX callback
+	 *
+	 * @return void $data
+	 * @since 1.0.0
+	 */
 	public function firebase_auth_error_ajax() {
 		$errorCode = $_REQUEST['code'];
 
@@ -123,6 +162,15 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 			wp_send_json_error();
 	}
 
+	/**
+	 * Add Single-on buttons in the login form.
+	 * Hook callback.
+	 *
+	 * @param $message
+	 *
+	 * @return string
+	 * @since 1.0.0
+	 */
 	public static function signin_auth_buttons( $message ) {
 		$config = WP_Firebase_Admin::get_providers();
 
@@ -135,6 +183,16 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		return $message;
 	}
 
+	/**
+	 * Modify how the incorrect password would display.
+	 * To be inline with firebase max attempts.
+	 *
+	 * @param $errors
+	 * @param $redirect_to
+	 *
+	 * @return mixed
+	 * @since 1.0.0
+	 */
 	public function modify_incorrect_password( $errors, $redirect_to ) {
 		if ( isset( $errors->errors['incorrect_password'] ) ) {
 			$tmp = $errors->errors;
@@ -152,6 +210,15 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		return $errors;
 	}
 
+	/**
+	 * Check whether user already exists, otherwise create user in WordPress.
+	 *
+	 * @param $emailAddress
+	 * @param null $password
+	 *
+	 * @return false|\WP_User
+	 * @since 1.0.0
+	 */
 	public static function auth_user( $emailAddress, $password = null ) {
 		$userId = email_exists( $emailAddress );
 
@@ -170,6 +237,14 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		return get_user_by( 'id', $userId );
 	}
 
+	/**
+	 * Set authentication cookies.
+	 *
+	 * @param $userId
+	 *
+	 * @return string
+	 * @since 1.0.0
+	 */
 	private static function login_user( $userId ) {
 		wp_clear_auth_cookie();
 		wp_set_current_user( $userId );
@@ -179,6 +254,16 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		return get_admin_url();
 	}
 
+	/**
+	 * Save User Meta upon logged in.
+	 *
+	 * @param $userId
+	 * @param $signInType
+	 * @param null $refreshToken
+	 * @param null $oAuthToken
+	 *
+	 * @since 1.0.0
+	 */
 	private static function signin_usermeta( $userId, $signInType, $refreshToken = null, $oAuthToken = null ) {
 		$signInTypes = get_user_meta( $userId, self::USER_SIGNIN_TYPE, false );
 
@@ -196,12 +281,22 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 		}
 	}
 
+	/**
+	 * Set cookie logout.
+	 *
+	 * @since 1.0.0
+	 */
 	public static function set_cookie_logout() {
 		setcookie( self::cookieLogout, 1, time() + 3600, COOKIEPATH, COOKIE_DOMAIN );
 	}
 
+	/**
+	 * Set cookie deletion
+	 *
+	 * @since 1.0.0
+	 */
 	public static function delete_cookie() {
-
+		// TODO
 	}
 }
 

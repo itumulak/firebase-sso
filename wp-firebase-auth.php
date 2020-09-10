@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Firebase Auth Sign-in
  * Plugin URI:
- * Description: Utilize Firebase to login to your website
+ * Description: Utilize Firebase to sign-in to your website.
  * Version: 1.0.0
  * Author: Ian Tumulak
  * Author URI: https://itumulak.com

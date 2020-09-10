@@ -158,6 +158,8 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 
 		if ( $errorCode == 'auth/account-exists-with-different-credential' )
 			wp_send_json_success( [ 'message' => 'Account already in use.' ] );
+		else if ( $errorCode == 'auth/network-request-failed' )
+			wp_send_json_success( [ 'message' => 'Sign-in failed. Please try again.' ] );
 		else
 			wp_send_json_error();
 	}

@@ -1,5 +1,4 @@
 <?php
-namespace Firebase;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

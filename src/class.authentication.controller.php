@@ -1,6 +1,4 @@
 <?php
-namespace Firebase;
-use Kreait\Firebase\Factory;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

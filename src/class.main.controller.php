@@ -1,10 +1,12 @@
 <?php
+namespace IT\SSO\Firebase;
+use IT\SSO\Firebase\Authentication as Auth;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-class WP_Firebase_Main extends WP_Firebase_Auth {
+class Frontend extends Auth {
 
 	const USER_SIGNIN_TYPE = 'wp_firebase_signin';
 	const SIGNIN_REFRESHTOKEN = 'wp_firebase_refresh_token';
@@ -14,7 +16,7 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	const SIGNIN_FACEBOOK = 'facebook';
 
 	/**
-	 * WP_Firebase_Main constructor.
+	 * Frontend constructor.
 	 *
 	 * Register AJAX request handling of Firebase Providers.
 	 * Hook single sign-on buttons in the login form.
@@ -53,6 +55,7 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	/**
 	 * Register Frontend Scripts
 	 *
+	 * @use Hook/Action
 	 * @since 1.0.0
 	 */
 	public function scripts() {
@@ -63,7 +66,7 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 
 		/** Main */
 		wp_enqueue_script( self::JS_MAIN, plugin_dir_url( __DIR__) . 'js/main.js', ['jquery', self::JS_FIREBASE_AUTH], '', 'true' );
-		wp_localize_script( self::JS_MAIN, 'wp_firebase', WP_Firebase_Admin::get_config() );
+		wp_localize_script( self::JS_MAIN, 'wp_firebase', Admin::get_config() );
 		wp_localize_script( self::JS_MAIN, 'firebase_ajaxurl', admin_url( 'admin-ajax.php' ) );
 
 		wp_enqueue_style( 'firebase_login', plugin_dir_url( __DIR__ ) . 'styles/login.css', [], '', 'all' );
@@ -74,6 +77,8 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	/**
 	 * Email/Pass Authentication callback.
 	 *
+	 * @use Hook/Filter
+	 *
 	 * @param $user
 	 * @param $emailAddress
 	 * @param $password
@@ -83,7 +88,7 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	 */
 	public function email_pass_auth( $user, $emailAddress, $password ) {
 		if ( $emailAddress && is_email( $emailAddress ) && ! email_exists( $emailAddress ) ) { // Firebase only accepts email address to auth
-			$auth = new WP_Firebase_Auth();
+			$auth = new Auth();
 			$userInfo = $auth->signInWithEmailAndPassword( $emailAddress, $password );
 
 			if ( ! isset( $userInfo['error'] ) )
@@ -99,6 +104,7 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	/**
 	 * Google Authentication AJAX callback
 	 *
+	 * @use Hook/Action
 	 * @return void $data
 	 * @since  1.0.0
 	 */
@@ -124,6 +130,7 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	/**
 	 * Facebook Authentication AJAX callback
 	 *
+	 * @use Hook/Action
 	 * @return void $data
 	 * @since 1.0.0
 	 */
@@ -147,8 +154,9 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	}
 
 	/**
-	 * Firebase Authentucation Error AJAX callback
+	 * Firebase Authentication Error AJAX callback
 	 *
+	 * @use Hook/Action
 	 * @return void $data
 	 * @since 1.0.0
 	 */
@@ -165,7 +173,8 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 
 	/**
 	 * Add Single-on buttons in the login form.
-	 * Hook callback.
+	 *
+	 * @use Hook/Action
 	 *
 	 * @param $message
 	 *
@@ -173,7 +182,7 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	 * @since 1.0.0
 	 */
 	public static function signin_auth_buttons( $message ) {
-		$config = WP_Firebase_Admin::get_providers();
+		$config = Admin::get_providers();
 
 		if (in_array('google', $config))
 			$message .= '<p class="btn-wrapper"><button id="wp-firebase-google-sign-in" class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Sign in with Google</button></p>';
@@ -187,6 +196,8 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	/**
 	 * Modify how the incorrect password would display.
 	 * To be inline with firebase max attempts.
+	 *
+	 * @use Hook/Filter
 	 *
 	 * @param $errors
 	 * @param $redirect_to
@@ -285,6 +296,7 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	/**
 	 * Set cookie logout.
 	 *
+	 * @use Hook/Action
 	 * @since 1.0.0
 	 */
 	public static function set_cookie_logout() {
@@ -301,4 +313,4 @@ class WP_Firebase_Main extends WP_Firebase_Auth {
 	}
 }
 
-new namespace\WP_Firebase_Main();
+new namespace\Frontend();

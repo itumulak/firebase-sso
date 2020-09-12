@@ -1,13 +1,15 @@
 <?php
+namespace IT\SSO\Firebase;
+use IT\SSO\Firebase\WP as Main;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-class WP_Firebase_Admin extends WP_Firebase {
+class Admin extends Main {
 
 	/**
-	 * WP_Firebase_Admin constructor.
+	 * Admin constructor.
      *
      * Build WP Admin.
      *
@@ -236,4 +238,4 @@ class WP_Firebase_Admin extends WP_Firebase {
 	}
 }
 
-new namespace\WP_Firebase_Admin();
+new namespace\Admin();

@@ -1,14 +1,13 @@
 <?php
+namespace IT\SSO\Firebase;
+use IT\SSO\Firebase\WP as Main;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-class WP_Firebase_Auth extends WP_Firebase {
-	public $firebase;
-	public $auth;
+class Authentication extends Main {
 	public $config;
-
 	public $apiKey;
 	public $endPoint;
 	public $data;
@@ -16,11 +15,25 @@ class WP_Firebase_Auth extends WP_Firebase {
 	const signInEmailPassword = ':signInWithPassword';
 	const cookieLogout = 'wp_firebase_logout';
 
+	/**
+	 * Authentication constructor.
+	 * Handles PHP related HTTP request.
+	 *
+	 * @since 1.0.0
+	 */
 	public function __construct() {
-		$this->config = WP_Firebase_Admin::get_config();
+		$this->config = Admin::get_config();
 		$this->apiKey = $this->config['apiKey'];
 	}
 
+	/**
+	 * Prepare data for HTTP request for Email/Password Sign-in Method.
+	 *
+	 * @param $emailAddress
+	 * @param $password
+	 *
+	 * @return JSON
+	 */
 	public function signInWithEmailAndPassword( $emailAddress, $password ) {
 		$this->data = [
 			'email' => $emailAddress,
@@ -29,26 +42,6 @@ class WP_Firebase_Auth extends WP_Firebase {
 		];
 
 		return  $this->handle_request( self::signInEmailPassword,  $this->data );
-	}
-
-	public function GoogleAuthProvider( $token, $emailAddress ) {
-
-	}
-
-	/**
-	 * Handles sign-in method
-	 * @param $response
-	 */
-	public static function handle_verification( $response ) {
-		if ( $response['operationType'] ) {
-			switch ( $response['operationType'] ) {
-				case 'signIn':
-					$response = self::email_pass_auth( $response );
-					break;
-			}
-		}
-
-		return ['message' => $response['message'], 'status' => $response['code']];
 	}
 
 	/**
@@ -88,14 +81,14 @@ class WP_Firebase_Auth extends WP_Firebase {
 		return email_exists( $email );
 	}
 
-	private static function google_auth( $response ) {
-
-	}
-
-	private static function facebook_auth( $response ) {
-
-	}
-
+	/**
+	 * Perform HTTP Request from Firebase
+	 *
+	 * @param $auth
+	 * @param array $data
+	 *
+	 * @return JSON
+	 */
 	protected function handle_request( $auth, $data = [] ) {
 		$args = [
 			'method' => 'POST',

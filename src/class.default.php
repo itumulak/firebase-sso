@@ -1,16 +1,17 @@
 <?php
+namespace IT\SSO\Firebase;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-class WP_Firebase
+class WP
 {
 	/**
-	 * Default Firebase keys.
+	 * Default Firebase slugs for WordPress.
 	 */
 	const MENU_SLUG = 'wp-firebase';
-	const JS_MAIN = 'wp_firebase_main';
+	const JS_MAIN = 'SSO_Firebase_Main';
 	const JS_ADMIN = 'wp_firebase_admin';
 	const JS_FIREBASE = 'firebase';
 	const JS_FIREBASE_AUTH = 'firebase_authentication';

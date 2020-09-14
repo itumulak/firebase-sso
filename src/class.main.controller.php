@@ -109,9 +109,9 @@ class Frontend extends Auth {
 	 * @since  1.0.0
 	 */
 	public function google_auth_ajax() {
-		$oAuthToken = $_REQUEST['oauth_token'];
-		$refreshToken = $_REQUEST['refresh_token'];
-		$userEmail = $_REQUEST['email'];
+		$oAuthToken = sanitize_key( $_REQUEST['oauth_token'] );
+		$refreshToken = sanitize_key( $_REQUEST['refresh_token'] );
+		$userEmail = sanitize_email( $_REQUEST['email'] );
 
 		if ( $userEmail ) {
 			$user = self::auth_user( $userEmail );
@@ -135,9 +135,9 @@ class Frontend extends Auth {
 	 * @since 1.0.0
 	 */
 	public function facebook_auth_ajax() {
-		$oAuthToken = $_REQUEST['oauth_token'];
-		$refreshToken = $_REQUEST['refresh_token'];
-		$userEmail = $_REQUEST['email'];
+		$oAuthToken = sanitize_key( $_REQUEST['oauth_token'] );
+		$refreshToken = sanitize_key( $_REQUEST['refresh_token'] );
+		$userEmail = sanitize_email( $_REQUEST['email'] );
 
 		if ( $userEmail ) {
 			$user = self::auth_user( $userEmail );
@@ -161,7 +161,7 @@ class Frontend extends Auth {
 	 * @since 1.0.0
 	 */
 	public function firebase_auth_error_ajax() {
-		$errorCode = $_REQUEST['code'];
+		$errorCode = sanitize_key( $_REQUEST['code'] );
 
 		if ( $errorCode == 'auth/account-exists-with-different-credential' )
 			wp_send_json_success( [ 'message' => 'Account already in use.' ] );

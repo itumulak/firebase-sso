@@ -28,6 +28,7 @@ class Admin extends Main {
 	/**
 	 * Register Admin Menu
      *
+     * @use Hook/Action
      * @since 1.0.0
 	 */
 	public function admin_menu() {
@@ -37,6 +38,7 @@ class Admin extends Main {
 	/**
 	 * Register Admin Scripts
      *
+     * @use Hook/Action
      * @since 1.0.0
 	 */
 	public function admin_scripts() {
@@ -59,6 +61,7 @@ class Admin extends Main {
 	/**
 	 * Render Admin Page
      *
+     * @use Hook/Action
      * @since 1.0.0
 	 */
 	public function admin_page() {
@@ -137,11 +140,11 @@ class Admin extends Main {
 			                    <?php foreach ( $configFields as $key => $label ) : ?>
                                     <tr>
                                         <th scope="row">
-                                            <label for="<?= $key ?>"><?= $label ?></label>
+                                            <label for="<?= $key ?>"><?= esc_attr( $label ) ?></label>
                                         </th>
                                         <td>
-                                            <input name="<?= $key ?>" type="text" id="<?= $key ?>" class="regular-text"
-							                    <?= array_key_exists($key, $config) ? 'value="'.$config[$key].'"' : '' ?>>
+                                            <input name="<?= $key ?>" type="text" id="<?= esc_attr( $key ) ?>" class="regular-text"
+							                    <?= array_key_exists($key, $config) ? 'value="'. esc_attr( $config[$key] ) .'"' : '' ?>>
                                         </td>
                                     </tr>
 			                    <?php endforeach; ?>
@@ -163,11 +166,12 @@ class Admin extends Main {
 	 * Save Firebase Config
      * Ajax request callback
 	 *
+     * @use Hook/Action
 	 * @return void $data
 	 * @since 1.0.0
 	 */
 	public function ajax_save_config() {
-		$config = $_REQUEST;
+		$config = array_map( 'esc_attr', $_REQUEST );
 		unset( $config['action'] );
 
 		if ( $config ) {
@@ -206,7 +210,7 @@ class Admin extends Main {
      * @since 1.0.0
 	 */
 	public function ajax_save_providers() {
-		$providers = $_REQUEST['enabled_providers'];
+		$providers = array_map( 'esc_attr', $_REQUEST['enabled_providers'] );
 
 		if ( $providers ) {
 			self::save_providers( $providers );

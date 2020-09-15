@@ -2,7 +2,9 @@
 Contributors: itumulak
 Donate link: https://itumulak.com
 Tags: firebase, authentication, sso, login
-Requires at least: 3.0.1
+Requires at least: 4.7
+Tested up to: 5.4
+Requires PHP: 5.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 

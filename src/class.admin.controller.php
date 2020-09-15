@@ -171,7 +171,7 @@ class Admin extends Main {
 	 * @since 1.0.0
 	 */
 	public function ajax_save_config() {
-		$config = array_map( 'esc_attr', $_REQUEST );
+		$config = array_map( 'sanitize_text_field', $_REQUEST );
 		unset( $config['action'] );
 
 		if ( $config ) {
@@ -210,7 +210,7 @@ class Admin extends Main {
      * @since 1.0.0
 	 */
 	public function ajax_save_providers() {
-		$providers = array_map( 'esc_attr', $_REQUEST['enabled_providers'] );
+		$providers = array_map( 'sanitize_key', $_REQUEST['enabled_providers'] );
 
 		if ( $providers ) {
 			self::save_providers( $providers );

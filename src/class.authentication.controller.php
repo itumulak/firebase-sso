@@ -13,6 +13,7 @@ class Authentication extends Main {
 	public $data;
 	const baseUri = 'https://identitytoolkit.googleapis.com/v1/accounts';
 	const signInEmailPassword = ':signInWithPassword';
+	const signUpEmailPassword = ':signUp';
 	const cookieLogout = 'wp_firebase_logout';
 
 	/**
@@ -42,6 +43,16 @@ class Authentication extends Main {
 		];
 
 		return  $this->handle_request( self::signInEmailPassword,  $this->data );
+	}
+
+	public function createUserWithEmailAndPassword( $emailAddress, $password ) {
+		$this->data = [
+			'email' => $emailAddress,
+			'password' => $password,
+			'returnSecureToken' => true
+		];
+
+		return $this->handle_request( self::signUpEmailPassword, $this->data );
 	}
 
 	/**

@@ -44,11 +44,16 @@ class Frontend extends Auth {
 		add_action( 'wp_ajax_nopriv_firebase_handle_error', [$this, 'firebase_auth_error_ajax'] );
 		/**  */
 
-		/** General */
+		/** Login */
 		add_filter( 'authenticate', [$this, 'email_pass_auth'], 10, 3 );
 		add_filter( 'wp_login_errors', [$this, 'modify_incorrect_password'], 10, 2);
 		add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ] );
 		add_action( 'wp_logout', [$this, 'set_cookie_logout'] );
+		/**  */
+
+		/** Sign-Up */
+		add_action( 'register_post', [$this, 'verify_email_registration_to_firebase'], 10, 3 );
+		add_filter( 'wp_pre_insert_user_data', [$this, 'register_email_to_firebase'], 10, 3 );
 		/**  */
 	}
 
@@ -310,6 +315,46 @@ class Frontend extends Auth {
 	 */
 	public static function delete_cookie() {
 		// TODO
+	}
+
+	/**
+	 * Verify if email already exists when signing up.
+	 *
+	 * @use Hook/Action
+	 *
+	 * @param $user_login
+	 * @param $user_email
+	 * @param $errors
+	 *
+	 * @since 1.1.0
+	 */
+	public static function verify_email_registration_to_firebase( $user_login, $user_email, $errors ) {
+		$auth = new Auth();
+		$response = $auth->fetchProvidersForEmail( $user_email );
+
+		if ( $response['registered']  === true )
+		{
+			$errors->add( 'firebase_user_already_registered', '<strong>Error</strong>: Email Address already in use.' );
+		}
+	}
+
+	/**
+	 * Register email and password to Firebase before it is created.
+	 *
+	 * @use Hook/Filter
+	 *
+	 * @param $data
+	 * @param $update
+	 * @param $id
+	 *
+	 * @since 1.1.0
+	 */
+	public static function register_email_to_firebase( $data, $update, $id ) {
+		$auth = new Auth();
+		$response = $auth->createUserWithEmailAndPassword( $data['user_email'], $data['user_pass'] );
+
+		if ( $response )
+			return $data;
 	}
 }
 

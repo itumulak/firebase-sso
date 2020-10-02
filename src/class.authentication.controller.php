@@ -14,6 +14,7 @@ class Authentication extends Main {
 	const baseUri = 'https://identitytoolkit.googleapis.com/v1/accounts';
 	const signInEmailPassword = ':signInWithPassword';
 	const signUpEmailPassword = ':signUp';
+	const fetchProvidersEmail = ':createAuthUri';
 	const cookieLogout = 'wp_firebase_logout';
 
 	/**
@@ -43,6 +44,15 @@ class Authentication extends Main {
 		];
 
 		return  $this->handle_request( self::signInEmailPassword,  $this->data );
+	}
+
+	public function fetchProvidersForEmail( $emailAddress, $redirectUrl = null ) {
+		$this->data = [
+			'identifier' => $emailAddress,
+			'continueUri' => ! $redirectUrl ? get_admin_url() : $redirectUrl
+		];
+
+		return $this->handle_request( self::fetchProvidersEmail, $this->data );
 	}
 
 	public function createUserWithEmailAndPassword( $emailAddress, $password ) {

@@ -17,7 +17,10 @@ This plugin let's you sign-in your user with Firebase as the middleware for auth
     a) Email/Password
     b) Facebook
     c) Google
-*   **Account Creation** : once authenticated, WordPress User credentials is created.
+*   **Account Creation**
+    a) Once a WordPress user is validated and created, they are added to Firebase.
+    b) Once authenticated from Firebase, WordPress User credentials is created if it does not exist.
+
 
 == Installation ==
 
@@ -38,6 +41,9 @@ Please email me at <a href="mailto:edden87@gmail.com" target="_blank">edden87@gm
 Please email at <a href="mailto:edden87@gmail.com" target="_blank">edden87@gmail.com</a>.
 
 == Changelog ==
+
+= 1.1.0 =
+* Add User Email to Firebase after they pass validation and created.
 
 = 1.0.0 =
 * Initial Release

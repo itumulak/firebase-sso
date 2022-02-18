@@ -2,14 +2,14 @@
 
 namespace IT\SSO\Firebase;
 
-use IT\SSO\Firebase\Authentication as Auth;
+use IT\SSO\Firebase\SSO_Authentication as Auth;
 use WP_User;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-class Main_Controller extends Auth {
+class SSO_Main_Controller extends Auth {
 
 	const USER_SIGNIN_TYPE    = 'wp_firebase_signin';
 	const SIGNIN_REFRESHTOKEN = 'wp_firebase_refresh_token';
@@ -76,7 +76,7 @@ class Main_Controller extends Auth {
 
 		/** Main */
 		wp_enqueue_script( self::JS_MAIN, plugin_dir_url( __DIR__ ) . 'js/main.js', array( 'jquery', self::JS_FIREBASE_AUTH ), '', 'true' );
-		wp_localize_script( self::JS_MAIN, 'wp_firebase', Admin::get_config() );
+		wp_localize_script( self::JS_MAIN, 'wp_firebase', SSO_Admin::get_config() );
 		wp_localize_script( self::JS_MAIN, 'firebase_ajaxurl', (array) admin_url( 'admin-ajax.php' ) );
 
 		wp_enqueue_style( 'firebase_login', plugin_dir_url( __DIR__ ) . 'styles/login.css', array(), '' );
@@ -192,7 +192,7 @@ class Main_Controller extends Auth {
 	 * @since 1.0.0
 	 */
 	public static function signin_auth_buttons( $message ): string {
-		$config = Admin::get_providers();
+		$config = SSO_Admin::get_providers();
 
 		if ( in_array( 'google', $config, true ) ) {
 			$message .= '<p class="btn-wrapper"><button id="wp-firebase-google-sign-in" class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Sign in with Google</button></p>';
@@ -311,7 +311,7 @@ class Main_Controller extends Auth {
 	 * @since 1.0.0
 	 */
 	public static function set_cookie_logout() {
-		setcookie( self::cookieLogout, 1, time() + 3600, COOKIEPATH, COOKIE_DOMAIN );
+		setcookie( self::COOKIE_LOGOUT, 1, time() + 3600, COOKIEPATH, COOKIE_DOMAIN );
 	}
 
 	/**
@@ -367,4 +367,4 @@ class Main_Controller extends Auth {
 	}
 }
 
-new namespace\Main_Controller();
+new namespace\SSO_Main_Controller();

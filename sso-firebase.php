@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-require_once 'src/class.default.php';
-require_once 'src/class.authentication.controller.php';
-require_once 'src/class.admin.controller.php';
-require_once 'src/class-main-controller.php';
+require_once 'src/class-sso-default.php';
+require_once 'src/class-sso-authentication.php';
+require_once 'src/class-sso-admin.php';
+require_once 'src/class-sso-main-controller.php';

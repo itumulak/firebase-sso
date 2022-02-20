@@ -78,9 +78,10 @@ class SSO_Admin extends Main {
             <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
             <!-- Here are our tabs -->
             <h2 class="nav-tab-wrapper hide-if-js" style="display: block;">
-                <a class="nav-tab" href="#configurations" id="configurations" title="Configuration">Configuration</a>
-                <a class="nav-tab" href="#sign-in-providers" id="sign-in-providers" title="Sign-in Providers">Sign-in
-                    providers</a>
+                <a class="nav-tab" href="#configurations" id="configurations"
+                   title="<?php esc_attr( 'Configuration' ) ?>"><?php _e( 'Configuration' ) ?></a>
+                <a class="nav-tab" href="#sign-in-providers" id="sign-in-providers"
+                   title="<?php esc_attr( 'Sign-in Providers' ) ?>"><?php _e( 'Sign-in providers' ) ?></a>
             </h2>
             <div class="tabs-holder">
                 <div id="sign-in-providers-tab" class="group">
@@ -91,35 +92,35 @@ class SSO_Admin extends Main {
                                 <tbody>
                                 <tr>
                                     <th scope="row">
-                                        <label for="email-password">Email/Password</label>
+                                        <label for="email-password"><?php _e( 'Email/Password' ) ?></label>
                                     </th>
                                     <td>
                                         <input type="checkbox" id="email-password"
-                                               name="sign-in-providers[emailpassword]" <?= ( in_array( 'email-password', $enabledProviders ) ? 'checked' : '' ) ?>>
+                                               name="sign-in-providers[emailpassword]" <?= ( in_array( 'email-password', $enabledProviders, true ) ? 'checked' : '' ) ?>>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">
-                                        <label for="facebook">Facebook</label>
+                                        <label for="facebook"><?php _e( 'Facebook' ) ?></label>
                                     </th>
                                     <td>
                                         <input type="checkbox" id="facebook"
-                                               name="sign-in-providers[facebook]" <?= ( in_array( 'facebook', $enabledProviders ) ? 'checked' : '' ) ?>>
+                                               name="sign-in-providers[facebook]" <?= ( in_array( 'facebook', $enabledProviders, true ) ? 'checked' : '' ) ?>>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">
-                                        <label for="google">Google</label>
+                                        <label for="google"><?php _e( 'Google' ) ?></label>
                                     </th>
                                     <td>
-                                        <input type="checkbox" id="google"
-                                               name="sign-in-providers[google]" <?= ( in_array( 'google', $enabledProviders ) ? 'checked' : '' ) ?>>
+                                        <input id="google" name="sign-in-providers[google]"
+                                               type="checkbox" <?= ( in_array( 'google', $enabledProviders, true ) ? 'checked' : '' ) ?>>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
                             <p>
-                                <button type="submit" class="button button-primary">Save</button>
+                                <button type="submit" class="button button-primary"><?php _e( 'Save' ); ?></button>
                             </p>
                         </form>
                     </div>
@@ -127,12 +128,23 @@ class SSO_Admin extends Main {
                 <div id="configurations-tab" class="group">
                     <div id="config-textarea-wrapper">
                         <form id="configuration-fields">
-                            <h1>Firebase Configurations</h1>
-                            <p>Get a copy, and paste your <a target="_blank"
-                                                             href="https://firebase.google.com/docs/web/setup?authuser=0#config-object">Firebase
-                                    config object</a> found at your project settings.</p>
+                            <h1><?php _e( 'Firebase Configurations' ); ?></h1>
+                            <p><?php echo wp_sprintf(
+									'%s <a target="_blank" href="%s">%s</a> %s',
+									__( 'Get a copy, and paste your' ),
+									esc_url( 'https://firebase.google.com/docs/web/setup?authuser=0#config-object' ),
+									__( 'Firebase config object' ),
+									__( 'found at your project settings.' ),
+								);
+								?>
+                            </p>
 							<?php
-							$config        = $this->get_config();
+							$config = $this->get_config();
+
+							if ( array_key_exists( 'apiKey', $config ) ) {
+								echo 'hello';
+							}
+
 							$config_fields = array(
 								'apiKey'     => 'API Key',
 								'authDomain' => 'Authorized Domain',
@@ -140,15 +152,21 @@ class SSO_Admin extends Main {
 							?>
                             <table class="form-table">
                                 <tbody>
-								<?php foreach ( $config_fields as $key => $label ) : ?>
+								<?php foreach ( $config_fields as $key => $label ) :
+									$field_value = '';
+
+									if ( array_key_exists( 'apiKey', $config ) ) {
+										$field_value =  $config[ $key ];
+									}
+									?>
                                     <tr>
                                         <th scope="row">
-                                            <label for="<?php $key ?>"><?php esc_attr( $label ) ?></label>
+                                            <label for="<?php echo esc_attr( $key ) ?>"><?php echo esc_attr( $label ) ?></label>
                                         </th>
                                         <td>
-                                            <input class="regular-text" id="<?php esc_attr( $key ) ?>"
-                                                   name="<?php $key ?>"
-                                                   type="text" <?php array_key_exists( $key, $config ) ? 'value="' . esc_attr( $config[ $key ] ) . '"' : '' ?>>
+                                            <input class="regular-text" id="<?php echo esc_attr( $key ) ?>"
+                                                   name="<?php echo esc_attr( $key ) ?>"
+                                                   type="text" value="<?php echo esc_attr( $field_value ); ?>">
                                         </td>
                                     </tr>
 								<?php endforeach; ?>
@@ -156,7 +174,8 @@ class SSO_Admin extends Main {
                                 </tbody>
                             </table>
                             <p>
-                                <button type="submit" class="button button-primary">Save Config</button>
+                                <button type="submit"
+                                        class="button button-primary"><?php _e( 'Save Config' ) ?></button>
                             </p>
                         </form>
                     </div>

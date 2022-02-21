@@ -42,6 +42,10 @@ Please email at <a href="mailto:edden87@gmail.com" target="_blank">edden87@gmail
 
 == Changelog ==
 
+= 1.1.1 =
+* Sanitized fields
+* Added translation
+
 = 1.1.0 =
 * Add User Email to Firebase after they pass validation and created.
 

@@ -1,9 +1,10 @@
 {
-  "name": "my-theme",
+  "name": "wp-sso-firebase",
   "private": true,
   "dependencies": {
     "@babel/polyfill": "^7.11.5",
-    "firebase": "^9.6.7"
+    "firebase": "^9.6.7",
+    "jquery": "^3.6.0"
   },
   "devDependencies": {
     "@wordpress/eslint-plugin": "^10.0.1",
@@ -15,8 +16,10 @@
     "css-loader": "^6.6.0",
     "eslint": "^8.9.0",
     "file-loader": "^6.2.0",
+    "glob": "^7.2.0",
     "mini-css-extract-plugin": "^2.5.3",
     "node-sass": "^7.0.1",
+    "purgecss-webpack-plugin": "^4.1.3",
     "sass": "^1.49.8",
     "sass-loader": "^12.6.0",
     "stylelint": "^14.5.2",
@@ -30,8 +33,9 @@
     "webpackbar": "^5.0.2"
   },
   "scripts": {
-    "build": "webpack --mode production",
-    "dev": "webpack --mode development --watch"
+    "build": "webpack --mode production --config production.config.js",
+    "dev": "webpack --mode development --config development.config.js",
+    "dev:watch": "webpack --mode development --config development.config.js --watch"
   },
   "babel": {
     "presets": [

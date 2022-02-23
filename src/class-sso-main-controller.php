@@ -75,11 +75,11 @@ class SSO_Main_Controller extends Auth {
 		/**  */
 
 		/** Main */
-		wp_enqueue_script( self::JS_MAIN, plugin_dir_url( __DIR__ ) . 'js/main.js', array( 'jquery', self::JS_FIREBASE_AUTH ), '', 'true' );
+		wp_enqueue_script( self::JS_MAIN, plugin_dir_url( __DIR__ ) . 'dist/sso-fb.js', array( self::JS_FIREBASE_AUTH ), '', 'true' );
 		wp_localize_script( self::JS_MAIN, 'wp_firebase', SSO_Admin::get_config() );
 		wp_localize_script( self::JS_MAIN, 'firebase_ajaxurl', (array) admin_url( 'admin-ajax.php' ) );
 
-		wp_enqueue_style( 'firebase_login', plugin_dir_url( __DIR__ ) . 'styles/login.css', array(), '' );
+		wp_enqueue_style( 'firebase_login', plugin_dir_url( __DIR__ ) . 'dist/login.css', array(), '' );
 		/**  */
 
 	}

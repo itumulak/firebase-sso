@@ -1,80 +1,118 @@
-jQuery(document).ready((_) => {
-    firebase.initializeApp(wp_firebase);
+/* eslint-disable no-undef */
+import $ from 'jquery';
 
-    _('#wp-firebase-google-sign-in').on('click', (event) => {
-        const provider = new firebase.auth.GoogleAuthProvider();
+/**
+ * Variables that are defined in wp_localized_script.
+ *  - wp_firebase
+ *  - firebase_ajaxurl
+ */
 
-        firebase.auth().signInWithPopup(provider)
-            .then((result) => {
-                const token = result.credential.accessToken;
-                const user = result.user;
+$(document).ready((_) => {
+	firebase.initializeApp(wp_firebase);
 
-                _.post(firebase_ajaxurl, {action: 'firebase_google_login', oauth_token: token, refresh_token: user.refreshToken, email: user.email }, (e, textStatus, jqXHR) => {
-                    if (e.success == true) {
-                        window.location.href = e.data.url;
-                    }
-                });
-            })
-            .catch((error) => {
-                // Handle Errors here.
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                // The email of the user's account used.
-                var email = error.email;
-                // The firebase.auth.AuthCredential type that was used.
-                var credential = error.credential;
-            })
-    });
+	_('#wp-firebase-google-sign-in').on('click', () => {
+		const provider = new firebase.auth.GoogleAuthProvider();
 
-    _('#wp-firebase-facebook-sign-in').on('click', (event) => {
-         const provider = new firebase.auth.FacebookAuthProvider();
+		firebase
+			.auth()
+			.signInWithPopup(provider)
+			.then((result) => {
+				const token = result.credential.accessToken;
+				const user = result.user;
 
-        firebase.auth().signInWithPopup(provider)
-                .then((result) => {
-                    const token = result.credential.accessToken;
-                    const user = result.user;
+				_.post(
+					firebase_ajaxurl,
+					{
+						action: 'firebase_google_login',
+						oauth_token: token,
+						refresh_token: user.refreshToken,
+						email: user.email,
+					},
+					(e) => {
+						if (e.success === true) {
+							window.location.href = e.data.url;
+						}
+					}
+				);
+			})
+			.catch((error) => {
+				// Handle Errors here.
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				// The email of the user's account used.
+				const email = error.email;
+				// The firebase.auth.AuthCredential type that was used.
+				const credential = error.credential;
+			});
+	});
 
-                    _.post(firebase_ajaxurl, {action: 'firebase_facebook_login', oauth_token: token, refresh_token: user.refreshToken, email: user.email }, (e, textStatus, jqXHR) => {
-                        if (e.success == true) {
-                            window.location.href = e.data.url;
-                        }
-                    });
-                })
-                .catch((error) => {
-                    // Handle Errors here.
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
-                    // The email of the user's account used.
-                    var email = error.email;
-                    // The firebase.auth.AuthCredential type that was used.
-                    var credential = error.credential;
+	_('#wp-firebase-facebook-sign-in').on('click', () => {
+		const provider = new firebase.auth.FacebookAuthProvider();
 
-                    _.post(firebase_ajaxurl, {action: 'firebase_handle_error', code: error.code}, (e, textStatus, jqXHR) => {
-                        if (e.success == true) {
-                            if (_('#login_error')[0]) {
-                                _('#login_error').text(e.data.message);
+		firebase
+			.auth()
+			.signInWithPopup(provider)
+			.then((result) => {
+				const token = result.credential.accessToken;
+				const user = result.user;
 
-                                document.getElementById('loginform').classList.remove('shake');
+				_.post(
+					firebase_ajaxurl,
+					{
+						action: 'firebase_facebook_login',
+						oauth_token: token,
+						refresh_token: user.refreshToken,
+						email: user.email,
+					},
+					(e) => {
+						if (e.success === true) {
+							window.location.href = e.data.url;
+						}
+					}
+				);
+			})
+			.catch((error) => {
+				// Handle Errors here.
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				// The email of the user's account used.
+				const email = error.email;
+				// The firebase.auth.AuthCredential type that was used.
+				const credential = error.credential;
 
-                                setTimeout(() => {
-                                    _('form#loginform').addClass('shake');
+				_.post(
+					firebase_ajaxurl,
+					{ action: 'firebase_handle_error', code: error.code },
+					(e) => {
+						if (e.success === true) {
+							if (_('#login_error')[0]) {
+								_('#login_error').text(e.data.message);
 
-                                }, 1200);
-                            }
-                            else {
-                                _(`<div id="login_error">${e.data.message}</div>`).insertBefore('form#loginform');
-                                _('form#loginform').addClass('shake');
-                            }
-                        }
-                    });
-                })
-    });
+								document
+									.getElementById('loginform')
+									.classList.remove('shake');
 
-    if ( document.cookie.indexOf('wp_firebase_logout') !== -1 ) {
-        firebase.auth().signOut()
-            .then(() => {
-                console.log('firebase signout.');
-            });
+								setTimeout(() => {
+									_('form#loginform').addClass('shake');
+								}, 1200);
+							} else {
+								_(
+									`<div id="login_error">${e.data.message}</div>`
+								).insertBefore('form#loginform');
+								_('form#loginform').addClass('shake');
+							}
+						}
+					}
+				);
+			});
+	});
 
-    }
+	if (document.cookie.indexOf('wp_firebase_logout') !== -1) {
+		firebase
+			.auth()
+			.signOut()
+			.then(() => {
+				console.log('firebase signout.');
+			});
+	}
 });

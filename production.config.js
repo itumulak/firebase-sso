@@ -5,8 +5,8 @@ const glob = require('glob');
 const WebpackBar = require('webpackbar');
 
 // change these variables to fit your project
-const jsPath = './js';
-const cssPath = './styles';
+const jsPath = './src/js';
+const cssPath = './src/styles';
 const outputPath = 'dist';
 const entryPoints = {
 	// 'app' is the output name, people commonly use 'bundle'

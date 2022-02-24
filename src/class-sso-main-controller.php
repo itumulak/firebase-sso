@@ -60,6 +60,11 @@ class SSO_Main_Controller extends Auth {
 		add_action( 'register_post', array( $this, 'verify_email_registration_to_firebase' ), 10, 3 );
 		add_filter( 'wp_pre_insert_user_data', array( $this, 'register_email_to_firebase' ), 10, 3 );
 		/**  */
+
+		/** Fetch Firebase configs */
+		add_action( 'wp_ajax_firebase_config', array( $this, 'get_firebase_config_ajax' ) );
+		add_action( 'wp_ajax_nopriv_firebase_config', array( $this, 'get_firebase_config_ajax' ) );
+		/**  */
 	}
 
 	/**
@@ -70,18 +75,31 @@ class SSO_Main_Controller extends Auth {
 	 */
 	public function scripts() {
 		/** Firebase */
-		wp_register_script( self::JS_FIREBASE, 'https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js', array(), '7.15.0', true );
-		wp_register_script( self::JS_FIREBASE_AUTH, 'https://www.gstatic.com/firebasejs/7.15.0/firebase-auth.js', array( self::JS_FIREBASE ), '7.15.0', true );
+//		wp_register_script( self::JS_FIREBASE, 'https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js', array(), '7.15.0', true );
+//		wp_register_script( self::JS_FIREBASE_AUTH, 'https://www.gstatic.com/firebasejs/7.15.0/firebase-auth.js', array( self::JS_FIREBASE ), '7.15.0', true );
 		/**  */
 
 		/** Main */
-		wp_enqueue_script( self::JS_MAIN, plugin_dir_url( __DIR__ ) . 'dist/sso-fb.js', array( self::JS_FIREBASE_AUTH ), '', 'true' );
-		wp_localize_script( self::JS_MAIN, 'wp_firebase', SSO_Admin::get_config() );
-		wp_localize_script( self::JS_MAIN, 'firebase_ajaxurl', (array) admin_url( 'admin-ajax.php' ) );
+//		wp_enqueue_script( self::JS_MAIN, plugin_dir_url( __DIR__ ) . 'dist/sso-fb.js', array( self::JS_FIREBASE_AUTH ), '', 'true' );
+//		wp_localize_script( self::JS_MAIN, 'wp_firebase', SSO_Admin::get_config() );
+//		wp_localize_script( self::JS_MAIN, 'firebase_ajaxurl', (array) admin_url( 'admin-ajax.php' ) );
 
 		wp_enqueue_style( 'firebase_login', plugin_dir_url( __DIR__ ) . 'dist/login.css', array(), '' );
 		/**  */
 
+		/** Development v2 */
+		wp_enqueue_script( 'SSO_Firebase_Main_Dev', plugin_dir_url( __DIR__ ) . 'dist/sso-fb-dev.js', array(), '', 'true' );
+		wp_localize_script( 'SSO_Firebase_Main_Dev', 'firebase_ajaxurl', (array) admin_url( 'admin-ajax.php' ) );
+	}
+
+	/**
+	 * Return the Firebase configs AJAX callback.
+	 *
+	 * @return false|mixed|void
+	 * @since 2.0.0
+	 */
+	public function get_firebase_config_ajax() {
+		wp_send_json_success( array( 'config' => SSO_Admin::get_config() ) );
 	}
 
 	/**

@@ -1,4 +1,8 @@
-jQuery(document).ready((_) => {
+import $ from 'jquery';
+
+$(document).ready((_) => {
+	console.log('hello');
+
 	if (location.hash.substr(1))
 		_(`#${location.hash.substr(1)}`).addClass('nav-tab-active');
 	else _('.nav-tab-wrapper a:first-child').addClass('nav-tab-active');

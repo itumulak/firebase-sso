@@ -56,10 +56,7 @@ class SSO_Admin extends Main {
 
 			/** Admin main */
 			wp_enqueue_style( self::JS_ADMIN, plugin_dir_url( __DIR__ ) . 'dist/admin.css', array(), '' );
-			wp_enqueue_script( self::JS_ADMIN, plugin_dir_url( __DIR__ ) . 'dist/admin.js', array(
-				'jquery',
-				'toast'
-			), '1.0.0', 'true' );
+			wp_enqueue_script( self::JS_ADMIN, plugin_dir_url( __DIR__ ) . 'dist/sso-fb-admin.js', array( 'toast' ), '2', 'true' );
 			/**  */
 		}
 	}

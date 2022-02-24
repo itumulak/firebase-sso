@@ -50,13 +50,13 @@ class SSO_Admin extends Main {
 	public function admin_scripts() {
 		if ( isset( $_GET['page'] ) && $_GET['page'] === self::MENU_SLUG ) {
 			/** Toast */
-			wp_enqueue_script( 'toast', plugin_dir_url( __DIR__ ) . 'js/jquery.toast.min.js', array( 'jquery' ), '', 'true' );
-			wp_enqueue_style( 'toast', plugin_dir_url( __DIR__ ) . 'styles/jquery.toast.min.css', array(), '' );
+			wp_enqueue_script( 'toast', plugin_dir_url( __DIR__ ) . 'dist/jquery.toast.min.js', array( 'jquery' ), '', 'true' );
+			wp_enqueue_style( 'toast', plugin_dir_url( __DIR__ ) . 'dist/jquery.toast.min.css', array(), '' );
 			/**  */
 
 			/** Admin main */
-			wp_enqueue_style( self::JS_ADMIN, plugin_dir_url( __DIR__ ) . 'styles/admin.css', array(), '' );
-			wp_enqueue_script( self::JS_ADMIN, plugin_dir_url( __DIR__ ) . 'js/admin.js', array(
+			wp_enqueue_style( self::JS_ADMIN, plugin_dir_url( __DIR__ ) . 'dist/admin.css', array(), '' );
+			wp_enqueue_script( self::JS_ADMIN, plugin_dir_url( __DIR__ ) . 'dist/admin.js', array(
 				'jquery',
 				'toast'
 			), '1.0.0', 'true' );

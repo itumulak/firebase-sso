@@ -1,0 +1,33 @@
+[type=button]:not(:disabled),
+[type=reset]:not(:disabled),
+[type=submit]:not(:disabled),
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+.btn {
+  font-size: 80%;
+  border-radius: 5rem;
+  letter-spacing: .1rem;
+  font-weight: bold;
+  padding: 1rem;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  margin-bottom: .5rem;
+  width: 90%;
+  border: none;
+
+  &-wrapper {
+    text-align: center;
+  }
+
+  &-google {
+    color: white;
+    background-color: #ea4335;
+  }
+
+  &-facebook {
+    color: white;
+    background-color: #3b5998;
+  }
+}

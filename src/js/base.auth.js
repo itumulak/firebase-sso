@@ -1,4 +1,6 @@
 import { initializeApp } from 'firebase/app';
+import { getAuth, signOut } from 'firebase/auth';
+
 import $ from 'jquery';
 import googleAuth from './auth/google.auth';
 import facebookAuth from './auth/facebook.auth';
@@ -17,11 +19,24 @@ $(document).ready(() => {
 				// console.log(response.data.config);
 				firebaseConfig = response.data.config;
 				initializeApp(firebaseConfig);
+
+				// @todo Implement a Firebase sign-out if they sign-out on WP...
+				// const auth = getAuth();
+				//
+				// signOut(auth)
+				// 	.then(() => {
+				// 		// Sign-out successful.
+				// 		console.log('Sign out...');
+				// 	})
+				// 	.catch((error) => {
+				// 		// An error happened.
+				// 	});
 			}
 		}
 	);
 
-	$('#wp-firebase-googlae-sign-in').on('click', () => {
+	$('#wp-firebase-google-sign-in').on('click', () => {
+		console.log('google auth');
 		googleAuth();
 	});
 

@@ -88,7 +88,7 @@ class SSO_Main_Controller extends Auth {
 		/**  */
 
 		/** Development v2 */
-		wp_enqueue_script( 'SSO_Firebase_Main_Dev', plugin_dir_url( __DIR__ ) . 'dist/sso-fb-dev.js', array(), 'v0.1', 'true' );
+		wp_enqueue_script( 'SSO_Firebase_Main_Dev', plugin_dir_url( __DIR__ ) . 'dist/sso-fb-dev.js', array(), 'v0.4', 'true' );
 		wp_localize_script( 'SSO_Firebase_Main_Dev', 'firebase_ajaxurl', (array) admin_url( 'admin-ajax.php' ) );
 	}
 

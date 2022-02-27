@@ -74,22 +74,9 @@ class SSO_Main_Controller extends Auth {
 	 * @since 1.0.0
 	 */
 	public function scripts() {
-		/** Firebase */
-//		wp_register_script( self::JS_FIREBASE, 'https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js', array(), '7.15.0', true );
-//		wp_register_script( self::JS_FIREBASE_AUTH, 'https://www.gstatic.com/firebasejs/7.15.0/firebase-auth.js', array( self::JS_FIREBASE ), '7.15.0', true );
-		/**  */
-
-		/** Main */
-//		wp_enqueue_script( self::JS_MAIN, plugin_dir_url( __DIR__ ) . 'dist/sso-fb.js', array( self::JS_FIREBASE_AUTH ), '', 'true' );
-//		wp_localize_script( self::JS_MAIN, 'wp_firebase', SSO_Admin::get_config() );
-//		wp_localize_script( self::JS_MAIN, 'firebase_ajaxurl', (array) admin_url( 'admin-ajax.php' ) );
-
-		wp_enqueue_style( 'firebase_login', plugin_dir_url( __DIR__ ) . 'dist/login.css', array(), '' );
-		/**  */
-
-		/** Development v2 */
-		wp_enqueue_script( 'SSO_Firebase_Main_Dev', plugin_dir_url( __DIR__ ) . 'dist/sso-fb-dev.js', array(), 'v0.4', 'true' );
+		wp_enqueue_script( 'SSO_Firebase_Main_Dev', plugin_dir_url( __DIR__ ) . 'dist/sso-fb-dev.js', array(), (string) time(), 'true' );
 		wp_localize_script( 'SSO_Firebase_Main_Dev', 'firebase_ajaxurl', (array) admin_url( 'admin-ajax.php' ) );
+		wp_enqueue_style( 'firebase_login', plugin_dir_url( __DIR__ ) . 'dist/login.css', array(), '' );
 	}
 
 	/**

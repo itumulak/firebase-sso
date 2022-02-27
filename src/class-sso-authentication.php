@@ -48,10 +48,10 @@ class SSO_Authentication extends Main {
 		return  $this->handle_request( self::SINGIN_EMAIL_PASSWORD, $this->data );
 	}
 
-	public function fetchProvidersForEmail( $email_address, $redirec_url = null ) {
+	public function fetchProvidersForEmail( $email_address, $redirect_url = null ) {
 		$this->data = array(
 			'identifier'  => $email_address,
-			'continueUri' => ! $redirec_url ? get_admin_url() : $redirec_url,
+			'continueUri' => ! $redirect_url ? get_admin_url() : $redirect_url,
 		);
 
 		return $this->handle_request( self::FETCH_PROVIDERS_EMAIL, $this->data );

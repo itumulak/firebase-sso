@@ -1,3 +1,10 @@
+/**
+ * Facebook Authentication.
+ * Script for authenticating Facebook signup with Firebase SDK package.
+ *
+ * @since 2.0.0
+ */
+
 import { getAuth, signInWithPopup, FacebookAuthProvider } from 'firebase/auth';
 import $ from 'jquery';
 

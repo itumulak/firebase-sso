@@ -1,3 +1,9 @@
+/**
+ * Base Authentication file.
+ *
+ * @since 2.0.0
+ */
+
 import { initializeApp } from 'firebase/app';
 import { getAuth, signOut } from 'firebase/auth';
 

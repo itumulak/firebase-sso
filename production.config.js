@@ -11,7 +11,7 @@ const outputPath = 'dist';
 const entryPoints = {
 	// 'app' is the output name, people commonly use 'bundle'
 	// you can have more than 1 entry point
-	'sso-fb': jsPath + '/main.js',
+	'sso-fb': jsPath + '/base.auth.js',
 	admin: cssPath + '/admin.scss',
 	login: cssPath + '/login.scss',
 };

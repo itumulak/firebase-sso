@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import $ from 'jquery';
 import googleAuth from './auth/google.auth';
+import facebookAuth from './auth/facebook.auth';
 
 let firebaseConfig;
 
@@ -20,7 +21,11 @@ $(document).ready(() => {
 		}
 	);
 
-	$('#wp-firebase-google-sign-in').on('click', () => {
+	$('#wp-firebase-googlae-sign-in').on('click', () => {
 		googleAuth();
+	});
+
+	$('#wp-firebase-facebook-sign-in').one('click', () => {
+		facebookAuth();
 	});
 });

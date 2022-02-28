@@ -221,7 +221,8 @@ class Admin extends Main {
 	 * @return false|mixed|void
 	 * @since 1.0.0
 	 */
-	public static function get_providers() {
+	public static function
+    get_providers() {
 		return get_option( self::OPTION_KEY_PROVIDERS );
 	}
 }

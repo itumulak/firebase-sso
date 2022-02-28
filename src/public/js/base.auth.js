@@ -42,7 +42,6 @@ $(document).ready(() => {
 	);
 
 	$('#wp-firebase-google-sign-in').on('click', () => {
-		console.log('google auth');
 		googleAuth();
 	});
 

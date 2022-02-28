@@ -21,6 +21,10 @@ require_once 'src/class-default-vars.php';
 require_once 'src/class-wp-auth.php';
 /**  */
 
+/** API */
+require_once 'src/public/api/class-email-password-auth.php';
+/**  */
+
 /** Callbacks */
 require_once 'src/public/callback/class-email-password.php';
 require_once 'src/public/callback/class-google.php';
@@ -36,6 +40,3 @@ require_once 'src/admin/class-admin.php';
 require_once 'src/class-wp-auth.php';
 require_once 'src/class-wp-login.php';
 /**  */
-
-//require_once 'src/public/class-sso-email-password-authentication.php';
-//require_once 'src/public/class-sso-main-controller.php';

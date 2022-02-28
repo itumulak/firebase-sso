@@ -25,6 +25,12 @@ class Default_Vars {
 	const SIGNIN_FACEBOOK      = 'facebook';
 	const COOKIE_LOGOUT        = 'wp_firebase_logout';
 
+	/**
+	 * Return the plugin's root url.
+	 *
+	 * @since 2.0.0
+	 * @return string
+	 */
 	public static function get_plugin_url() {
 		return WP_PLUGIN_URL . '/wp-sso-firebase/';
 	}

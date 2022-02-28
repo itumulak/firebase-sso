@@ -5,15 +5,18 @@ const glob = require('glob');
 const WebpackBar = require('webpackbar');
 
 // change these variables to fit your project
-const jsPath = './src/js';
-const cssPath = './src/styles';
+const jsPublicPath = './src/public/js';
+const cssPublicPath = './src/public/styles';
+const jsAdminPath = './src/admin/js';
+const cssAdminPath = './src/admin/styles';
 const outputPath = 'dist';
 const entryPoints = {
 	// 'app' is the output name, people commonly use 'bundle'
 	// you can have more than 1 entry point
-	'sso-fb': jsPath + '/base.auth.js',
-	admin: cssPath + '/admin.scss',
-	login: cssPath + '/login.scss',
+	'sso-fb': `${jsPublicPath}/base.auth.js`,
+	'sso-fb-admin': jsAdminPath + '/admin.js',
+	admin: cssAdminPath + '/admin.scss',
+	login: cssPublicPath + '/login.scss',
 };
 
 const PATHS = {

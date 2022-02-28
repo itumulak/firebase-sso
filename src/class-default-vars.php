@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-class SSO_Default {
+class Default_Vars {
 	/**
 	 * Default Firebase slugs for WordPress.
 	 */
@@ -17,4 +17,15 @@ class SSO_Default {
 	const JS_FIREBASE_AUTH     = 'firebase_authentication';
 	const OPTION_KEY_CONFIG    = 'wp_firebase_config';
 	const OPTION_KEY_PROVIDERS = 'wp_firebase_signin_providers';
+	const USER_SIGNIN_TYPE     = 'wp_firebase_signin';
+	const SIGNIN_REFRESHTOKEN  = 'wp_firebase_refresh_token';
+	const SIGNIN_OAUTH         = 'wp_firebase_oauth';
+	const SIGNIN_EMAILPASS     = 'emailpass';
+	const SIGNIN_GOOGLE        = 'google';
+	const SIGNIN_FACEBOOK      = 'facebook';
+	const COOKIE_LOGOUT        = 'wp_firebase_logout';
+
+	public static function get_plugin_url() {
+		return WP_PLUGIN_URL . '/wp-sso-firebase/';
+	}
 }

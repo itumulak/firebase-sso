@@ -2,14 +2,18 @@
 
 namespace IT\SSO\Firebase;
 
-use IT\SSO\Firebase\SSO_Default as Main;
+use IT\SSO\Firebase\Default_Vars as Main;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-class SSO_Admin extends Main {
-
+/**
+ * Admin class.
+ *
+ * @since 1.0.0
+ */
+class Admin extends Main {
 	/**
 	 * Admin constructor.
 	 *
@@ -24,8 +28,6 @@ class SSO_Admin extends Main {
 	function __construct() {
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
-		add_action( 'wp_ajax_firebase_config', array( $this, 'ajax_save_config' ) );
-		add_action( 'wp_ajax_firebase_providers', array( $this, 'ajax_save_providers' ) );
 	}
 
 	/**
@@ -50,13 +52,12 @@ class SSO_Admin extends Main {
 	public function admin_scripts() {
 		if ( isset( $_GET['page'] ) && $_GET['page'] === self::MENU_SLUG ) {
 			/** Toast */
-			wp_enqueue_script( 'toast', plugin_dir_url( __DIR__ ) . 'dist/jquery.toast.min.js', array( 'jquery' ), '', 'true' );
-			wp_enqueue_style( 'toast', plugin_dir_url( __DIR__ ) . 'dist/jquery.toast.min.css', array(), '' );
+			wp_enqueue_script( 'toast', self::get_plugin_url() . 'lib/toast/jquery.toast.min.js', array( 'jquery' ), '', 'true' );
 			/**  */
 
 			/** Admin main */
-			wp_enqueue_style( self::JS_ADMIN, plugin_dir_url( __DIR__ ) . 'dist/admin.css', array(), '' );
-			wp_enqueue_script( self::JS_ADMIN, plugin_dir_url( __DIR__ ) . 'dist/sso-fb-admin.js', array( 'toast' ), '2', 'true' );
+			wp_enqueue_style( self::JS_ADMIN, self::get_plugin_url() . 'dist/admin.css', array(), (string) time() );
+			wp_enqueue_script( self::JS_ADMIN, self::get_plugin_url() . 'dist/sso-fb-admin.js', array( 'toast', 'jquery' ), (string) time(), 'true' );
 			/**  */
 		}
 	}
@@ -184,32 +185,12 @@ class SSO_Admin extends Main {
 
 	/**
 	 * Save Firebase Config
-	 * Ajax request callback
-	 *
-	 * @use Hook/Action
-	 * @return void $data
-	 * @since 1.0.0
-	 */
-	public function ajax_save_config() {
-		$config = array_map( 'sanitize_text_field', $_REQUEST );
-		unset( $config['action'] );
-
-		if ( $config ) {
-			self::save_config( $config );
-			wp_send_json_success();
-		} else {
-			wp_send_json_error();
-		}
-	}
-
-	/**
-	 * Save Firebase Config
 	 *
 	 * @param $config
 	 *
 	 * @since 1.0.0
 	 */
-	private static function save_config( $config ) {
+	public static function save_config( $config ) {
 		update_option( self::OPTION_KEY_CONFIG, $config );
 	}
 
@@ -225,31 +206,12 @@ class SSO_Admin extends Main {
 
 	/**
 	 * Save Firebase Sign-in Providers
-	 * Ajax request callback
-	 *
-	 * @return void $data
-	 * @since 1.0.0
-	 */
-	public function ajax_save_providers() {
-		$providers = array_map( 'sanitize_key', $_REQUEST['enabled_providers'] );
-
-		if ( $providers ) {
-			self::save_providers( $providers );
-			wp_send_json_success();
-
-		} else {
-			wp_send_json_error();
-		}
-	}
-
-	/**
-	 * Save Firebase Sign-in Providers
 	 *
 	 * @param $providers
 	 *
 	 * @since 1.0.0
 	 */
-	private static function save_providers( $providers ) {
+	public static function save_providers( $providers ) {
 		update_option( self::OPTION_KEY_PROVIDERS, $providers );
 	}
 
@@ -264,4 +226,4 @@ class SSO_Admin extends Main {
 	}
 }
 
-new namespace\SSO_Admin();
+new namespace\Admin();

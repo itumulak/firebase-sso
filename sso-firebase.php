@@ -33,7 +33,7 @@ require_once 'src/public/callback/class-facebook.php';
 /**  */
 
 /** Admin */
-require_once 'src/admin/class-admin-configs.php';
+require_once 'src/admin/class-admin-config.php';
 require_once 'src/admin/callback/class-admin-ajax.php';
 require_once 'src/admin/class-admin.php';
 /**  */

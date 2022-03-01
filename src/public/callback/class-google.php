@@ -28,4 +28,3 @@ class Google extends Callback {
 
 $google_callback = new namespace\Google();
 $google_callback->init();
-

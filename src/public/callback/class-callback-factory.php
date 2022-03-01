@@ -21,6 +21,10 @@ class Callback_Factory extends Base {
 	 * @return void
 	 */
 	public function callback() {
+		if ( ! check_ajax_referer( self::AJAX_NONCE, 'security' ) ) {
+			wp_send_json_error();
+		}
+
 		$this->oauth_token   = sanitize_key( $_REQUEST['oauth_token'] );
 		$this->refresh_token = sanitize_key( $_REQUEST['refresh_token'] );
 		$this->email         = sanitize_email( $_REQUEST['email'] );

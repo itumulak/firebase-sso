@@ -26,6 +26,7 @@ const googleAuth = () => {
 					oauth_token: token,
 					refresh_token: user.refreshToken,
 					email: user.email,
+					security: sso_firebase_nonce,
 				},
 				(e) => {
 					if (e.success === true) {

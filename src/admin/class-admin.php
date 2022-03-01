@@ -35,7 +35,7 @@ class Admin extends Admin_Config {
 		add_menu_page( 'WP Firebase', 'WP Firebase', 'manage_options', self::MENU_SLUG, array(
 			$this,
 			'admin_page'
-		), '', 9 );
+		), self::get_plugin_url() . 'assets/firebase-logo-menu-icon.svg', 9 );
 	}
 
 	/**

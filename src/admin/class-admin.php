@@ -134,10 +134,6 @@ class Admin extends Admin_Config {
 							<?php
 							$config = $this->get_config();
 
-							if ( array_key_exists( 'apiKey', $config ) ) {
-								echo 'hello';
-							}
-
 							$config_fields = array(
 								'apiKey'     => 'API Key',
 								'authDomain' => 'Authorized Domain',

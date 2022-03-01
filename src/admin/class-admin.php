@@ -94,7 +94,7 @@ class Admin extends Admin_Config {
                                 </tr>
                                 <tr>
                                     <th scope="row">
-                                        <label for="facebook"><img height="24" src="<?php echo self::get_plugin_url() . 'assets/facebook-logo.svg'; ?>" /> <span><?php _e( 'Facebook' ) ?></span></label>
+                                        <label for="facebook"><img height="24" src="<?php echo self::get_plugin_url() . 'assets/facebook-logo.svg'; ?>" /> <span class="facebook"><?php _e( 'Facebook' ) ?></span></label>
                                     </th>
                                     <td>
                                         <input type="checkbox" id="facebook"
@@ -103,7 +103,7 @@ class Admin extends Admin_Config {
                                 </tr>
                                 <tr>
                                     <th scope="row">
-                                        <label for="google"><?php _e( 'Google' ) ?></label>
+                                        <label for="google"><img height="24" src="<?php echo self::get_plugin_url() . 'assets/google-logo.svg'; ?>" /> <span class="google"><?php _e( 'Google' ) ?></span></label>
                                     </th>
                                     <td>
                                         <input id="google" name="sign-in-providers[google]"

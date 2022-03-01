@@ -32,6 +32,10 @@
       left: 30%;
       top: 45%;
       transform: translate(-50%, -50%);
+
+      &.google {
+        left: 26%;
+      }
     }
   }
 }

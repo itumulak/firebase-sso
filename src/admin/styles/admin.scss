@@ -29,9 +29,17 @@
 
     span {
       position: absolute;
-      left: 30%;
       top: 45%;
       transform: translate(-50%, -50%);
+
+      &.mail {
+        left: 40%;
+        top: 40%;
+      }
+
+      &.facebook {
+        left: 30%;
+      }
 
       &.google {
         left: 26%;

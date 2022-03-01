@@ -85,7 +85,7 @@ class Admin extends Admin_Config {
                                 <tbody>
                                 <tr>
                                     <th scope="row">
-                                        <label for="email-password"><?php _e( 'Email/Password' ) ?></label>
+                                        <label for="email-password"><img height="24" src="<?php echo self::get_plugin_url() . 'assets/mail-logo.svg'; ?>" /> <span class="mail"><?php _e( 'Email/Password' ) ?></span></label>
                                     </th>
                                     <td>
                                         <input type="checkbox" id="email-password"

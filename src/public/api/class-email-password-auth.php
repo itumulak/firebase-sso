@@ -2,6 +2,8 @@
 
 namespace IT\SSO\Firebase;
 
+use IT\SSO\Firebase\Admin_Config as Admin_Config;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
@@ -13,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 2.0.0
  */
 class Email_Password_Auth {
+	public Admin_Config $admin_config;
 	public $config;
 	public string $api_key;
 	public string $end_point;
@@ -30,8 +33,9 @@ class Email_Password_Auth {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		$this->config  = Admin::get_config();
-		$this->api_key = $this->config['apiKey'];
+		$this->admin_config = new Admin_Config();
+		$this->config       = $this->admin_config->get_config();
+		$this->api_key      = $this->config['apiKey'];
 	}
 
 	/**

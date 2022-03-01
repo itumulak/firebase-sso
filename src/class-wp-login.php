@@ -4,7 +4,7 @@ namespace IT\SSO\Firebase;
 
 use IT\SSO\Firebase\Email_Password_Auth as Firebase_Auth;
 use IT\SSO\Firebase\Admin as Admin;
-use IT\SSO\Firebase\Default_Vars as Main;
+use IT\SSO\Firebase\Base as Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -15,15 +15,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 2.0.0
  */
-class WP_Login extends Main {
+class WP_Login extends Base {
+	public Firebase_Auth $firebase_auth;
+	public WP_Auth $wp_auth;
+	public Admin $admin;
+
 	/**
 	 * WP login constructor.
-	 *
-	 * Register hooks and filters that modify wp-login.php.
 	 *
 	 * @since 1.0.0
 	 */
 	public function __construct() {
+		$this->firebase_auth = new Firebase_Auth();
+		$this->wp_auth       = new WP_Auth();
+		$this->admin         = new Admin();
+	}
+
+	/**
+	 * Initialized function.
+	 * Hooks/Filter are added here.
+	 * Register hooks and filters that modify wp-login.php.
+	 *
+	 * @since 2.0.0
+	 */
+	public function init() {
 		add_action( 'login_enqueue_scripts', array( $this, 'scripts' ) );
 		add_filter( 'login_message', array( $this, 'signin_auth_buttons' ) );
 
@@ -47,6 +62,7 @@ class WP_Login extends Main {
 	public function scripts() {
 		wp_enqueue_script( self::JS_ADMIN, self::get_plugin_url() . 'dist/sso-fb.js', array(), (string) time(), 'true' );
 		wp_localize_script( self::JS_ADMIN, 'firebase_ajaxurl', (array) admin_url( 'admin-ajax.php' ) );
+		wp_localize_script( self::JS_ADMIN, 'sso_firebase_nonce', (array) wp_create_nonce( self::AJAX_NONCE ) );
 		wp_enqueue_style( 'firebase_login', self::get_plugin_url() . 'dist/login.css', array(), '' );
 	}
 
@@ -60,8 +76,8 @@ class WP_Login extends Main {
 	 * @return string
 	 * @since 1.0.0
 	 */
-	public static function signin_auth_buttons( $message ): string {
-		$config = Admin::get_providers();
+	public function signin_auth_buttons( $message ): string {
+		$config = $this->admin->get_providers();
 
 		if ( in_array( 'google', $config, true ) ) {
 			$message .= '<p class="btn-wrapper"><button id="wp-firebase-google-sign-in" class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Sign in with Google</button></p>';
@@ -109,7 +125,7 @@ class WP_Login extends Main {
 	 * @since 1.0.0
 	 */
 	public function set_cookie_logout() {
-		setcookie( Default_Vars::COOKIE_LOGOUT, 1, time() + 3600, COOKIEPATH, COOKIE_DOMAIN );
+		setcookie( self::COOKIE_LOGOUT, 1, time() + 3600, COOKIEPATH, COOKIE_DOMAIN );
 	}
 
 	/**
@@ -135,12 +151,11 @@ class WP_Login extends Main {
 	 */
 	public function email_pass_auth( $user, $email_address, $password ) {
 		if ( $email_address && is_email( $email_address ) && ! email_exists( $email_address ) ) { // Firebase only accepts email address to auth
-			$auth      = new Firebase_Auth();
-			$user_info = $auth->signin_from_email_password( $email_address, $password );
+			$user_info = $this->firebase_auth->signin_from_email_password( $email_address, $password );
 
 			if ( ! isset( $user_info['error'] ) ) {
-				$user = WP_Auth::auth_user( $user_info['email'], $password );
-				WP_Auth::signin_usermeta( $user->ID, Default_Vars::SIGNIN_EMAILPASS );
+				$user = $this->wp_auth->auth_user( $user_info['email'], $password );
+				$this->wp_auth->signin_usermeta( $user->ID, self::SIGNIN_EMAILPASS );
 			}
 		}
 
@@ -159,8 +174,7 @@ class WP_Login extends Main {
 	 * @since 1.1.0
 	 */
 	public function verify_email_exist_from_firebase( $user_login, $user_email, $errors ) {
-		$auth     = new Firebase_Auth();
-		$response = $auth->get_providers_from_email( $user_email, '' );
+		$response = $this->firebase_auth->get_providers_from_email( $user_email, '' );
 
 		if ( $response['registered'] ) {
 			$errors->add( 'firebase_user_already_registered', '<strong>Error</strong>: Email Address already in use.' );
@@ -180,8 +194,7 @@ class WP_Login extends Main {
 	 * @since 1.1.0
 	 */
 	public function register_email_to_firebase( $data, $update, $id ) {
-		$auth     = new Firebase_Auth();
-		$response = $auth->signup_from_email_password( $data['user_email'], $data['user_pass'] );
+		$response = $this->firebase_auth->signup_from_email_password( $data['user_email'], $data['user_pass'] );
 
 		if ( $response ) {
 			return $data;
@@ -214,8 +227,9 @@ class WP_Login extends Main {
 	 * @return false|mixed|void
 	 */
 	public function get_firebase_config_ajax() {
-		wp_send_json_success( array( 'config' => Admin::get_config() ) );
+		wp_send_json_success( array( 'config' => $this->admin->get_config() ) );
 	}
 }
 
-new WP_Login();
+$wp_login = new namespace\WP_Login();
+$wp_login->init();

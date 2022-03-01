@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // @todo Configure composer autoloader.
 
 /** Base */
-require_once 'src/class-default-vars.php';
+require_once 'src/class-base.php';
 require_once 'src/class-wp-auth.php';
 /**  */
 
@@ -26,12 +26,14 @@ require_once 'src/public/api/class-email-password-auth.php';
 /**  */
 
 /** Callbacks */
+require_once 'src/public/callback/class-callback-factory.php';
 require_once 'src/public/callback/class-email-password.php';
 require_once 'src/public/callback/class-google.php';
 require_once 'src/public/callback/class-facebook.php';
 /**  */
 
 /** Admin */
+require_once 'src/admin/class-admin-configs.php';
 require_once 'src/admin/callback/class-admin-ajax.php';
 require_once 'src/admin/class-admin.php';
 /**  */

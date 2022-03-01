@@ -6,6 +6,8 @@
  */
 namespace IT\SSO\Firebase;
 
+use IT\SSO\Firebase\Base as Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
@@ -15,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 2.0.0
  */
-class WP_Auth {
+class WP_Auth extends Base {
 	/**
 	 * Authenticate user.
 	 *
@@ -29,7 +31,7 @@ class WP_Auth {
 	 * @return false|WP_User
 	 * @since 1.0.0
 	 */
-	public static function auth_user( $email, $password = null ) {
+	public function auth_user( $email, $password = null ) {
 		$user_id = email_exists( $email );
 
 		if ( ! $user_id ) {
@@ -55,7 +57,7 @@ class WP_Auth {
 	 * @return string
 	 * @since 1.0.0
 	 */
-	public static function login_user( $user_id ) {
+	public function login_user( $user_id ) {
 		wp_clear_auth_cookie();
 		wp_set_current_user( $user_id );
 		wp_set_auth_cookie( $user_id );
@@ -74,20 +76,20 @@ class WP_Auth {
 	 *
 	 * @since 1.0.0
 	 */
-	public static function signin_usermeta( $user_id, $sign_in_type, $refresh_token = null, $oauth_token = null ) {
-		$sign_in_types = get_user_meta( $user_id, Default_Vars::USER_SIGNIN_TYPE, false );
+	public function signin_usermeta( $user_id, $sign_in_type, $refresh_token = null, $oauth_token = null ) {
+		$sign_in_types = get_user_meta( $user_id, self::USER_SIGNIN_TYPE, false );
 
 		if ( $sign_in_type ) {
 			if ( ! in_array( $sign_in_type, $sign_in_types, true ) ) {
 				$sign_in_types[] = $sign_in_type;
-				update_user_meta( $user_id, Default_Vars::USER_SIGNIN_TYPE, $sign_in_types );
+				update_user_meta( $user_id, self::USER_SIGNIN_TYPE, $sign_in_types );
 
-				if ( $sign_in_type === Default_Vars::SIGNIN_GOOGLE || $sign_in_type === Default_Vars::SIGNIN_FACEBOOK ) {
-					update_user_meta( $user_id, Default_Vars::SIGNIN_OAUTH, $oauth_token );
+				if ( $sign_in_type === self::SIGNIN_GOOGLE || $sign_in_type === self::SIGNIN_FACEBOOK ) {
+					update_user_meta( $user_id, self::SIGNIN_OAUTH, $oauth_token );
 				}
 			}
 
-			update_user_meta( $user_id, Default_Vars::SIGNIN_REFRESHTOKEN, $refresh_token );
+			update_user_meta( $user_id, self::SIGNIN_REFRESHTOKEN, $refresh_token );
 		}
 	}
 
@@ -97,8 +99,8 @@ class WP_Auth {
 	 * @use Hook/Action
 	 * @since 1.0.0
 	 */
-	public static function set_cookie_logout() {
-		setcookie( Default_Vars::COOKIE_LOGOUT, 1, time() + 3600, COOKIEPATH, COOKIE_DOMAIN );
+	public function set_cookie_logout() {
+		setcookie( self::COOKIE_LOGOUT, 1, time() + 3600, COOKIEPATH, COOKIE_DOMAIN );
 	}
 
 	/**
@@ -106,7 +108,7 @@ class WP_Auth {
 	 *
 	 * @since 1.0.0
 	 */
-	public static function delete_cookie() {
+	public function delete_cookie() {
 		// TODO
 	}
 }

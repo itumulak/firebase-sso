@@ -2,6 +2,8 @@
 
 namespace IT\SSO\Firebase;
 
+use IT\SSO\Firebase\Admin_Config as Config;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
@@ -12,14 +14,31 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 2.0.0
  */
 class Admin_Ajax {
+	public Config $admin_config;
+
+	/**
+	 * Admin Ajax constructor.
+	 *
+	 * @since 2.0.0
+	 */
 	public function __construct() {
+		$this->admin_config = new Config();
+	}
+
+	/**
+	 * Initialized functions.
+	 * Hooks/Filter are added here.
+	 *
+	 * @since 2.0.0
+	 */
+	public function init() {
 		add_action( 'wp_ajax_firebase_config', array( $this, 'ajax_save_config' ) );
 		add_action( 'wp_ajax_firebase_providers', array( $this, 'ajax_save_providers' ) );
 	}
 
 	/**
-	 * Save Firebase Config
-	 * Ajax request callback
+	 * Save Firebase Config.
+	 * Ajax request callback.
 	 *
 	 * @use Hook/Action
 	 * @return void $data
@@ -30,7 +49,7 @@ class Admin_Ajax {
 		unset( $config['action'] );
 
 		if ( $config ) {
-			Admin::save_config( $config );
+			$this->admin_config->save_config( $config );
 			wp_send_json_success();
 		} else {
 			wp_send_json_error();
@@ -48,7 +67,7 @@ class Admin_Ajax {
 		$providers = array_map( 'sanitize_key', $_REQUEST['enabled_providers'] );
 
 		if ( $providers ) {
-			Admin::save_providers( $providers );
+			$this->admin_config->save_providers( $providers );
 			wp_send_json_success();
 
 		} else {
@@ -57,4 +76,5 @@ class Admin_Ajax {
 	}
 }
 
-new namespace\Admin_Ajax();
+$admin_ajax = new namespace\Admin_Ajax();
+$admin_ajax->init();

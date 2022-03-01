@@ -2,7 +2,7 @@
 
 namespace IT\SSO\Firebase;
 
-use IT\SSO\Firebase\Default_Vars as Main;
+use IT\SSO\Firebase\Admin_Config as Admin_Config;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -13,22 +13,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class Admin extends Main {
+class Admin extends Admin_Config {
 	/**
-	 * Admin constructor.
+	 * Initialized functions.
+	 * Hooks/Filter are added here.
 	 *
-	 * Build WP Admin.
-	 *
-	 * @param void
-	 *
-	 * @return void
-	 * @since 1.0.0
-	 *
+	 * @since 2.0.0
 	 */
-	function __construct() {
+	public function init() {
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
-	}
+    }
 
 	/**
 	 * Register Admin Menu
@@ -85,7 +80,7 @@ class Admin extends Main {
                 <div id="sign-in-providers-tab" class="group">
                     <div id="sign-in-providers-list">
                         <form id="sign-in-providers-form">
-							<?php $enabledProviders = self::get_providers(); ?>
+							<?php $enabledProviders = $this->get_providers(); ?>
                             <table class="form-table">
                                 <tbody>
                                 <tr>
@@ -182,49 +177,7 @@ class Admin extends Main {
         </div>
 		<?php
 	}
-
-	/**
-	 * Save Firebase Config
-	 *
-	 * @param $config
-	 *
-	 * @since 1.0.0
-	 */
-	public static function save_config( $config ) {
-		update_option( self::OPTION_KEY_CONFIG, $config );
-	}
-
-	/**
-	 * Fetch saved Firebase Config
-	 *
-	 * @return false|mixed|void
-	 * @since 1.0.0
-	 */
-	public static function get_config() {
-		return get_option( self::OPTION_KEY_CONFIG );
-	}
-
-	/**
-	 * Save Firebase Sign-in Providers
-	 *
-	 * @param $providers
-	 *
-	 * @since 1.0.0
-	 */
-	public static function save_providers( $providers ) {
-		update_option( self::OPTION_KEY_PROVIDERS, $providers );
-	}
-
-	/**
-	 * Fetch saved Sign-in Providers
-	 *
-	 * @return false|mixed|void
-	 * @since 1.0.0
-	 */
-	public static function
-    get_providers() {
-		return get_option( self::OPTION_KEY_PROVIDERS );
-	}
 }
 
-new namespace\Admin();
+$admin = new namespace\Admin();
+$admin->init();

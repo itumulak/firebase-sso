@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-class Default_Vars {
+class Base {
 	/**
 	 * Default Firebase slugs for WordPress.
 	 */
@@ -24,6 +24,7 @@ class Default_Vars {
 	const SIGNIN_GOOGLE        = 'google';
 	const SIGNIN_FACEBOOK      = 'facebook';
 	const COOKIE_LOGOUT        = 'wp_firebase_logout';
+	const AJAX_NONCE           = 'sso-firebase';
 
 	/**
 	 * Return the plugin's root url.
@@ -31,7 +32,7 @@ class Default_Vars {
 	 * @since 2.0.0
 	 * @return string
 	 */
-	public static function get_plugin_url() {
+	public function get_plugin_url() {
 		return WP_PLUGIN_URL . '/wp-sso-firebase/';
 	}
 }

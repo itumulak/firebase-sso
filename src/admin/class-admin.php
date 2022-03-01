@@ -94,7 +94,7 @@ class Admin extends Admin_Config {
                                 </tr>
                                 <tr>
                                     <th scope="row">
-                                        <label for="facebook"><?php _e( 'Facebook' ) ?></label>
+                                        <label for="facebook"><img height="24" src="<?php echo self::get_plugin_url() . 'assets/facebook-logo.svg'; ?>" /> <span><?php _e( 'Facebook' ) ?></span></label>
                                     </th>
                                     <td>
                                         <input type="checkbox" id="facebook"

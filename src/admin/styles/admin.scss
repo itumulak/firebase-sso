@@ -22,3 +22,16 @@
   width: 20em;
   padding: 10px;
 }
+
+#sign-in-providers-list {
+  label {
+    position: relative;
+
+    span {
+      position: absolute;
+      left: 30%;
+      top: 45%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}

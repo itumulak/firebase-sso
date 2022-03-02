@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 [type=button]:not(:disabled),
 [type=reset]:not(:disabled),
 [type=submit]:not(:disabled),
@@ -6,24 +8,39 @@ button:not(:disabled) {
 }
 
 .btn {
-  font-size: 80%;
-  border-radius: 5rem;
-  letter-spacing: .1rem;
-  font-weight: bold;
-  padding: 1rem;
+  //font-size: 80%;
+  //border-radius: 5rem;
+  //letter-spacing: .1rem;
+  //font-weight: bold;
   transition: all 0.2s;
   text-transform: uppercase;
   margin-bottom: .5rem;
   width: 90%;
   border: none;
+  margin-left: auto;
+  margin-right: auto;
 
   &-wrapper {
     text-align: center;
   }
 
   &-google {
-    color: white;
-    background-color: #ea4335;
+    color: grey;
+    font-size: 14px;
+    text-transform: uppercase;
+    height: 40px;
+    background-color: white;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 6px -4px grey;
+    font-family: Roboto;
+    letter-spacing: 0.2px;
+
+    img {
+      margin-right: 24px;
+    }
   }
 
   &-facebook {

@@ -80,7 +80,7 @@ class WP_Login extends Base {
 		$config = $this->admin->get_providers();
 
 		if ( in_array( 'google', $config, true ) ) {
-			$message .= '<p class="btn-wrapper"><button id="wp-firebase-google-sign-in" class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Sign in with Google</button></p>';
+			$message .= '<p class="btn-wrapper"><button id="wp-firebase-google-sign-in" class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><img height="18" src="'. self::get_plugin_url() . 'assets/google-logo.svg' .'" /> Sign in with Google</button></p>';
 		}
 
 		if ( in_array( 'facebook', $config, true ) ) {

@@ -8,10 +8,6 @@ button:not(:disabled) {
 }
 
 .btn {
-  //font-size: 80%;
-  //border-radius: 5rem;
-  //letter-spacing: .1rem;
-  //font-weight: bold;
   transition: all 0.2s;
   text-transform: uppercase;
   margin-bottom: .5rem;
@@ -27,9 +23,9 @@ button:not(:disabled) {
   box-shadow: 0 3px 6px -4px grey;
   color: grey;
   font-size: 14px;
-  text-transform: uppercase;
   height: 40px;
   letter-spacing: 0.2px;
+  font-family: Roboto, sans-serif;
 
   img {
     margin-right: 24px;
@@ -40,11 +36,9 @@ button:not(:disabled) {
   }
 
   &-google {
-    font-family: Roboto;
   }
 
   &-facebook {
-    font-family: Roboto;
     color: white;
     background-color: #4267b2;
     text-transform: none;

@@ -48,6 +48,7 @@ class Admin extends Admin_Config {
 		if ( isset( $_GET['page'] ) && $_GET['page'] === self::MENU_SLUG ) {
 			/** Toast */
 			wp_enqueue_script( 'toast', self::get_plugin_url() . 'lib/toast/jquery.toast.min.js', array( 'jquery' ), '', 'true' );
+			wp_enqueue_style( 'toast', self::get_plugin_url() . 'lib/toast/jquery.toast.min.css', array(), '' );
 			/**  */
 
 			/** Admin main */

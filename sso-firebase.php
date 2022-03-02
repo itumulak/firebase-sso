@@ -39,6 +39,5 @@ require_once 'src/admin/class-admin.php';
 /**  */
 
 /** Frontend */
-require_once 'src/class-wp-auth.php';
-require_once 'src/class-wp-login.php';
+require_once 'src/public/class-wp-login.php';
 /**  */

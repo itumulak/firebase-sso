@@ -60,7 +60,7 @@ class WP_Login extends Base {
 	 * @since 1.0.0
 	 */
 	public function scripts() {
-		wp_enqueue_script( self::JS_ADMIN, self::get_plugin_url() . 'dist/sso-fb.js', array(), (string) time(), 'true' );
+		wp_enqueue_script( self::JS_ADMIN, self::get_plugin_url() . 'dist/sso-fb.js', array(), self::get_version(), 'true' );
 		wp_localize_script( self::JS_ADMIN, 'firebase_ajaxurl', (array) admin_url( 'admin-ajax.php' ) );
 		wp_localize_script( self::JS_ADMIN, 'sso_firebase_nonce', wp_create_nonce( self::AJAX_NONCE ) );
 		wp_enqueue_style( 'firebase_login', self::get_plugin_url() . 'dist/login.css', array(), '' );

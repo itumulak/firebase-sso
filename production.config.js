@@ -3,6 +3,7 @@ const PurgeCssPlugin = require('purgecss-webpack-plugin');
 const path = require('path');
 const glob = require('glob');
 const WebpackBar = require('webpackbar');
+const RemovePlugin = require("remove-files-webpack-plugin");
 
 // change these variables to fit your project
 const jsPublicPath = './src/public/js';
@@ -48,6 +49,13 @@ module.exports = {
 		new WebpackBar(),
 		new PurgeCssPlugin({
 			paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
+		}),
+		new RemovePlugin({
+			after: {
+				include: [
+					'config.dev.php'
+				],
+			}
 		}),
 	],
 	module: {

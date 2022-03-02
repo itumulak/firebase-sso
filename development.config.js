@@ -1,6 +1,7 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 const WebpackBar = require('webpackbar');
+const CreateFileWebpack = require('create-file-webpack');
 
 // change these variables to fit your project
 const jsPublicPath = './src/public/js';
@@ -28,6 +29,11 @@ module.exports = {
 			filename: '[name].css',
 		}),
 		new WebpackBar(),
+		new CreateFileWebpack({
+			path: './',
+			fileName: 'config.dev.php',
+			content: '<?php return array("development" => true);',
+		}),
 	],
 	module: {
 		rules: [

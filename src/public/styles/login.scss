@@ -19,32 +19,36 @@ button:not(:disabled) {
   border: none;
   margin-left: auto;
   margin-right: auto;
+  background-color: white;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 6px -4px grey;
+  color: grey;
+  font-size: 14px;
+  text-transform: uppercase;
+  height: 40px;
+  letter-spacing: 0.2px;
+
+  img {
+    margin-right: 24px;
+  }
 
   &-wrapper {
     text-align: center;
   }
 
   &-google {
-    color: grey;
-    font-size: 14px;
-    text-transform: uppercase;
-    height: 40px;
-    background-color: white;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 3px 6px -4px grey;
     font-family: Roboto;
-    letter-spacing: 0.2px;
-
-    img {
-      margin-right: 24px;
-    }
   }
 
   &-facebook {
-    color: white;
-    background-color: #3b5998;
+    font-family: Roboto;
+    color: #4267B2;
+
+    img {
+      margin-left: 8px;
+    }
   }
 }

@@ -84,7 +84,7 @@ class WP_Login extends Base {
 		}
 
 		if ( in_array( 'facebook', $config, true ) ) {
-			$message .= '<p class="btn-wrapper"><button id="wp-firebase-facebook-sign-in" class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><img height="18" src="'. self::get_plugin_url() . 'assets/facebook-logo.svg' .'" /> Login with Facebook</button></p>';
+			$message .= '<p class="btn-wrapper"><button id="wp-firebase-facebook-sign-in" class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><img height="28" src="'. self::get_plugin_url() . 'assets/facebook-logo-invert.svg' .'" /> Log in With Facebook</button></p>';
 		}
 
 		return $message;

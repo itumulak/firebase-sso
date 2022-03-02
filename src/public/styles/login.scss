@@ -45,10 +45,13 @@ button:not(:disabled) {
 
   &-facebook {
     font-family: Roboto;
-    color: #4267B2;
+    color: white;
+    background-color: #4267b2;
+    text-transform: none;
 
     img {
-      margin-left: 8px;
+      margin-left: -20px;
+      margin-right: 12px;
     }
   }
 }

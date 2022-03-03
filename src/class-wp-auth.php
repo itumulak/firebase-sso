@@ -7,6 +7,7 @@
 namespace IT\SSO\Firebase;
 
 use IT\SSO\Firebase\Base as Base;
+use WP_Error;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -19,8 +20,34 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WP_Auth extends Base {
 	/**
-	 * Authenticate user.
+	 * Register user.
 	 *
+	 * If email already exists, skipped the registration.
+	 * Otherwise, it will into the process of registering the user.
+	 * The newly registered user will undergo and confirm their registration via email.
+	 *
+	 * If a username is already used, it will generate a random username instead.
+	 *
+	 * @param $user_email
+	 *
+	 * @return false|int|WP_Error
+	 */
+	public function register_user( $user_email ) {
+		$email   = sanitize_email( $user_email );
+		$user_id = email_exists( $email );
+
+		if ( ! $user_id ) {
+			$username = $this->generate_user_login( $email );
+			$user_id  = register_new_user( $username, $email );
+		}
+
+		return $user_id;
+	}
+
+	/**
+	 * Insert a user.
+	 *
+	 * No email verification is sent on this process.
 	 * Check whether a user already exists and return the user ID.
 	 * Otherwise, create user in WordPress and return the user ID.
 	 * User login is the same as the email (before the @).
@@ -31,7 +58,7 @@ class WP_Auth extends Base {
 	 * @return false|WP_User
 	 * @since 1.0.0
 	 */
-	public function auth_user( $email, $password = null ) {
+	public function insert_user( $email, $password = null ) {
 		$user_id = email_exists( $email );
 
 		if ( ! $user_id ) {
@@ -110,5 +137,36 @@ class WP_Auth extends Base {
 	 */
 	public function delete_cookie() {
 		// TODO
+	}
+
+	/**
+	 * Get the username from the email before the @ symbol.
+	 *
+	 * If it exists, we then generate a random username.
+	 * Repeated verification (username_exists function call) until a non-existing username is generated.
+	 *
+	 * @param $email
+	 * @param $verify_username
+	 * @param $length
+	 *
+	 * @since 2.0.0
+	 * @return false|int|string
+	 */
+	protected function generate_user_login( $email ) {
+		$username_from_email = explode( '@', $email )[0];
+		$user_exists         = username_exists( $username_from_email );
+
+		do {
+			$characters        = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			$characters_length = strlen( $characters );
+			$random_username   = '';
+			for ( $i = 0; $i < strlen( $username_from_email ); $i ++ ) {
+				$random_username .= $characters[ rand( 0, $characters_length - 1 ) ];
+			}
+
+			$user_exists = username_exists( $random_username );
+		} while ( $user_exists > 0 );
+
+		return $random_username;
 	}
 }

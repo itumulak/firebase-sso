@@ -16,6 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 2.0.0
  */
 class Email_Password extends Callback {
+	public function __construct() {
+		$this->sign_in_type = self::SIGNIN_EMAILPASS;
+	}
 	/**
 	 * Initialized functions.
 	 * Hooks/Filter are added here.
@@ -42,20 +45,21 @@ class Email_Password extends Callback {
 	 */
 	public function email_pass_auth( $user, $email_address, $password ) {
 		if ( $email_address && is_email( $email_address ) && ! email_exists( $email_address ) ) { // Firebase only accepts email address to auth
-			$firebase_auth = new Firebase_Auth();
-			$wp_auth       = new WP();
+			$sanitized_email = sanitize_email( $email_address );
+			$firebase_auth   = new Firebase_Auth();
+			$wp_auth         = new WP();
 
-			$user_info = $firebase_auth->signin_from_email_password( $email_address, $password );
+			$user_info = $firebase_auth->signin_from_email_password( $sanitized_email, $password );
 
 			if ( ! isset( $user_info['error'] ) ) {
-				$user = $wp_auth->auth_user( $user_info['email'], $password );
-				$wp_auth->signin_usermeta( $user->ID, self::SIGNIN_EMAILPASS );
+//				$user = $wp_auth->insert_user( $user_info['email'], $password );
+				$user = $wp_auth->register_user( $user_info['email'], $password );
+				$wp_auth->signin_usermeta( $user->ID, $this->sign_in_type );
 			}
 		}
 
 		return $user;
 	}
-
 }
 
 $email_password = new Email_Password();

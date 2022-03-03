@@ -14,6 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 2.0.0
  */
 class Facebook extends Callback {
+	public function __construct() {
+		$this->sign_in_type = self::SIGNIN_FACEBOOK;
+	}
+
 	/**
 	 * Initialized functions.
 	 * Hooks/Filter are added here.

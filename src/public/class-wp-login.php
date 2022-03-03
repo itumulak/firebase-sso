@@ -154,7 +154,7 @@ class WP_Login extends Base {
 			$user_info = $this->firebase_auth->signin_from_email_password( $email_address, $password );
 
 			if ( ! isset( $user_info['error'] ) ) {
-				$user = $this->wp_auth->auth_user( $user_info['email'], $password );
+				$user = $this->wp_auth->insert_user( $user_info['email'], $password );
 				$this->wp_auth->signin_usermeta( $user->ID, self::SIGNIN_EMAILPASS );
 			}
 		}

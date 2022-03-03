@@ -13,6 +13,7 @@ class Callback_Factory extends Base {
 	protected string $oauth_token;
 	protected string $refresh_token;
 	protected string $email;
+	protected string $sign_in_type;
 
 	/**
 	 * AJAX callback factory.
@@ -32,13 +33,16 @@ class Callback_Factory extends Base {
 		$wp_auth = new WP_Auth();
 
 		if ( $this->email ) {
-			$user = $wp_auth->auth_user( $this->email );
+			$user = $wp_auth->register_user( $this->email );
 
 			if ( ! is_wp_error( $user ) ) {
-				$wp_auth->signin_usermeta( $user->ID, self::SIGNIN_FACEBOOK, $this->refresh_token, $this->oauth_token );
-				$login_user_url = $wp_auth->login_user( $user->ID );
+				$wp_auth->signin_usermeta( $user->ID, $this->sign_in_type, $this->refresh_token, $this->oauth_token );
 
-				wp_send_json_success( array( 'url' => $login_user_url ) );
+				// @todo instead of logging in on new user right away, redirect to a page or notify them via email to activate their account.
+//				$login_user_url = $wp_auth->login_user( $user->ID );
+//				wp_send_json_success( array( 'url' => $login_user_url ) );
+				wp_send_json_success( array( 'url' => get_home_url() ) );
+
 			}
 		}
 

@@ -104,7 +104,7 @@ class WP_Auth extends Base {
 	 * @since 1.0.0
 	 */
 	public function signin_usermeta( $user_id, $sign_in_type, $refresh_token = null, $oauth_token = null ) {
-		$sign_in_types = get_user_meta( $user_id, self::USER_SIGNIN_TYPE, false );
+		$sign_in_types = get_user_meta( $user_id, self::USER_SIGNIN_TYPE, true );
 
 		if ( $sign_in_type ) {
 			if ( ! in_array( $sign_in_type, $sign_in_types, true ) ) {

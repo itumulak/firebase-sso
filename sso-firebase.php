@@ -21,8 +21,9 @@ require_once 'src/class-base.php';
 require_once 'src/class-wp-auth.php';
 /**  */
 
-/** API */
-require_once 'src/public/api/class-email-password-auth.php';
+/** Inc */
+require_once 'src/inc/class-email-password-auth.php';
+require_once 'src/inc/template-plugin.php';
 /**  */
 
 /** Callbacks */

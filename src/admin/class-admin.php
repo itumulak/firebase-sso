@@ -72,51 +72,13 @@ class Admin extends Admin_Config {
             <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
             <!-- Here are our tabs -->
             <h2 class="nav-tab-wrapper hide-if-js" style="display: block;">
-                <a class="nav-tab" href="#configurations" id="configurations"
-                   title="<?php esc_attr( 'Configuration' ) ?>"><?php _e( 'Configuration' ) ?></a>
-                <a class="nav-tab" href="#sign-in-providers" id="sign-in-providers"
-                   title="<?php esc_attr( 'Sign-in Providers' ) ?>"><?php _e( 'Sign-in providers' ) ?></a>
+                <a class="nav-tab" href="#configurations" id="configurations" title="<?php esc_attr__( 'Configuration', 'sso-firebase' ) ?>"><?php _e( 'Configuration', 'sso-firebase' ) ?></a>
+                <a class="nav-tab" href="#sign-in-providers" id="sign-in-providers" title="<?php esc_attr__( 'Sign-in Providers', 'sso-firebase' ) ?>"><?php _e( 'Sign-in providers', 'sso-firebase' ) ?></a>
             </h2>
             <div class="tabs-holder">
                 <div id="sign-in-providers-tab" class="group">
                     <div id="sign-in-providers-list">
-                        <form id="sign-in-providers-form">
-							<?php $enabledProviders = $this->get_providers(); ?>
-                            <table class="form-table">
-                                <tbody>
-                                <tr>
-                                    <th scope="row">
-                                        <label for="email-password"><img height="24" src="<?php echo self::get_plugin_url() . 'assets/mail-logo.svg'; ?>" /> <span class="mail"><?php _e( 'Email/Password' ) ?></span></label>
-                                    </th>
-                                    <td>
-                                        <input type="checkbox" id="email-password"
-                                               name="sign-in-providers[emailpassword]" <?= ( in_array( 'email-password', $enabledProviders, true ) ? 'checked' : '' ) ?>>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label for="facebook"><img height="24" src="<?php echo self::get_plugin_url() . 'assets/facebook-logo.svg'; ?>" /> <span class="facebook"><?php _e( 'Facebook' ) ?></span></label>
-                                    </th>
-                                    <td>
-                                        <input type="checkbox" id="facebook"
-                                               name="sign-in-providers[facebook]" <?= ( in_array( 'facebook', $enabledProviders, true ) ? 'checked' : '' ) ?>>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label for="google"><img height="24" src="<?php echo self::get_plugin_url() . 'assets/google-logo.svg'; ?>" /> <span class="google"><?php _e( 'Google' ) ?></span></label>
-                                    </th>
-                                    <td>
-                                        <input id="google" name="sign-in-providers[google]"
-                                               type="checkbox" <?= ( in_array( 'google', $enabledProviders, true ) ? 'checked' : '' ) ?>>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <p>
-                                <button type="submit" class="button button-primary"><?php _e( 'Save' ); ?></button>
-                            </p>
-                        </form>
+                        <?php echo it_get_admin_template_part( 'template', 'providers', array( 'providers' => $this->get_providers(), 'plugin_url' => self::get_plugin_url()  ) ); ?>
                     </div>
                 </div>
                 <div id="configurations-tab" class="group">

@@ -8,59 +8,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly
 
 /**
- * The below function will help to load template file from plugin directory of WordPress.
+ * Get our admin template part.
  *
  * @param $slug
- * @param null $name
- * @param array $args
+ * @param $name
+ * @param $args
+ * @param $require_once
  *
+ * @since 2.0.0
  * @return void
  */
-function it_get_admin_template_part( $slug, $name = null, $args = array() ) {
-	do_action( "it_get_admin_template_path_$slug", $slug, $name );
+function get_admin_template_part( $slug, $name = '', $args = array(), $require_once = false  ) {
+	$template = '';
+	$base     = new Base();
 
-	$templates = array();
-	if ( isset( $name ) ) {
-		$templates[] = "{$slug}-{$name}.php";
+	if ( ! $template && $name && $base->get_plugin_dir() . "template-part/{$slug}-{$name}.php" ) {
+		$template = $base->get_plugin_dir() . "src/admin/template-parts/{$slug}-{$name}.php";
 	}
 
-	$templates[] = "$slug.php";
-
-	it_get_admin_template_path( $templates, true, false, $args );
-}
-
-/**
- * Extend locate_template from WP Core and used it for this plugin.
- *
- * @param $template_names
- * @param bool $load
- * @param bool $require_once
- * @param array $args
- *
- * @return string
- */
-
-function it_get_admin_template_path( $template_names, $load = false, $require_once = true, $args = array() ) {
-	$base    = new Base();
-	$located = '';
-
-	foreach ( (array) $template_names as $template_name ) {
-		if ( ! $template_name ) {
-			continue;
-		}
-
-		if ( file_exists( $base->get_plugin_dir() . 'src/admin/template-parts/' . $template_name ) ) {
-			$located = $base->get_plugin_dir() . 'src/admin/template-parts/' . $template_name;
-			break;
-		} elseif ( file_exists( $base->get_plugin_dir() . 'src/admin/templates/' . $template_name ) ) {
-			$located = $base->get_plugin_dir() . 'src/admin/templates/' . $template_name;
-			break;
-		}
+	if ( ! $template && $name && $base->get_plugin_dir() . "templates/{$slug}-{$name}.php" ) {
+		$template = $base->get_plugin_dir() . "src/admin/templates/{$slug}-{$name}.php";
 	}
 
-	if ( $load && '' !== $located ) {
-		load_template( $located, $require_once, $args );
+	if ( $template ) {
+		load_template( $template, $require_once, $args );
 	}
-
-	return $located;
 }

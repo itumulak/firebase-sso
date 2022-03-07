@@ -35,7 +35,7 @@ class Admin extends Admin_Config {
 		add_menu_page( 'WP Firebase', 'WP Firebase', 'manage_options', self::MENU_SLUG, array(
 			$this,
 			'admin_page'
-		), self::get_plugin_url() . 'assets/firebase-logo-menu-icon.svg', 9 );
+		), $this->get_plugin_url() . 'assets/firebase-logo-menu-icon.svg', 9 );
 	}
 
 	/**
@@ -47,13 +47,13 @@ class Admin extends Admin_Config {
 	public function admin_scripts() {
 		if ( isset( $_GET['page'] ) && $_GET['page'] === self::MENU_SLUG ) {
 			/** Toast */
-			wp_enqueue_script( 'toast', self::get_plugin_url() . 'lib/toast/jquery.toast.min.js', array( 'jquery' ), '', 'true' );
-			wp_enqueue_style( 'toast', self::get_plugin_url() . 'lib/toast/jquery.toast.min.css', array(), '' );
+			wp_enqueue_script( 'toast', $this->get_plugin_url() . 'lib/toast/jquery.toast.min.js', array( 'jquery' ), '', 'true' );
+			wp_enqueue_style( 'toast', $this->get_plugin_url() . 'lib/toast/jquery.toast.min.css', array(), '' );
 			/**  */
 
 			/** Admin main */
-			wp_enqueue_style( self::JS_ADMIN, self::get_plugin_url() . 'dist/admin.css', array(), self::get_version() );
-			wp_enqueue_script( self::JS_ADMIN, self::get_plugin_url() . 'dist/sso-fb-admin.js', array( 'toast', 'jquery' ), self::get_version(), 'true' );
+			wp_enqueue_style( self::JS_ADMIN, $this->get_plugin_url() . 'dist/admin.css', array(), self::get_version() );
+			wp_enqueue_script( self::JS_ADMIN, $this->get_plugin_url() . 'dist/sso-fb-admin.js', array( 'toast', 'jquery' ), self::get_version(), 'true' );
 			/**  */
 		}
 	}
@@ -65,76 +65,7 @@ class Admin extends Admin_Config {
 	 * @since 1.0.0
 	 */
 	public function admin_page() {
-		?>
-        <!-- Our admin page content should all be inside .wrap -->
-        <div class="wrap">
-            <!-- Print the page title -->
-            <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-            <!-- Here are our tabs -->
-            <h2 class="nav-tab-wrapper hide-if-js" style="display: block;">
-                <a class="nav-tab" href="#configurations" id="configurations" title="<?php esc_attr__( 'Configuration', 'sso-firebase' ) ?>"><?php _e( 'Configuration', 'sso-firebase' ) ?></a>
-                <a class="nav-tab" href="#sign-in-providers" id="sign-in-providers" title="<?php esc_attr__( 'Sign-in Providers', 'sso-firebase' ) ?>"><?php _e( 'Sign-in providers', 'sso-firebase' ) ?></a>
-            </h2>
-            <div class="tabs-holder">
-                <div id="sign-in-providers-tab" class="group">
-                    <div id="sign-in-providers-list">
-                        <?php echo it_get_admin_template_part( 'template', 'providers', array( 'providers' => $this->get_providers(), 'plugin_url' => self::get_plugin_url()  ) ); ?>
-                    </div>
-                </div>
-                <div id="configurations-tab" class="group">
-                    <div id="config-textarea-wrapper">
-                        <form id="configuration-fields">
-                            <h1><?php _e( 'Firebase Configurations' ); ?></h1>
-                            <p><?php echo wp_sprintf(
-									'%s <a target="_blank" href="%s">%s</a> %s',
-									__( 'Get a copy, and paste your' ),
-									esc_url( 'https://firebase.google.com/docs/web/setup?authuser=0#config-object' ),
-									__( 'Firebase config object' ),
-									__( 'found at your project settings.' ),
-								);
-								?>
-                            </p>
-							<?php
-							$config = $this->get_config();
-
-							$config_fields = array(
-								'apiKey'     => 'API Key',
-								'authDomain' => 'Authorized Domain',
-							);
-							?>
-                            <table class="form-table">
-                                <tbody>
-								<?php foreach ( $config_fields as $key => $label ) :
-									$field_value = '';
-
-									if ( array_key_exists( 'apiKey', $config ) ) {
-										$field_value =  $config[ $key ];
-									}
-									?>
-                                    <tr>
-                                        <th scope="row">
-                                            <label for="<?php echo esc_attr( $key ) ?>"><?php echo esc_attr( $label ) ?></label>
-                                        </th>
-                                        <td>
-                                            <input class="regular-text" id="<?php echo esc_attr( $key ) ?>"
-                                                   name="<?php echo esc_attr( $key ) ?>"
-                                                   type="text" value="<?php echo esc_attr( $field_value ); ?>">
-                                        </td>
-                                    </tr>
-								<?php endforeach; ?>
-
-                                </tbody>
-                            </table>
-                            <p>
-                                <button type="submit"
-                                        class="button button-primary"><?php _e( 'Save Config' ) ?></button>
-                            </p>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-		<?php
+		echo get_admin_template_part( 'template', 'admin' );
 	}
 }
 

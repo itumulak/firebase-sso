@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly
 
 /**
- * Get our admin template part.
+ * Load our admin template parts.
  *
  * @param $slug
  * @param $name

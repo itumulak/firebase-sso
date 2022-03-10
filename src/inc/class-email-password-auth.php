@@ -2,17 +2,24 @@
 
 namespace IT\SSO\Firebase;
 
-use IT\SSO\Firebase\SSO_Default as Main;
+use IT\SSO\Firebase\Admin_Config as Admin_Config;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-class SSO_Authentication extends Main {
+/**
+ * Email & Password Authentication class.
+ * Utilizes Firebase Auth REST API for email and password sign-in or sing-up.
+ *
+ * @since 2.0.0
+ */
+class Email_Password_Auth {
+	public Admin_Config $admin_config;
 	public $config;
-	public $api_key;
-	public $end_point;
-	public $data;
+	public string $api_key;
+	public string $end_point;
+	public array $data;
 	const BASE_URI              = 'https://identitytoolkit.googleapis.com/v1/accounts';
 	const SINGIN_EMAIL_PASSWORD = ':signInWithPassword';
 	const SINGUP_EMAIL_PASSWORD = ':signUp';
@@ -26,19 +33,21 @@ class SSO_Authentication extends Main {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		$this->config  = SSO_Admin::get_config();
-		$this->api_key = $this->config['apiKey'];
+		$this->admin_config = new Admin_Config();
+		$this->config       = $this->admin_config->get_config();
+		$this->api_key      = $this->config['apiKey'];
 	}
 
 	/**
-	 * Prepare data for HTTP request for Email/Password Sign-in Method.
+	 * Sign-in Method.
 	 *
 	 * @param $email_address
 	 * @param $password
+	 * @since 1.0.0
 	 *
 	 * @return array JSON
 	 */
-	public function signInWithEmailAndPassword( $email_address, $password ) {
+	public function signin_from_email_password( $email_address, $password ) {
 		$this->data = array(
 			'email'             => $email_address,
 			'password'          => $password,
@@ -48,16 +57,17 @@ class SSO_Authentication extends Main {
 		return  $this->handle_request( self::SINGIN_EMAIL_PASSWORD, $this->data );
 	}
 
-	public function fetchProvidersForEmail( $email_address, $redirec_url = null ) {
-		$this->data = array(
-			'identifier'  => $email_address,
-			'continueUri' => ! $redirec_url ? get_admin_url() : $redirec_url,
-		);
 
-		return $this->handle_request( self::FETCH_PROVIDERS_EMAIL, $this->data );
-	}
-
-	public function createUserWithEmailAndPassword( $email_address, $password ) {
+	/**
+	 * Sign-up method.
+	 *
+	 * @param $email_address
+	 * @param $password
+	 * @since 1.0.0
+	 *
+	 * @return mixed
+	 */
+	public function signup_from_email_password( $email_address, $password ) {
 		$this->data = array(
 			'email'             => $email_address,
 			'password'          => $password,
@@ -68,50 +78,29 @@ class SSO_Authentication extends Main {
 	}
 
 	/**
-	 * Handles error response
-	 * @param $response
+	 * Fetch providers from User's email.
+	 *
+	 * @param $email_address
+	 * @param $continue_uri
+	 * @since 2.0.0
 	 *
 	 * @return array
 	 */
-	public static function handle_error( $response ) {
-		$message = '';
-		$status  = 400;
-
-		if ( $response['code'] ) {
-			switch ( $response['code'] ) {
-				case 'auth/user-disabled':
-				case 'auth/user-not-found':
-				case 'auth/wrong-password':
-				case 'auth/invalid-email':
-					$message = $response['message'];
-					break;
-				default:
-					$message = 'An error has occured. Please contact admin.';
-			}
-		}
-
-		return array(
-			'message' => $message,
-			'status'  => $status,
+	public function get_providers_from_email( $email_address, $continue_uri ) {
+		$this->data = array(
+			'identifier'  => $email_address,
+			'continueUri' => $continue_uri,
 		);
+
+		return $this->handle_request( self::FETCH_PROVIDERS_EMAIL, $this->data );
 	}
 
 	/**
-	 * Verify if email exist
-	 *
-	 * @param $email
-	 *
-	 * @return mixed
-	 */
-	public static function verify_user( $email ) {
-		return email_exists( $email );
-	}
-
-	/**
-	 * Perform HTTP Request from Firebase
+	 * Perform HTTP Request from Firebase.
 	 *
 	 * @param $auth
 	 * @param array $data
+	 * @since 1.0.0
 	 *
 	 * @return array JSON
 	 */

@@ -52,8 +52,8 @@ class Admin extends Admin_Config {
 			/**  */
 
 			/** Admin main */
-			wp_enqueue_style( self::JS_ADMIN, $this->get_plugin_url() . 'dist/admin.css', array(), self::get_version() );
-			wp_enqueue_script( self::JS_ADMIN, $this->get_plugin_url() . 'dist/sso-fb-admin.js', array( 'toast', 'jquery' ), self::get_version(), 'true' );
+			wp_enqueue_style( self::JS_ADMIN, $this->get_plugin_url() . 'src/admin/styles/admin.css', array(), self::get_version() );
+			wp_enqueue_script( self::JS_ADMIN, $this->get_plugin_url() . 'src/admin/js/admin.js', array( 'toast', 'jquery' ), self::get_version(), 'true' );
 			/**  */
 		}
 	}

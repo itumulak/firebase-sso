@@ -21,8 +21,7 @@
 		?>
 	</p>
 	<?php
-	$config = $args['config'];
-
+	$config = wp_parse_args($args['config'], array('apiKey' => '', 'authDomain' => ''));
 	$config_fields = array(
 		'apiKey'     => 'API Key',
 		'authDomain' => 'Authorized Domain',

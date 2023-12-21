@@ -6,10 +6,15 @@
  * @since 2.0.0
  */
 
+ $enabledProviders = array(
+    'email-password' => false,
+    'facebook' => false,
+    'google' => false,
+ );
 
+ $enabledProviders = wp_parse_args($args['providers'], $enabledProviders);
 ?>
 <form id="sign-in-providers-form">
-	<?php $enabledProviders = $args['providers']; ?>
     <table class="form-table">
         <tbody>
         <tr>
@@ -20,7 +25,7 @@
             </th>
             <td>
                 <input type="checkbox" id="email-password"
-                       name="sign-in-providers[emailpassword]" <?= ( in_array( 'email-password', $enabledProviders, true ) ? 'checked' : '' ) ?>>
+                       name="sign-in-providers[emailpassword]" <?php ( in_array( 'email-password', $enabledProviders, true ) ? 'checked' : '' ) ?>>
             </td>
         </tr>
         <tr>

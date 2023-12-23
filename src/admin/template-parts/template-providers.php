@@ -6,13 +6,8 @@
  * @since 2.0.0
  */
 
- $enabledProviders = array(
-    'email-password' => false,
-    'facebook' => false,
-    'google' => false,
- );
-
- $enabledProviders = wp_parse_args($args['providers'], $enabledProviders);
+ $enabledProviders = $args['providers'];
+ $admin_instance = $args['admin_instance'];
 ?>
 <form id="sign-in-providers-form">
     <table class="form-table">
@@ -25,7 +20,7 @@
             </th>
             <td>
                 <input type="checkbox" id="email-password"
-                       name="sign-in-providers[emailpassword]" <?php ( in_array( 'email-password', $enabledProviders, true ) ? 'checked' : '' ) ?>>
+                       name="sign-in-providers[emailpassword]" <?php  echo $enabledProviders[$admin_instance::PROVIDER_SLUG_EMAILPASS] ? 'checked' : '' ?>>
             </td>
         </tr>
         <tr>
@@ -36,7 +31,7 @@
             </th>
             <td>
                 <input type="checkbox" id="facebook"
-                       name="sign-in-providers[facebook]" <?= ( in_array( 'facebook', $enabledProviders, true ) ? 'checked' : '' ) ?>>
+                       name="sign-in-providers[facebook]" <?php echo $enabledProviders[$admin_instance::PROVIDER_SLUG_FB] ? 'checked' : '' ?>>
             </td>
         </tr>
         <tr>
@@ -47,7 +42,7 @@
             </th>
             <td>
                 <input id="google" name="sign-in-providers[google]"
-                       type="checkbox" <?= ( in_array( 'google', $enabledProviders, true ) ? 'checked' : '' ) ?>>
+                       type="checkbox" <?php echo $enabledProviders[$admin_instance::PROVIDER_SLUG_GOOGLE] ? 'checked' : '' ?>>
             </td>
         </tr>
         </tbody>

@@ -26,12 +26,12 @@ $base = new Base();
 	<div class="tabs-holder">
 		<div id="sign-in-providers-tab" class="group">
 			<div id="sign-in-providers-list">
-				<?php echo get_admin_template_part( 'template', 'providers', array( 'providers' => $admin_config->get_providers(), 'plugin_url' => $base->get_plugin_url()  ) ); ?>
+				<?php echo get_admin_template_part( 'template', 'providers', array( 'providers' => $admin_config->get_providers(), 'admin_instance' => $admin_config, 'plugin_url' => $base->get_plugin_url()  ) ); ?>
 			</div>
 		</div>
 		<div id="configurations-tab" class="group">
 			<div id="config-textarea-wrapper">
-				<?php echo get_admin_template_part( 'template', 'configuration', array( 'config' => $admin_config->get_config() ) ); ?>
+				<?php echo get_admin_template_part( 'template', 'configuration', array( 'config' => $admin_config->get_config(), 'admin_instance' => $admin_config ) ); ?>
 			</div>
 		</div>
 	</div>

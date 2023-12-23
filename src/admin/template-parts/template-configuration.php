@@ -6,9 +6,8 @@
  * @since 2.0.0
  */
 
+ $configs = $args['config'];
 ?>
-
-
 <form id="configuration-fields">
 	<h1><?php _e( 'Firebase Configurations' ); ?></h1>
 	<p><?php echo wp_sprintf(
@@ -20,30 +19,18 @@
 		);
 		?>
 	</p>
-	<?php
-	$config = wp_parse_args($args['config'], array('apiKey' => '', 'authDomain' => ''));
-	$config_fields = array(
-		'apiKey'     => 'API Key',
-		'authDomain' => 'Authorized Domain',
-	);
-	?>
 	<table class="form-table">
 		<tbody>
-		<?php foreach ( $config_fields as $key => $label ) :
-			$field_value = '';
-
-			if ( array_key_exists( 'apiKey', $config ) ) {
-				$field_value =  $config[ $key ];
-			}
+		<?php foreach ( $configs as $key => $config ) :
 			?>
 			<tr>
 				<th scope="row">
-					<label for="<?php echo esc_attr( $key ) ?>"><?php echo esc_attr( $label ) ?></label>
+					<label for="<?php echo esc_attr( $key ) ?>"><?php echo esc_attr( $config['label'] ) ?></label>
 				</th>
 				<td>
 					<input class="regular-text" id="<?php echo esc_attr( $key ) ?>"
-					       name="<?php echo esc_attr( $key ) ?>"
-					       type="text" value="<?php echo esc_attr( $field_value ); ?>">
+					       name="<?php echo esc_attr( $key ) ?>[value]"
+					       type="text" value="<?php echo esc_attr( $config['value'] ); ?>">
 				</td>
 			</tr>
 		<?php endforeach; ?>

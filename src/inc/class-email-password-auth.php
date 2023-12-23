@@ -35,7 +35,7 @@ class Email_Password_Auth {
 	public function __construct() {
 		$this->admin_config = new Admin_Config();
 		$this->config       = $this->admin_config->get_config();
-		$this->api_key      = $this->config['apiKey'];
+		$this->api_key      = $this->config['apiKey']['value'] && '';
 	}
 
 	/**

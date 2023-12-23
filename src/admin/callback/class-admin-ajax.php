@@ -32,7 +32,7 @@ class Admin_Ajax {
 	 * @since 2.0.0
 	 */
 	public function init() {
-		add_action( 'wp_ajax_firebase_config', array( $this, 'ajax_save_config' ) );
+		add_action( 'wp_ajax_firebase_configs', array( $this, 'ajax_save_config' ) );
 		add_action( 'wp_ajax_firebase_providers', array( $this, 'ajax_save_providers' ) );
 	}
 
@@ -44,12 +44,10 @@ class Admin_Ajax {
 	 * @return void $data
 	 * @since 1.0.0
 	 */
-	public function ajax_save_config() {
-		$config = array_map( 'sanitize_text_field', $_REQUEST );
-		unset( $config['action'] );
+	public function ajax_save_config() {	
+		$isSave = $this->admin_config->save_config( $_REQUEST );
 
-		if ( $config ) {
-			$this->admin_config->save_config( $config );
+		if ( $isSave ) {
 			wp_send_json_success();
 		} else {
 			wp_send_json_error();
@@ -65,9 +63,9 @@ class Admin_Ajax {
 	 */
 	public function ajax_save_providers() {
 		$providers = array_map( 'sanitize_key', $_REQUEST['enabled_providers'] );
+		$isSave = $this->admin_config->save_providers( $providers );
 
-		if ( $providers ) {
-			$this->admin_config->save_providers( $providers );
+		if ( $isSave ) {
 			wp_send_json_success();
 
 		} else {

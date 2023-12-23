@@ -33,7 +33,7 @@ jQuery(document).ready(($) => {
 			$configuration[$key] = $val;
 		});
 
-		$configuration.action = 'firebase_config';
+		$configuration.action = 'firebase_configs';
 
 		// eslint-disable-next-line no-undef
 		$.post(ajaxurl, $configuration, (e) => {

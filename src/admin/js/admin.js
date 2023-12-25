@@ -4,83 +4,117 @@
  * @since 1.0.0
  */
 
+document.addEventListener("DOMContentLoaded", () => {
+  const navTabsWrapperClassName = "nav-tab-wrapper";
+  const tabContentWrapperClassName = "tabs-holder";
+  const activeTabClassName = "nav-tab-active";
+
+  document
+    .querySelectorAll(`.${tabContentWrapperClassName} > div`)
+    .forEach((element) => {
+      element.style.display = "none";
+    });
+
+  if (location.hash.substring(1)) {
+    document
+      .getElementById(location.hash.substring(1))
+      .classList.add(activeTabClassName);
+    document.getElementById(`${location.hash.substring(1)}-tab`).style.display =
+      "block";
+  } else {
+    document
+      .querySelector(`.${navTabsWrapperClassName} a:first-child`)
+      .classList.add(activeTabClassName);
+    document.querySelector(
+      `.${tabContentWrapperClassName} #${document
+        .querySelector(`.${navTabsWrapperClassName} a:first-child`)
+        .getAttribute("id")}-tab`
+    ).style.display = "block";
+  }
+
+  document
+    .querySelectorAll(`.${navTabsWrapperClassName} a`)
+    .forEach((element) => {
+      element.addEventListener("click", () => {
+        document
+          .querySelectorAll(`.${navTabsWrapperClassName} a`)
+          .forEach((element) => {
+            element.classList.remove(activeTabClassName);
+          });
+        element.classList.add(activeTabClassName);
+
+        document
+          .querySelectorAll(`.${tabContentWrapperClassName} > div`)
+          .forEach((element) => {
+            element.style.display = "none";
+          });
+        document.querySelector(
+          `.${tabContentWrapperClassName} > #${element.getAttribute("id")}-tab`
+        ).style.display = "block";
+      });
+    });
+});
+
 jQuery(document).ready(($) => {
-	if (location.hash.substr(1))
-		$(`#${location.hash.substr(1)}`).addClass('nav-tab-active');
-	else $('.nav-tab-wrapper a:first-child').addClass('nav-tab-active');
+  $("#configuration-fields").submit((event) => {
+    event.preventDefault();
+    const $configuration = {};
 
-	$('.nav-tab-wrapper a').each((index, element) => {
-		if ($(element).hasClass('nav-tab-active') === false)
-			$(`#${$(element).attr('id')}-tab`).css('display', 'none');
-	});
+    $("#configuration-fields :input").each((index, element) => {
+      const $key = $(element).attr("id");
+      const $val = $(element).val();
 
-	$('.nav-tab').on('click', (element) => {
-		$('.nav-tab').removeClass('nav-tab-active');
-		$(element.target).addClass('nav-tab-active');
+      $configuration[$key] = $val;
+    });
 
-		$('.tabs-holder .group').css('display', 'none');
-		$(`#${$(element.target).attr('id')}-tab`).css('display', 'block');
-	});
+    $configuration.action = "firebase_configs";
 
-	$('#configuration-fields').submit((event) => {
-		event.preventDefault();
-		const $configuration = {};
+    // eslint-disable-next-line no-undef
+    $.post(ajaxurl, $configuration, (e) => {
+      if (e.success === true) {
+        $.toast({
+          heading: "Success",
+          text: "Config updated.",
+          showHideTransition: "slide",
+          icon: "success",
+          position: {
+            top: 40,
+            right: 80,
+          },
+        });
+      }
+    });
+  });
 
-		$('#configuration-fields :input').each((index, element) => {
-			const $key = $(element).attr('id');
-			const $val = $(element).val();
+  $("#sign-in-providers-form").submit((event) => {
+    event.preventDefault();
+    const $signInProviders = [];
 
-			$configuration[$key] = $val;
-		});
+    $("#sign-in-providers-form input:checked").each((index, element) => {
+      $signInProviders.push($(element).attr("id"));
+    });
 
-		$configuration.action = 'firebase_configs';
-
-		// eslint-disable-next-line no-undef
-		$.post(ajaxurl, $configuration, (e) => {
-			if (e.success === true) {
-				$.toast({
-					heading: 'Success',
-					text: 'Config updated.',
-					showHideTransition: 'slide',
-					icon: 'success',
-					position: {
-						top: 40,
-						right: 80,
-					},
-				});
-			}
-		});
-	});
-
-	$('#sign-in-providers-form').submit((event) => {
-		event.preventDefault();
-		const $signInProviders = [];
-
-		$('#sign-in-providers-form input:checked').each((index, element) => {
-			$signInProviders.push($(element).attr('id'));
-		});
-
-		$.post(
-			// eslint-disable-next-line no-undef
-			ajaxurl,
-			{
-				action: 'firebase_providers',
-				enabled_providers: $signInProviders,
-			},
-			(e) => {
-				if (e.success === true) {
-					$.toast({
-						heading: 'Success',
-						text: 'Sign-in providers updated.',
-						showHideTransition: 'slide',
-						icon: 'success',
-						position: {
-							top: 40,
-							right: 80,
-						},
-					});
-				}
-			}
-		);
-	});
+    $.post(
+      // eslint-disable-next-line no-undef
+      ajaxurl,
+      {
+        action: "firebase_providers",
+        enabled_providers: $signInProviders,
+      },
+      (e) => {
+        if (e.success === true) {
+          $.toast({
+            heading: "Success",
+            text: "Sign-in providers updated.",
+            showHideTransition: "slide",
+            icon: "success",
+            position: {
+              top: 40,
+              right: 80,
+            },
+          });
+        }
+      }
+    );
+  });
 });

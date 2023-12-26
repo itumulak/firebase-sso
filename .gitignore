@@ -1,4 +1,5 @@
 /vendor/
 node_modules
+.idea
 **/*-dev.css
 **/*-dev.css.map

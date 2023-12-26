@@ -1,6 +1,32 @@
 .tabs-holder {
-  .group {
-    margin: 1em auto;
+  margin: 0;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background-color: #FFF;
+  border-left: 1px solid #c3c4c7;
+  border-right: 1px solid #c3c4c7;
+  border-bottom: 1px solid #c3c4c7;
+}
+
+.nav {
+  &-tab {
+    &:first-child {
+      margin-left: 20px;
+    }
+
+    &-active {
+      background-color: #FFF;
+
+      &:focus {
+        outline: none;
+        box-shadow: none;
+        background-color: #FFF;
+        border-bottom-color: transparent;
+
+      }
+    }
   }
 }
 

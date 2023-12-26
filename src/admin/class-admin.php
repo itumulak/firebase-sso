@@ -23,7 +23,7 @@ class Admin extends Admin_Config {
 	public function init() {
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
-    }
+	}
 
 	/**
 	 * Register Admin Menu
@@ -32,10 +32,18 @@ class Admin extends Admin_Config {
 	 * @since 1.0.0
 	 */
 	public function admin_menu() {
-		add_menu_page( 'WP Firebase', 'WP Firebase', 'manage_options', self::MENU_SLUG, array(
-			$this,
-			'admin_page'
-		), $this->get_plugin_url() . 'assets/firebase-logo-menu-icon.svg', 9 );
+		add_menu_page(
+			'WP Firebase',
+			'WP Firebase',
+			'manage_options',
+			self::MENU_SLUG,
+			array(
+				$this,
+				'admin_page',
+			),
+			$this->get_plugin_url() . 'assets/firebase-logo-menu-icon.svg',
+			9
+		);
 	}
 
 	/**
@@ -45,10 +53,10 @@ class Admin extends Admin_Config {
 	 * @since 1.0.0
 	 */
 	public function admin_scripts() {
-		if ( isset( $_GET['page'] ) && $_GET['page'] === self::MENU_SLUG ) {
+		if ( isset( $_GET['page'] ) && self::MENU_SLUG === $_GET['page'] ) {
 			/** Toast */
-			wp_enqueue_script( 'toast', $this->get_plugin_url() . 'lib/toast/jquery.toast.min.js', array( 'jquery' ), '', 'true' );
-			wp_enqueue_style( 'toast', $this->get_plugin_url() . 'lib/toast/jquery.toast.min.css', array(), '' );
+			wp_enqueue_script( 'toast', $this->get_plugin_url() . 'lib/toast/jquery.toast.min.js', array( 'jquery' ), '1.0.0', 'true' );
+			wp_enqueue_style( 'toast', $this->get_plugin_url() . 'lib/toast/jquery.toast.min.css', array(), '1.0.0' );
 			/**  */
 
 			/** Admin main */
@@ -65,7 +73,7 @@ class Admin extends Admin_Config {
 	 * @since 1.0.0
 	 */
 	public function admin_page() {
-		echo get_admin_template_part( 'template', 'admin' );
+		echo get_admin_template_part( 'template', 'admin' ); // phpcs:ignore
 	}
 }
 

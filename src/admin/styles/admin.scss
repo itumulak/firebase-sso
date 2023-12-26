@@ -1,13 +1,18 @@
+:root {
+  --background-color: #FFF;
+  --border-color: #c3c4c7;
+}
+
 .tabs-holder {
   margin: 0;
   padding-left: 25px;
   padding-right: 25px;
   padding-top: 15px;
   padding-bottom: 15px;
-  background-color: #FFF;
-  border-left: 1px solid #c3c4c7;
-  border-right: 1px solid #c3c4c7;
-  border-bottom: 1px solid #c3c4c7;
+  background-color: var(--background-color);
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .nav {
@@ -17,12 +22,12 @@
     }
 
     &-active {
-      background-color: #FFF;
+      background-color: var(--background-color);
 
       &:focus {
         outline: none;
         box-shadow: none;
-        background-color: #FFF;
+        background-color: var(--background-color);
         border-bottom-color: transparent;
       }
     }
@@ -41,7 +46,7 @@
 }
 
 #sign-in-providers-tab {
-  background-color: #FFF;
+  background-color: var(--background-color);
   width: 20em;
   padding: 10px;
 }

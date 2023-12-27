@@ -8,6 +8,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
+// @todo Refactor this as the model of the Admin page.
+
 class Admin_Config extends Base {
 	private array $configs;
 	private array $providers;

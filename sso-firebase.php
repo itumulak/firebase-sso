@@ -14,31 +14,40 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
+// /** Base */
+// require_once 'src/class-base.php';
+// require_once 'src/class-wp-auth.php';
+// /**  */
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // @todo Configure composer autoloader.
+// @todo Redo the plugin structure to comply with PSR-4 autoloading.
+require 'vendor/autoload.php';
 
-/** Base */
-require_once 'src/class-base.php';
-require_once 'src/class-wp-auth.php';
-/**  */
+$admin = new \Itumulak\WpSsoFirebase\Admin\Controller();
+$admin->init();
 
-/** Inc */
-require_once 'src/inc/class-email-password-auth.php';
-require_once 'src/inc/template-plugin.php';
-/**  */
+// /** Inc */
+// require_once 'src/inc/class-email-password-auth.php';
+// require_once 'src/inc/template-plugin.php';
+// /**  */
 
-/** Callbacks */
-require_once 'src/public/callback/class-callback-factory.php';
-require_once 'src/public/callback/class-email-password.php';
-require_once 'src/public/callback/class-google.php';
-require_once 'src/public/callback/class-facebook.php';
-/**  */
+// /** Callbacks */
+// require_once 'src/public/callback/class-callback-factory.php';
+// require_once 'src/public/callback/class-email-password.php';
+// require_once 'src/public/callback/class-google.php';
+// require_once 'src/public/callback/class-facebook.php';
+// /**  */
 
-/** Admin */
-require_once 'src/admin/class-admin-config.php';
-require_once 'src/admin/callback/class-admin-ajax.php';
-require_once 'src/admin/class-admin.php';
-/**  */
+// /** Admin */
+// require_once 'src/admin/class-admin-config.php';
+// require_once 'src/admin/callback/class-admin-ajax.php';
+// require_once 'src/admin/class-admin.php';
+// /**  */
 
-/** Frontend */
-require_once 'src/public/class-wp-login.php';
-/**  */
+// /** Frontend */
+// require_once 'src/public/class-wp-login.php';
+// /**  */

@@ -6,6 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
+// @todo refactor this file as the base model.
+
 class Base {
 	/**
 	 * Default Firebase slugs for WordPress.

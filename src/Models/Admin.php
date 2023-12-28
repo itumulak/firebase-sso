@@ -4,12 +4,18 @@ namespace Itumulak\WpSsoFirebase\Models;
 class Admin extends Factory {
 	private array $configs;
 	private array $providers;
-	const PROVIDER_SLUG_EMAILPASS = 'email-password';
+	const PROVIDER_SLUG_EMAILPASS = 'emailpassword';
 	const PROVIDER_SLUG_FB        = 'facebook';
 	const PROVIDER_SLUG_GOOGLE    = 'google';
 	const PROVIDER_ACTION         = 'provider_action';
 	const CONFIG_ACTION           = 'config_action';
 
+	/**
+	 * Constructor.
+	 * Initialize default data.
+	 * 
+	 * @since 2.0.0
+	 */
 	public function __construct() {
 		$this->configs = array(
 			'apiKey'     => array(
@@ -23,9 +29,24 @@ class Admin extends Factory {
 		);
 
 		$this->providers = array(
-			self::PROVIDER_SLUG_EMAILPASS => false,
-			self::PROVIDER_SLUG_FB        => false,
-			self::PROVIDER_SLUG_GOOGLE    => false,
+			self::PROVIDER_SLUG_EMAILPASS => array(
+				'id' => self::PROVIDER_SLUG_EMAILPASS,
+				'icon' => $this->get_plugin_url() . 'src/Admin/assets/images/mail-logo.svg',
+				'label' => 'Email/Password',
+				'is_active' => false 
+			),
+			self::PROVIDER_SLUG_GOOGLE    => array(
+				'id' => self::PROVIDER_SLUG_GOOGLE,
+				'icon' => $this->get_plugin_url() . 'src/Admin/assets/images/google-logo.svg',
+				'label' => 'Google',
+				'is_active' => false,
+			),
+			self::PROVIDER_SLUG_FB        => array(
+				'id' => self::PROVIDER_SLUG_FB,
+				'icon' => $this->get_plugin_url() . 'src/Admin/assets/images/facebook-logo.svg',
+				'label' => 'Facebook',
+				'is_active' => false,
+			),
 		);
 	}
 
@@ -38,11 +59,25 @@ class Admin extends Factory {
 	 * @since 1.0.0
 	 */
 	public function save_config( array $configs ): bool {
+		$_configs = $this->configs;
+		$current_config = $this->get_config();
+
 		foreach ( array_keys( $this->configs ) as $key ) {
-			$this->configs[ $key ]['value'] = $configs[ $key ];
+			// @todo Improve saving of configs.
+			if ( $this->spoof_datum() !== $configs[ $key ] ) {
+				$_configs[ $key ]['value'] = $configs[ $key ];
+			}
+			else {
+				if ( $configs[$key] === $current_config[$key]['value'] ) {
+					$_configs[$key]['value'] = $current_config[$key]['value'];
+				}
+				else {
+					$_configs[$key]['value'] =$configs[ $key ];
+				}
+			}
 		}
 
-		return update_option( self::OPTION_KEY_CONFIG, $this->configs );
+		return update_option( self::OPTION_KEY_CONFIG, $_configs );
 	}
 
 	/**
@@ -52,7 +87,13 @@ class Admin extends Factory {
 	 * @since 1.0.0
 	 */
 	public function get_config(): array {
-		return wp_parse_args( get_option( self::OPTION_KEY_CONFIG ), $this->configs );
+		$_configs = wp_parse_args( get_option( self::OPTION_KEY_CONFIG), $this->configs );
+
+		foreach(array_keys($this->configs) as $key) {
+			$_configs[$key]['value'] = strlen($_configs[$key]['value']) ? $this->spoof_datum() : '';
+		}
+
+		return $_configs;
 	}
 
 	/**
@@ -68,7 +109,7 @@ class Admin extends Factory {
 			$enabled[ $provider ] = true;
 		}
 
-		return update_option( self::OPTION_KEY_PROVIDERS, wp_parse_args( $enabled, $this->providers ) );
+		return update_option( self::OPTION_KEY_PROVIDERS, $enabled );
 	}
 
 	/**
@@ -78,54 +119,22 @@ class Admin extends Factory {
 	 * @since 1.0.0
 	 */
 	public function get_providers(): mixed {
-		return get_option( self::OPTION_KEY_PROVIDERS );
+		$saved_providers = get_option( self::OPTION_KEY_PROVIDERS );
+		$providers = $this->providers;
+
+		foreach ( array_keys( $saved_providers ) as $key ) {
+			$providers[$key]['is_active'] = true;
+		}
+
+		return $providers;
 	}
 
 	/**
-	 * Save Firebase Config.
-	 * Ajax request callback.
+	 * Return an imitating "•" to prevent revealing sensitive datum.
 	 *
-	 * @return void
-	 * @since 1.0.0
+	 * @return string
 	 */
-	public function save_config_callback() : void {
-		if ( ! $this->verify_nonce( $_REQUEST['nonce'], self::CONFIG_ACTION ) ) {
-			$this->handle_callback( false );
-		}
-
-		$this->handle_callback( $this->save_config( $_REQUEST ) );
-	}
-
-	/**
-	 * Save Firebase Sign-in Providers
-	 * Ajax request callback
-	 *
-	 * @return void
-	 * @since 1.0.0
-	 */
-	public function save_providers_callback() : void {
-		if ( ! $this->verify_nonce( $_POST['nonce'], self::PROVIDER_ACTION ) ) {
-			$this->handle_callback( false );
-		}
-
-		$providers = array_map( 'sanitize_key', $_REQUEST['enabled_providers'] );
-		$this->handle_callback( $this->save_providers( $providers ) );
-	}
-
-	/**
-	 * Handle WordPress callbacks.
-	 *
-	 * @param Function|bool $callback
-	 * @return void
-	 * @since 2.0.0
-	 */
-	private function handle_callback( $callback ) : void {
-		if ( $callback ) {
-			wp_send_json_success();
-		} else {
-			wp_send_json_error();
-		}
-
-		wp_die();
+	private function spoof_datum() : string {
+		return str_repeat('•', 30);
 	}
 }

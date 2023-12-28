@@ -2,9 +2,6 @@
 namespace Itumulak\WpSsoFirebase\Admin;
 
 use Itumulak\WpSsoFirebase\Models\Admin as AdminModel;
-use Itumulak\WpSsoFirebase\Models\AdminCallback;
-
-use function get_admin_template_part;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -12,14 +9,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Controller {
 	private AdminModel $admin_model;
-	private AdminCallback $admin_callback;
+	private CallbackController $callback;
 
 	/**
 	 * Constructor.
 	 */
 	public function __construct() {
-		$this->admin_model    = new AdminModel();
-		$this->admin_callback = new AdminCallback();
+		$this->admin_model = new AdminModel();
+		$this->callback    = new CallbackController();
 	}
 
 	/**
@@ -31,8 +28,8 @@ class Controller {
 	public function init() {
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
-		add_action( 'wp_ajax_' . $this->admin_model::PROVIDER_ACTION, array( $this->admin_callback, $this->admin_callback::SAVE_PROVIDERS_FUNC ) );
-		add_action( 'wp_ajax_' . $this->admin_model::CONFIG_ACTION, array( $this->admin_callback, $this->admin_callback::SAVE_CONFIG_FUNC ) );
+		add_action( 'wp_ajax_' . $this->admin_model::PROVIDER_ACTION, array( $this->callback, $this->callback::SAVE_PROVIDERS_FUNC ) );
+		add_action( 'wp_ajax_' . $this->admin_model::CONFIG_ACTION, array( $this->callback, $this->callback::SAVE_CONFIG_FUNC ) );
 	}
 
 	/**
@@ -69,20 +66,18 @@ class Controller {
 			wp_enqueue_style( 'toast', $this->admin_model->get_plugin_url() . 'lib/toast/jquery.toast.min.css', array(), '1.0.0' );
 			/**  */
 
-			/** Admin main */
 			wp_enqueue_style( $this->admin_model::JS_ADMIN_HANDLE, $this->admin_model->get_plugin_url() . 'src/Admin/assets/styles/admin.css', array(), $this->admin_model->get_version() );
 			wp_enqueue_script( $this->admin_model::JS_ADMIN_HANDLE, $this->admin_model->get_plugin_url() . 'src/Admin/assets/js/admin.js', array( 'toast', 'jquery' ), $this->admin_model->get_version(), 'true' );
-			wp_localize_script( 
-				$this->admin_model::JS_ADMIN_HANDLE, 
-				$this->admin_model::JS_ADMIN_OBJECT_NAME, 
-				array( 
-					'ajaxurl' => admin_url( 'admin-ajax.php'),
-					'config_action' => $this->admin_model::CONFIG_ACTION,
+			wp_localize_script(
+				$this->admin_model::JS_ADMIN_HANDLE,
+				$this->admin_model::JS_ADMIN_OBJECT_NAME,
+				array(
+					'ajaxurl'         => admin_url( 'admin-ajax.php' ),
+					'config_action'   => $this->admin_model::CONFIG_ACTION,
 					'provider_action' => $this->admin_model::PROVIDER_ACTION,
-					'nonce' => wp_create_nonce( $this->admin_model::AJAX_NONCE ),
+					'nonce'           => wp_create_nonce( $this->admin_model::AJAX_NONCE ),
 				)
 			);
-			/**  */
 		}
 	}
 

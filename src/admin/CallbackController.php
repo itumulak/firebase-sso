@@ -1,7 +1,9 @@
 <?php
-namespace Itumulak\WpSsoFirebase\Models;
+namespace Itumulak\WpSsoFirebase\Admin;
 
-class AdminCallback {
+use Itumulak\WpSsoFirebase\Models\Admin;
+
+class CallbackController {
 	private Admin $admin_model;
 	const SAVE_CONFIG_FUNC    = 'save_config_callback';
 	const SAVE_PROVIDERS_FUNC = 'save_providers_callback';
@@ -21,11 +23,11 @@ class AdminCallback {
 	 * @since 1.0.0
 	 */
 	public function save_config_callback() : void {
-		if ( !isset($_REQUEST['nonce']) && ! $this->admin_model->verify_nonce( $_REQUEST['nonce'], $this->admin_model::JS_ADMIN_NONCE ) ) {
-		    $this->handle_callback( false );
+		if ( ! isset( $_REQUEST['nonce'] ) && ! $this->admin_model->verify_nonce( $_REQUEST['nonce'], $this->admin_model::JS_ADMIN_NONCE ) ) { // phpcs:ignore
+			$this->handle_callback( false );
 		}
 
-		$this->handle_callback( $this->admin_model->save_config( $_REQUEST ) );
+		$this->handle_callback( $this->admin_model->save_config( $_REQUEST ) ); // phpcs:ignore
 	}
 
 	/**
@@ -36,12 +38,11 @@ class AdminCallback {
 	 * @since 1.0.0
 	 */
 	public function save_providers_callback() : void {
-		if ( ! isset($_REQUEST['nonce']) && ! $this->admin_model->verify_nonce( $_REQUEST['nonce'], $this->admin_model::JS_ADMIN_NONCE ) ) {
-		    $this->handle_callback( false );
+		if ( ! isset( $_REQUEST['nonce'] ) && ! $this->admin_model->verify_nonce( $_REQUEST['nonce'], $this->admin_model::JS_ADMIN_NONCE ) ) { // phpcs:ignore
+			$this->handle_callback( false );
 		}
 
-		$providers = array_map( 'sanitize_key', $_POST['enabled_providers'] );
-		// $providers = $_REQUEST;
+		$providers = array_map( 'sanitize_key', $_POST['enabled_providers'] ); // phpcs:ignore
 		$this->handle_callback( $this->admin_model->save_providers( $providers ) );
 	}
 

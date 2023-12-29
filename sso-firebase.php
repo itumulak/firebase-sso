@@ -10,6 +10,9 @@
  * Text Domain: sso-firebase
  */
 
+use Itumulak\WpSsoFirebase\Admin\Controller as AdminController;
+use Itumulak\WpSsoFirebase\Frontend\Controller as FrontendController;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
@@ -27,8 +30,11 @@ error_reporting(E_ALL);
 // @todo Redo the plugin structure to comply with PSR-4 autoloading.
 require 'vendor/autoload.php';
 
-$admin = new \Itumulak\WpSsoFirebase\Admin\Controller();
+$admin = new AdminController();
 $admin->init();
+
+$frontend = new FrontendController();
+$frontend->init();
 
 // /** Inc */
 // require_once 'src/inc/class-email-password-auth.php';

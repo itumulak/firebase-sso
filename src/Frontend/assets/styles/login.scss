@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+:root {
+  --color-white: #FFF;
+  --color-grey: #808080;
+  --color-facebook-blue: #4267b2;
+}
+
+[type=button]:not(:disabled),
+[type=reset]:not(:disabled),
+[type=submit]:not(:disabled),
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+.btn {
+  transition: all 0.2s;
+  text-transform: uppercase;
+  margin-bottom: .5rem;
+  width: 100%;
+  border: none;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: var(--color-white);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 6px -4px hsl(0, 0%, 50%);
+  color: var(--color-grey);
+  font-size: 14px;
+  height: 40px;
+  letter-spacing: 0.2px;
+  font-family: Roboto, sans-serif;
+
+  img {
+    margin-right: 24px;
+  }
+
+  &-wrapper {
+    text-align: center;
+  }
+
+  &-facebook {
+    color: var(--color-white);
+    background-color: var(--color-facebook-blue);
+
+    img {
+      margin-left: -20px;
+      margin-right: 12px;
+    }
+  }
+}

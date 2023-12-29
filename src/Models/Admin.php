@@ -13,7 +13,7 @@ class Admin extends Factory {
 	/**
 	 * Constructor.
 	 * Initialize default data.
-	 * 
+	 *
 	 * @since 2.0.0
 	 */
 	public function __construct() {
@@ -30,21 +30,21 @@ class Admin extends Factory {
 
 		$this->providers = array(
 			self::PROVIDER_SLUG_EMAILPASS => array(
-				'id' => self::PROVIDER_SLUG_EMAILPASS,
-				'icon' => $this->get_plugin_url() . 'src/Admin/assets/images/mail-logo.svg',
-				'label' => 'Email/Password',
-				'is_active' => false 
+				'id'        => self::PROVIDER_SLUG_EMAILPASS,
+				'icon'      => $this->get_plugin_url() . 'src/Admin/assets/images/mail-logo.svg',
+				'label'     => 'Email/Password',
+				'is_active' => false,
 			),
 			self::PROVIDER_SLUG_GOOGLE    => array(
-				'id' => self::PROVIDER_SLUG_GOOGLE,
-				'icon' => $this->get_plugin_url() . 'src/Admin/assets/images/google-logo.svg',
-				'label' => 'Google',
+				'id'        => self::PROVIDER_SLUG_GOOGLE,
+				'icon'      => $this->get_plugin_url() . 'src/Admin/assets/images/google-logo.svg',
+				'label'     => 'Google',
 				'is_active' => false,
 			),
 			self::PROVIDER_SLUG_FB        => array(
-				'id' => self::PROVIDER_SLUG_FB,
-				'icon' => $this->get_plugin_url() . 'src/Admin/assets/images/facebook-logo.svg',
-				'label' => 'Facebook',
+				'id'        => self::PROVIDER_SLUG_FB,
+				'icon'      => $this->get_plugin_url() . 'src/Admin/assets/images/facebook-logo.svg',
+				'label'     => 'Facebook',
 				'is_active' => false,
 			),
 		);
@@ -59,20 +59,18 @@ class Admin extends Factory {
 	 * @since 1.0.0
 	 */
 	public function save_config( array $configs ): bool {
-		$_configs = $this->configs;
+		$_configs       = $this->configs;
 		$current_config = $this->get_config();
 
 		foreach ( array_keys( $this->configs ) as $key ) {
 			// @todo Improve saving of configs.
 			if ( $this->spoof_datum() !== $configs[ $key ] ) {
 				$_configs[ $key ]['value'] = $configs[ $key ];
-			}
-			else {
-				if ( $configs[$key] === $current_config[$key]['value'] ) {
-					$_configs[$key]['value'] = $current_config[$key]['value'];
-				}
-				else {
-					$_configs[$key]['value'] =$configs[ $key ];
+			} else {
+				if ( $configs[ $key ] === $current_config[ $key ]['value'] ) {
+					$_configs[ $key ]['value'] = $current_config[ $key ]['value'];
+				} else {
+					$_configs[ $key ]['value'] = $configs[ $key ];
 				}
 			}
 		}
@@ -87,10 +85,10 @@ class Admin extends Factory {
 	 * @since 1.0.0
 	 */
 	public function get_config(): array {
-		$_configs = wp_parse_args( get_option( self::OPTION_KEY_CONFIG), $this->configs );
+		$_configs = wp_parse_args( get_option( self::OPTION_KEY_CONFIG ), $this->configs );
 
-		foreach(array_keys($this->configs) as $key) {
-			$_configs[$key]['value'] = strlen($_configs[$key]['value']) ? $this->spoof_datum() : '';
+		foreach ( array_keys( $this->configs ) as $key ) {
+			$_configs[ $key ]['value'] = strlen( $_configs[ $key ]['value'] ) ? $this->spoof_datum() : '';
 		}
 
 		return $_configs;
@@ -120,10 +118,10 @@ class Admin extends Factory {
 	 */
 	public function get_providers(): mixed {
 		$saved_providers = get_option( self::OPTION_KEY_PROVIDERS );
-		$providers = $this->providers;
+		$providers       = $this->providers;
 
 		foreach ( array_keys( $saved_providers ) as $key ) {
-			$providers[$key]['is_active'] = true;
+			$providers[ $key ]['is_active'] = true;
 		}
 
 		return $providers;
@@ -135,6 +133,6 @@ class Admin extends Factory {
 	 * @return string
 	 */
 	private function spoof_datum() : string {
-		return str_repeat('•', 30);
+		return str_repeat( '•', 30 );
 	}
 }

@@ -24,9 +24,9 @@ $admin = $args['admin_model'];
 		<div id="sign-in-providers-tab" class="group">
 			<div id="sign-in-providers-list">
 				<?php
-				echo $admin->get_admin_template_part(
-					'template',
-					'providers',
+				echo $admin->get_template(
+					'Admin',
+					'template-providers',
 					array(
 						'providers'   => $admin->get_providers(),
 						'admin_model' => $admin,
@@ -39,9 +39,9 @@ $admin = $args['admin_model'];
 		<div id="configurations-tab" class="group">
 			<div id="config-textarea-wrapper">
 				<?php
-				echo $admin->get_admin_template_part(
-					'template',
-					'configuration',
+				echo $admin->get_template(
+					'Admin',
+					'template-configuration',
 					array(
 						'config'      => $admin->get_config(),
 						'admin_model' => $admin,

@@ -16,14 +16,9 @@ class Factory {
 	const JS_ADMIN_NONCE       = 'sso_admin_nonce';
 	const JS_FIREBASE          = 'firebase';
 	const JS_FIREBASE_AUTH     = 'firebase_authentication';
-	const OPTION_KEY_CONFIG    = 'wp_firebase_config';
-	const OPTION_KEY_PROVIDERS = 'wp_firebase_signin_providers';
 	const USER_SIGNIN_TYPE     = 'wp_firebase_signin';
 	const SIGNIN_REFRESHTOKEN  = 'wp_firebase_refresh_token';
 	const SIGNIN_OAUTH         = 'wp_firebase_oauth';
-	const SIGNIN_EMAILPASS     = 'emailpass';
-	const SIGNIN_GOOGLE        = 'google';
-	const SIGNIN_FACEBOOK      = 'facebook';
 	const COOKIE_LOGOUT        = 'wp_firebase_logout';
 	const AJAX_NONCE           = 'sso-firebase';
 
@@ -86,28 +81,16 @@ class Factory {
 	/**
 	 * Load our admin template parts.
 	 *
-	 * @param $slug
-	 * @param $name
-	 * @param $args
-	 * @param $require_once
+	 * @param string $path
+	 * @param string $slugfile_name
+	 * @param array $args
+	 * @param bool $require_once
 	 *
 	 * @since 2.0.0
 	 * @return void
 	 */
-	public function get_admin_template_part( $slug, $name = '', $args = array(), $require_once = false ) {
-		$template = '';
-
-		if ( ! $template && $name && $this->get_plugin_dir() . "template-part/{$slug}-{$name}.php" ) {
-			$template = $this->get_plugin_dir() . "src/Admin/template-parts/{$slug}-{$name}.php";
-		}
-
-		if ( ! $template && $name && $this->get_plugin_dir() . "template-part/{$slug}-{$name}.php" ) {
-			$template = $this->get_plugin_dir() . "src/Admin/templates/{$slug}-{$name}.php";
-		}
-
-		if ( $template ) {
-			load_template( $template, $require_once, $args );
-		}
+	public function get_template(string $path, string $file_name, array $args = array(), bool $require_once = false ) {
+		load_template( $this->get_plugin_dir() . "src/View/{$path}/{$file_name}.php", $require_once, $args );
 	}
 
 	/**

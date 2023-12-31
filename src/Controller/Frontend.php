@@ -1,14 +1,16 @@
 <?php
-namespace Itumulak\WpSsoFirebase\Frontend;
+namespace Itumulak\WpSsoFirebase\Controller;
 
 use Itumulak\WpSsoFirebase\Models\Admin;
 use Itumulak\WpSsoFirebase\Models\Firebase_EmailPass_Auth;
-use Itumulak\WpSsoFirebase\Models\Frontend;
+use Itumulak\WpSsoFirebase\Models\Frontend as FrontendModel;
 use WP_User;
 
-class Controller {
+class Frontend {
 	const LOGIN_STYLE_HANDLE = 'firebase_login';
-	private Frontend $frontend_model;
+    const FIREBASE_GOOGLE_AJAX_HOOK   = 'firebase_google_login';
+	const FIREBASE_FACEBOOK_AJAX_HOOK = 'firebase_facebook_login';
+	private FrontendModel $frontend_model;
 	private Admin $admin_model;
 	private Firebase_EmailPass_Auth $email_auth;
 
@@ -18,7 +20,7 @@ class Controller {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		$this->frontend_model = new Frontend();
+		$this->frontend_model = new FrontendModel();
 		$this->admin_model    = new Admin();
 		$this->email_auth     = new Firebase_EmailPass_Auth();
 	}
@@ -34,7 +36,7 @@ class Controller {
 		add_action( 'login_enqueue_scripts', array( $this, 'scripts' ) );
 		add_filter( 'login_message', array( $this, 'signin_auth_buttons' ) );
 		add_filter( 'wp_login_errors', array( $this, 'modify_incorrect_password' ), 10, 2 );
-		add_filter( 'authenticate', array( $this, 'email_pass_auth' ), 10, 3 );
+		// add_filter( 'authenticate', array( $this, 'email_pass_auth' ), 10, 3 );
 	}
 
 	/**
@@ -44,7 +46,7 @@ class Controller {
 	 * @since 1.0.0
 	 */
 	public function scripts() : void {
-		wp_enqueue_style( 'firebase_login', $this->frontend_model->get_plugin_url() . 'src/Frontend/assets/styles/login.css', array(), $this->frontend_model->get_version() );
+		wp_enqueue_style( 'firebase_login', $this->frontend_model->get_plugin_url() . 'src/View/Frontend/assets/styles/login.css', array(), $this->frontend_model->get_version() );
 	}
 
 	/**
@@ -59,14 +61,13 @@ class Controller {
 	 */
 	public function signin_auth_buttons( $message ): string {
 		$config  = $this->admin_model->get_providers();
-		$pattern = '<p class="btn-wrapper"><button id="wp-firebase-%1$s-sign-in" class="btn btn-lg btn-%1$s btn-block text-uppercase" type="submit"><img height="%3$d" src="' . $this->frontend_model->get_plugin_url() . 'src/Frontend/assets/images/%1$s-logo.svg' . '" /> %2$s</button></p>'; // phpcs:ignore
 
 		if ( $config['google']['is_active'] ) {
-			$message .= wp_sprintf( $pattern, 'google', __( 'Sign In with Google' ), 18 );
+			$message .= $this->admin_model->get_template( 'Frontend', 'provider-design-1', array('provider_key' => 'google', 'label' => __( 'Sign In with Google' ), 'img_size' => 18, 'admin_model' => $this->admin_model) );
 		}
 
 		if ( $config['facebook']['is_active'] ) {
-			$message .= wp_sprintf( $pattern, 'facebook', __( 'Log in with Facebook' ), 28 );
+			$message .= $this->admin_model->get_template( 'Frontend', 'provider-design-1', array('provider_key' => 'facebook', 'label' => __( 'Log in with Facebook' ), 'img_size' => 28, 'admin_model' => $this->admin_model) );
 		}
 
 		return $message;
@@ -100,7 +101,7 @@ class Controller {
 		return $errors;
 	}
 
-	public function email_pass_firebase_auth( $user, $email_address, $password  ) : false|WP_User {
+	public function email_pass_firebase_auth( $user, $email_address, $password ) : false|WP_User {
 		return $user;
 	}
 }

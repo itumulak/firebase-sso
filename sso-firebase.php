@@ -10,8 +10,8 @@
  * Text Domain: sso-firebase
  */
 
-use Itumulak\WpSsoFirebase\Admin\Controller as AdminController;
-use Itumulak\WpSsoFirebase\Frontend\Controller as FrontendController;
+use Itumulak\WpSsoFirebase\Controller\Admin as AdminController;
+use Itumulak\WpSsoFirebase\Controller\Frontend as FrontendController;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

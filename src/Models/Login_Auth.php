@@ -2,7 +2,7 @@
 namespace Itumulak\WpSsoFirebase\Models;
 
 class Login_Auth extends Factory {
-    /**
+	/**
 	 * Set cookie logout.
 	 *
 	 * @use Hook/Action

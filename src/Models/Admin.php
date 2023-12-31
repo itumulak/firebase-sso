@@ -2,13 +2,12 @@
 namespace Itumulak\WpSsoFirebase\Models;
 
 class Admin extends Factory {
-	private array $configs;
-	private array $providers;
-	const PROVIDER_SLUG_EMAILPASS = 'emailpassword';
-	const PROVIDER_SLUG_FB        = 'facebook';
-	const PROVIDER_SLUG_GOOGLE    = 'google';
-	const PROVIDER_ACTION         = 'provider_action';
-	const CONFIG_ACTION           = 'config_action';
+	private array $configuration_data;
+	private array $providers_data;
+	private Configuration $configuration_model;
+	private Providers $providers_model;
+	const PROVIDER_ACTION = 'provider_action';
+	const CONFIG_ACTION   = 'config_action';
 
 	/**
 	 * Constructor.
@@ -17,7 +16,10 @@ class Admin extends Factory {
 	 * @since 2.0.0
 	 */
 	public function __construct() {
-		$this->configs = array(
+		$this->configuration_model = new Configuration();
+		$this->providers_model     = new Providers();
+
+		$this->configuration_data = array(
 			'apiKey'     => array(
 				'label' => 'API Key',
 				'value' => '',
@@ -28,23 +30,23 @@ class Admin extends Factory {
 			),
 		);
 
-		$this->providers = array(
-			self::PROVIDER_SLUG_EMAILPASS => array(
-				'id'        => self::PROVIDER_SLUG_EMAILPASS,
-				'icon'      => $this->get_plugin_url() . 'src/Admin/assets/images/mail-logo.svg',
-				'label'     => 'Email/Password',
+		$this->providers_data = array(
+			$this->providers_model::PROVIDER_EMAILPASS => array(
+				'id'        => $this->providers_model::PROVIDER_EMAILPASS,
+				'icon'      => $this->get_plugin_url() . 'src/View/Admin/assets/images/mail-logo.svg',
+				'label'     => __( 'Email/Password' ),
 				'is_active' => false,
 			),
-			self::PROVIDER_SLUG_GOOGLE    => array(
-				'id'        => self::PROVIDER_SLUG_GOOGLE,
-				'icon'      => $this->get_plugin_url() . 'src/Admin/assets/images/google-logo.svg',
-				'label'     => 'Google',
+			$this->providers_model::PROVIDER_GOOGLE    => array(
+				'id'        => $this->providers_model::PROVIDER_GOOGLE,
+				'icon'      => $this->get_plugin_url() . 'src/View/Admin/assets/images/google-logo.svg',
+				'label'     => __( 'Google' ),
 				'is_active' => false,
 			),
-			self::PROVIDER_SLUG_FB        => array(
-				'id'        => self::PROVIDER_SLUG_FB,
-				'icon'      => $this->get_plugin_url() . 'src/Admin/assets/images/facebook-logo.svg',
-				'label'     => 'Facebook',
+			$this->providers_model::PROVIDER_FACEBOOK  => array(
+				'id'        => $this->providers_model::PROVIDER_FACEBOOK,
+				'icon'      => $this->get_plugin_url() . 'src/View/Admin/assets/images/facebook-logo.svg',
+				'label'     => __( 'Facebook' ),
 				'is_active' => false,
 			),
 		);
@@ -53,61 +55,29 @@ class Admin extends Factory {
 	/**
 	 * Save Firebase Config
 	 *
-	 * @param array $configs
+	 * @param array $configuration_data
 	 * @return bool
 	 *
 	 * @since 1.0.0
 	 */
-	public function save_config( array $configs ): bool {
-		$_configs       = $this->configs;
-		$current_config = $this->get_config();
-
-		foreach ( array_keys( $this->configs ) as $key ) {
-			// @todo Improve saving of configs.
-			if ( $this->spoof_datum() !== $configs[ $key ] ) {
-				$_configs[ $key ]['value'] = $configs[ $key ];
-			} else {
-				if ( $configs[ $key ] === $current_config[ $key ]['value'] ) {
-					$_configs[ $key ]['value'] = $current_config[ $key ]['value'];
-				} else {
-					$_configs[ $key ]['value'] = $configs[ $key ];
-				}
-			}
-		}
-
-		return update_option( self::OPTION_KEY_CONFIG, $_configs );
+	public function save_config( array $data ): bool {
+		return $this->configuration_model->save( $data );
 	}
 
 	/**
-	 * Fetch saved Firebase Config
+	 * Fetch Settings configuration.
 	 *
 	 * @return array
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function get_config(): array {
-		$_configs = wp_parse_args( get_option( self::OPTION_KEY_CONFIG ), $this->configs );
+		$data = $this->configuration_model->get_all();
 
-		foreach ( array_keys( $this->configs ) as $key ) {
-			$_configs[ $key ]['value'] = strlen( $_configs[ $key ]['value'] ) ? $this->spoof_datum() : '';
+		foreach ( $data as $key => $datum ) {
+			$this->configuration_data[ $key ]['value'] = strlen( $datum ) > 0 ? $this->spoof_datum() : '';
 		}
 
-		return $_configs;
-	}
-
-	/**
-	 * Save Firebase Sign-in Providers
-	 *
-	 * @param array $providers
-	 * @return array
-	 *
-	 * @since 1.0.0
-	 */
-	public function save_providers( array $providers ): bool {
-		foreach ( $providers as $provider ) {
-			$enabled[ $provider ] = true;
-		}
-
-		return update_option( self::OPTION_KEY_PROVIDERS, $enabled );
+		return $this->configuration_data;
 	}
 
 	/**
@@ -116,15 +86,26 @@ class Admin extends Factory {
 	 * @return mixed
 	 * @since 1.0.0
 	 */
-	public function get_providers(): mixed {
-		$saved_providers = get_option( self::OPTION_KEY_PROVIDERS );
-		$providers       = $this->providers;
+	public function get_providers() : array {
+		$data = $this->providers_model->get_all();
 
-		foreach ( array_keys( $saved_providers ) as $key ) {
-			$providers[ $key ]['is_active'] = true;
+		foreach ( $data as $key => $datum ) {
+			$this->providers_data[ $key ]['is_active'] = $datum;
 		}
 
-		return $providers;
+		return $this->providers_data;
+	}
+
+	/**
+	 * Save Firebase Sign-in Providers
+	 *
+	 * @param array $data
+	 * @return bool
+	 *
+	 * @since 1.0.0
+	 */
+	public function save_providers( array $data ): bool {
+		return $this->providers_model->save( $data );
 	}
 
 	/**

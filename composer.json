@@ -1,0 +1,16 @@
+{
+    "name": "itumulak/wp-sso-firebase",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Itumulak\\WpSsoFirebase\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ian Tumulak",
+            "email": "edden87@gmail.com"
+        }
+    ],
+    "require": {}
+}

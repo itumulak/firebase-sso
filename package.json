@@ -1,10 +1,10 @@
 {
   "name": "wp-sso-firebase",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@babel/polyfill": "^7.11.5",
-    "firebase": "^9.6.7",
-    "jquery": "^3.6.0"
+    "firebase": "^9.23.0"
   },
   "devDependencies": {
     "@wordpress/eslint-plugin": "^10.0.1",

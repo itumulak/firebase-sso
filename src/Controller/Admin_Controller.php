@@ -1,14 +1,14 @@
 <?php 
 namespace Itumulak\WpSsoFirebase\Controller;
 
-use Itumulak\WpSsoFirebase\Models\Admin as AdminModel;
+use Itumulak\WpSsoFirebase\Models\Admin_Model;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-class Admin {
-    private AdminModel $admin_model;
+class Admin_Controller {
+    private Admin_Model $admin_model;
     const SAVE_CONFIG_FUNC    = 'save_config_callback';
 	const SAVE_PROVIDERS_FUNC = 'save_providers_callback';
 
@@ -16,14 +16,14 @@ class Admin {
 	 * Constructor.
 	 */
 	public function __construct() {
-		$this->admin_model = new AdminModel();
+		$this->admin_model = new Admin_Model();
 	}
 
 	/**
 	 * Initialized functions.
 	 * Hooks/Filter are added here.
 	 *
-	 * @since 2.0.0
+	 * @since 1.0.0
 	 */
 	public function init() {
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
@@ -48,7 +48,7 @@ class Admin {
 				$this,
 				'admin_page',
 			),
-			$this->admin_model->get_plugin_url() . 'src/View/assets/images/firebase-logo-menu-icon.svg',
+			$this->admin_model->get_plugin_url() . 'src/View/Admin/assets/images/firebase-logo-menu-icon.svg',
 			9
 		);
 	}
@@ -133,7 +133,7 @@ class Admin {
 	 *
 	 * @param Function|bool $callback
 	 * @return void
-	 * @since 2.0.0
+	 * @since 1.0.0
 	 */
 	private function handle_callback( $callback ) : void {
 		if ( $callback ) {

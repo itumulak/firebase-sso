@@ -1,7 +1,9 @@
 <?php
 namespace Itumulak\WpSsoFirebase\Models;
 
-class Configuration implements Data_Management {
+use Itumulak\WpSsoFirebase\Models\Interface\Data_Management_Interface;
+
+class Configuration_Model implements Data_Management_Interface {
 	private array $data;
 	const OPTION_KEY_NAME = 'wp_firebase_config';
 

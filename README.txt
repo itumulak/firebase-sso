@@ -42,14 +42,5 @@ Please email at <a href="mailto:edden87@gmail.com" target="_blank">edden87@gmail
 
 == Changelog ==
 
-= 2.0.0 =
-* Refactored the plugin to be modular.
-* Comply with coding standards of WP.
-* Updated to implement a Firebase SDK package.
-* Improved Admin page.
-
-= 1.1.0 =
-* Add User Email to Firebase after they pass validation and created.
-
 = 1.0.0 =
 * Initial Release

@@ -1,11 +1,13 @@
 <?php
 namespace Itumulak\WpSsoFirebase\Models;
 
-class Admin extends Factory {
+use Itumulak\WpSsoFirebase\Models\Providers_Model;
+
+class Admin_Model extends Base_Model {
 	private array $configuration_data;
 	private array $providers_data;
-	private Configuration $configuration_model;
-	private Providers $providers_model;
+	private Configuration_Model $configuration_model;
+	private Providers_Model $providers_model;
 	const PROVIDER_ACTION = 'provider_action';
 	const CONFIG_ACTION   = 'config_action';
 
@@ -13,11 +15,11 @@ class Admin extends Factory {
 	 * Constructor.
 	 * Initialize default data.
 	 *
-	 * @since 2.0.0
+	 * @since 1.0.0
 	 */
 	public function __construct() {
-		$this->configuration_model = new Configuration();
-		$this->providers_model     = new Providers();
+		$this->configuration_model = new Configuration_Model();
+		$this->providers_model     = new Providers_Model();
 
 		$this->configuration_data = array(
 			'apiKey'     => array(
@@ -68,7 +70,7 @@ class Admin extends Factory {
 	 * Fetch Settings configuration.
 	 *
 	 * @return array
-	 * @since 2.0.0
+	 * @since 1.0.0
 	 */
 	public function get_config(): array {
 		$data = $this->configuration_model->get_all();

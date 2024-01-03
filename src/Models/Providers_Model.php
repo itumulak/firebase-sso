@@ -1,7 +1,9 @@
 <?php
 namespace Itumulak\WpSsoFirebase\Models;
 
-class Providers implements Data_Management {
+use Itumulak\WpSsoFirebase\Models\Interface\Data_Management_Interface;
+
+class Providers_Model implements Data_Management_Interface {
 	private array $data;
 	const PROVIDER_EMAILPASS = 'emailpassword';
 	const PROVIDER_FACEBOOK  = 'facebook';

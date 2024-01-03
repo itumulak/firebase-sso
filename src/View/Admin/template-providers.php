@@ -3,7 +3,7 @@
  * Displays the Firebase provider that are available.
  *
  * @type template-type
- * @since 2.0.0
+ * @since 1.0.0
  */
 
  $enabled_providers = $args['providers'];

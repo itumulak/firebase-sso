@@ -1,7 +1,7 @@
 <?php
 namespace Itumulak\WpSsoFirebase\Models;
 
-class Login_Auth extends Factory {
+class Login_Auth extends Base_Model {
 	/**
 	 * Set cookie logout.
 	 *

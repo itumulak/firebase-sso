@@ -4,11 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-class Factory {
+class Base_Model {
 	/**
 	 * Default Firebase slugs for WordPress.
 	 */
-	const PLUGIN_VERSION       = '2.0.0';
+	const PLUGIN_VERSION       = '1.0.0';
 	const MENU_SLUG            = 'wp-firebase';
 	const JS_MAIN              = 'SSO_Firebase_Main';
 	const JS_ADMIN_HANDLE      = 'wp_firebase_admin';
@@ -25,7 +25,7 @@ class Factory {
 	/**
 	 * Return the plugin's root url.
 	 *
-	 * @since 2.0.0
+	 * @since 1.0.0
 	 * @return string
 	 */
 	public function get_plugin_url(): string {
@@ -36,7 +36,7 @@ class Factory {
 	/**
 	 * Return the plugin's root directory.
 	 *
-	 * @since 2.0.0
+	 * @since 1.0.0
 	 * @return string
 	 */
 	public function get_plugin_dir(): string {
@@ -48,7 +48,7 @@ class Factory {
 	 *
 	 * If plugin is on development, it will return time() to bypass the caching from enqueue versioning.
 	 *
-	 * @since 2.0.0
+	 * @since 1.0.0
 	 * @return string
 	 */
 	public function get_version(): string {
@@ -65,7 +65,7 @@ class Factory {
 	 * It will check for config.dev.php, then check the file variable 'development' set to true.
 	 * The file is generated via `npm run dev` and take down on `npm run build`.
 	 *
-	 * @since 2.0.0
+	 * @since 1.0.0
 	 * @return false|mixed
 	 */
 	public function is_development(): mixed {
@@ -86,7 +86,7 @@ class Factory {
 	 * @param array $args
 	 * @param bool $require_once
 	 *
-	 * @since 2.0.0
+	 * @since 1.0.0
 	 * @return void
 	 */
 	public function get_template(string $path, string $file_name, array $args = array(), bool $require_once = false ) {
@@ -99,7 +99,7 @@ class Factory {
 	 * @param string $nonce
 	 * @param string $action
 	 * @return boolean
-	 * @since 2.0.0
+	 * @since 1.0.0
 	 */
 	public function verify_nonce( $nonce, $action ): bool {
 		if ( ! wp_verify_nonce( $nonce, $action ) ) {

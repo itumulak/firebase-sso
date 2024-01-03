@@ -7,7 +7,7 @@ class Firebase_EmailPass_Auth {
 	private string $api_key;
 
 	public function __construct() {
-		 $admin_model  = new Admin();
+		$admin_model  = new Admin_Model();
 		$config        = $admin_model->get_config();
 		$this->api_key = $config['apiKey']['value'] && '';
 	}
@@ -55,7 +55,7 @@ class Firebase_EmailPass_Auth {
 	 *
 	 * @param $email_address
 	 * @param $continue_uri
-	 * @since 2.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array
 	 */

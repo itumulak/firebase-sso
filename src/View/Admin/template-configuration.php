@@ -3,7 +3,7 @@
  * Displays the configuration form.
  *
  * @type template-part
- * @since 2.0.0
+ * @since 1.0.0
  */
 
 $configs = $args['config'];

@@ -2,7 +2,7 @@
  * Google Authentication.
  * Script for authenticating Google signup with Firebase SDK package.
  *
- * @since 2.0.0
+ * @since 1.0.0
  */
 
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';

@@ -2,12 +2,12 @@
  * Facebook Authentication.
  * Script for authenticating Facebook signup with Firebase SDK package.
  *
- * @since 2.0.0
+ * @since 1.0.0
  */
 
-import { getAuth, signInWithPopup, FacebookAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, FacebookAuthProvider } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
-const facebookAuth = () => {
+export const auth = () => {
   const auth = getAuth();
   const provider = new FacebookAuthProvider();
 
@@ -47,7 +47,3 @@ const facebookAuth = () => {
       const credential = FacebookAuthProvider.credentialFromError(error);
     });
 };
-
-document.getElementById('wp-firebase-facebook-sign-in').addEventListener('click', (event) => {
-	facebookAuth();
-});

@@ -1,7 +1,7 @@
 /**
  * Base Authentication file.
  *
- * @since 2.0.0
+ * @since 1.0.0
  */
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';

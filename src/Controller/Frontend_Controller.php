@@ -132,4 +132,21 @@ class Frontend_Controller {
 		wp_send_json_success( array( 'config' => $this->admin_model->get_config(), 'providers' => $this->frontend_model->get_enabled_providers() ) );
 		wp_die();
 	}
+
+	public function firebase_login_callback() : void {
+		if (
+			isset($_POST) && 
+			isset($_POST['nonce']) && 
+			$this->frontend_model->verify_nonce( $_POST['nonce'], $this->frontend_model::FIREBASE_HANDLE )
+		) {
+			$email = $_POST['email'];
+			$provider = $_POST['provider'];
+			$oauth_token = $_POST['oauth_token'];
+			$refresh_token = $_POST['refresh_token'];
+		}
+	}
+
+	public function handle_callback() {
+		
+	}
 }

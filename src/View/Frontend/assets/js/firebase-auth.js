@@ -8,7 +8,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebas
 
 document.addEventListener('DOMContentLoaded', () => {
 	const firebaseConfig = firebase_sso_object.config;
-	const app = initializeApp(firebaseConfig);
+	initializeApp(firebaseConfig);
 
 	if ( firebase_sso_object.providers ) {
 		firebase_sso_object.providers.forEach((provider) => {	
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				event.preventDefault();
 				await import(`./${provider}-firebase-auth.js`)
 					.then((module) => {
-						module.auth();
+						module.auth()
 					});
 			});
 		});

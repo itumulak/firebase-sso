@@ -33,20 +33,20 @@ class Admin_Model extends Base_Model {
 		);
 
 		$this->providers_data = array(
-			$this->providers_model::PROVIDER_EMAILPASS => array(
-				'id'        => $this->providers_model::PROVIDER_EMAILPASS,
+			PROVIDER_EMAILPASS => array(
+				'id'        => PROVIDER_EMAILPASS,
 				'icon'      => $this->get_plugin_url() . 'src/View/Admin/assets/images/mail-logo.svg',
 				'label'     => __( 'Email/Password' ),
 				'is_active' => false,
 			),
-			$this->providers_model::PROVIDER_GOOGLE    => array(
-				'id'        => $this->providers_model::PROVIDER_GOOGLE,
+			PROVIDER_GOOGLE => array(
+				'id'        => PROVIDER_GOOGLE,
 				'icon'      => $this->get_plugin_url() . 'src/View/Admin/assets/images/google-logo.svg',
 				'label'     => __( 'Google' ),
 				'is_active' => false,
 			),
-			$this->providers_model::PROVIDER_FACEBOOK  => array(
-				'id'        => $this->providers_model::PROVIDER_FACEBOOK,
+			PROVIDER_FACEBOOK => array(
+				'id'        => PROVIDER_FACEBOOK,
 				'icon'      => $this->get_plugin_url() . 'src/View/Admin/assets/images/facebook-logo.svg',
 				'label'     => __( 'Facebook' ),
 				'is_active' => false,

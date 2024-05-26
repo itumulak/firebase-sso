@@ -3,18 +3,19 @@ namespace Itumulak\WpSsoFirebase\Models;
 
 use Itumulak\WpSsoFirebase\Models\Interface\Data_Management_Interface;
 
+const PROVIDER_EMAILPASS = 'emailpassword';
+const PROVIDER_FACEBOOK  = 'facebook';
+const PROVIDER_GOOGLE    = 'google';
+const OPTION_KEY_NAME    = 'wp_firebase_signin_providers';
+
 class Providers_Model implements Data_Management_Interface {
 	private array $data;
-	const PROVIDER_EMAILPASS = 'emailpassword';
-	const PROVIDER_FACEBOOK  = 'facebook';
-	const PROVIDER_GOOGLE    = 'google';
-	const OPTION_KEY_NAME    = 'wp_firebase_signin_providers';
 
 	public function __construct() {
 		$this->data = array(
-			'emailpassword' => false,
-			'google'        => false,
-			'facebook'      => false,
+			PROVIDER_GOOGLE    => false,
+			PROVIDER_FACEBOOK  => false,
+			PROVIDER_EMAILPASS => false,
 		);
 	}
 
@@ -34,7 +35,7 @@ class Providers_Model implements Data_Management_Interface {
 	 * @return array
 	 */
 	public function get_all() : array {
-		 return wp_parse_args( get_option( self::OPTION_KEY_NAME ), $this->data );
+		 return wp_parse_args( get_option( OPTION_KEY_NAME ), $this->data );
 	}
 
 	/**
@@ -50,6 +51,6 @@ class Providers_Model implements Data_Management_Interface {
 			}
 		}
 
-		return update_option( self::OPTION_KEY_NAME, $this->data );
+		return update_option( OPTION_KEY_NAME, $this->data );
 	}
 }

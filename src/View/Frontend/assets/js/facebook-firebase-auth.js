@@ -5,9 +5,9 @@
  * @since 2.0.0
  */
 
-import { getAuth, signInWithPopup, FacebookAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, FacebookAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-const facebookAuth = () => {
+export const auth = () => {
   const auth = getAuth();
   const provider = new FacebookAuthProvider();
 
@@ -20,7 +20,8 @@ const facebookAuth = () => {
       formData.append("oauth_token", token);
       formData.append("refresh_token", user.refreshToken);
       formData.append("email", user.email);
-      formData.append("action", firebase_sso_obect.action_facebook);
+      formData.append("action", firebase_sso_obect.action);
+      formData.append('provider', 'facebook');
       formData.append("nonce", firebase_sso_obect.nonce);
 
       await fetch(firebase_sso_obect.ajaxurl, {

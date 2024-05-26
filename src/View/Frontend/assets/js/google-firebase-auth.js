@@ -20,10 +20,11 @@ export const auth = () => {
       formData.append("oauth_token", token);
       formData.append("refresh_token", user.refreshToken);
       formData.append("email", user.email);
-      formData.append("action", firebase_sso_obect.action_google);
-      formData.append("nonce", firebase_sso_obect.nonce);
+      formData.append("action", firebase_sso_obect.action);
+      formData.append('provider', 'google');
+      formData.append("nonce", firebase_sso_object.nonce);
 
-      await fetch(firebase_sso_obect.ajaxurl, {
+      await fetch(firebase_sso_object.ajaxurl, {
         method: "POST",
         body: formData,
         credentials: "same-origin",

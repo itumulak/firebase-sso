@@ -20,7 +20,7 @@ export const auth = () => {
       formData.append("oauth_token", token);
       formData.append("refresh_token", user.refreshToken);
       formData.append("email", user.email);
-      formData.append("action", firebase_sso_obect.action);
+      formData.append("action", firebase_sso_obect.action_login);
       formData.append('provider', 'facebook');
       formData.append("nonce", firebase_sso_obect.nonce);
 

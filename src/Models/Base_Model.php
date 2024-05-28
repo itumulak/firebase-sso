@@ -89,7 +89,7 @@ class Base_Model {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function get_template(string $path, string $file_name, array $args = array(), bool $require_once = false ) {
+	public function get_template( string $path, string $file_name, array $args = array(), bool $require_once = false ) {
 		load_template( $this->get_plugin_dir() . "src/View/{$path}/{$file_name}.php", $require_once, $args );
 	}
 

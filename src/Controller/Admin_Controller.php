@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace Itumulak\WpSsoFirebase\Controller;
 
 use Itumulak\WpSsoFirebase\Models\Admin_Model;
@@ -8,11 +8,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly
 
 class Admin_Controller {
-    private Admin_Model $admin_model;
-    const SAVE_CONFIG_FUNC    = 'save_config_callback';
+	private Admin_Model $admin_model;
+	const SAVE_CONFIG_FUNC    = 'save_config_callback';
 	const SAVE_PROVIDERS_FUNC = 'save_providers_callback';
 
-    /**
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -91,7 +91,7 @@ class Admin_Controller {
 		echo $this->admin_model->get_template( 'Admin', 'template-admin', array( 'admin_model' => $this->admin_model ) );
 	}
 
-    /**
+	/**
 	 * Save Firebase Config.
 	 * Ajax request callback.
 	 *
@@ -106,7 +106,7 @@ class Admin_Controller {
 		$this->handle_callback( $this->admin_model->save_config( $_REQUEST ) ); // phpcs:ignore
 	}
 
-    /**
+	/**
 	 * Save Firebase Sign-in Providers
 	 * Ajax request callback
 	 *

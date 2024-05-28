@@ -7,7 +7,7 @@ use Itumulak\WpSsoFirebase\Models\Frontend_Model;
 use WP_User;
 
 class Frontend_Controller {
-    const FIREBASE_GOOGLE_AJAX_HOOK   = 'firebase_google_login';
+	const FIREBASE_GOOGLE_AJAX_HOOK   = 'firebase_google_login';
 	const FIREBASE_FACEBOOK_AJAX_HOOK = 'firebase_facebook_login';
 	private Frontend_Model $frontend_model;
 	private Admin_Model $admin_model;
@@ -35,11 +35,16 @@ class Frontend_Controller {
 		add_action( 'login_enqueue_scripts', array( $this, 'scripts' ) );
 		add_filter( 'login_message', array( $this, 'signin_auth_buttons' ) );
 		add_filter( 'wp_login_errors', array( $this, 'modify_incorrect_password' ), 10, 2 );
-		add_filter( 'script_loader_tag', array($this, 'add_module_attribute'), 10, 3);
+		add_filter( 'script_loader_tag', array( $this, 'add_module_attribute' ), 10, 3 );
 		// add_filter( 'authenticate', array( $this, 'email_pass_auth' ), 10, 3 );
 
 		// add_action( 'wp_ajax_' . self::FIREBASE_AJAX_HANDLE, array( $this, 'get_firebase_config_callback' ), 10);
 		// add_action( 'wp_ajax_nopriv_' . self::FIREBASE_AJAX_HANDLE, array( $this, 'get_firebase_config_callback' ), 10);
+		add_action( 'wp_ajax_' . $this->frontend_model::FIREBASE_LOGIN_HANDLE, array( $this, 'firebase_login_callback' ) );
+		add_action( 'wp_ajax_nopriv_' . $this->frontend_model::FIREBASE_LOGIN_HANDLE, array( $this, 'firebase_login_callback' ) );
+
+		add_action( 'wp_ajax_' . $this->frontend_model::FIREBASE_RELOG_HANDLE, array( $this, 'firebase_relogin_callback' ), 10 );
+		add_action( 'wp_ajax_nopriv_' . $this->frontend_model::FIREBASE_RELOG_HANDLE, array( $this, 'firebase_relogin_callback' ), 10 );
 	}
 
 	/**
@@ -49,9 +54,9 @@ class Frontend_Controller {
 	 * @since 1.0.0
 	 */
 	public function scripts() : void {
-		wp_enqueue_style( $this->frontend_model::FIREBASE_HANDLE, $this->frontend_model->get_asset_path_url() . 'styles/login.css', array(), $this->frontend_model->get_version() );
-		wp_enqueue_script( $this->frontend_model::FIREBASE_HANDLE, $this->frontend_model->get_asset_path_url() . 'js/firebase-auth.js', array(), $this->frontend_model->get_version(), true );
-		wp_localize_script( $this->frontend_model::FIREBASE_HANDLE, $this->frontend_model::FIREBASE_OBJECT, $this->frontend_model->get_object_data() );
+		wp_enqueue_style( $this->frontend_model::FIREBASE_LOGIN_HANDLE, $this->frontend_model->get_asset_path_url() . 'styles/login.css', array(), $this->frontend_model->get_version() );
+		wp_enqueue_script( $this->frontend_model::FIREBASE_LOGIN_HANDLE, $this->frontend_model->get_asset_path_url() . 'js/firebase-auth.js', array(), $this->frontend_model->get_version(), true );
+		wp_localize_script( $this->frontend_model::FIREBASE_LOGIN_HANDLE, $this->frontend_model::FIREBASE_OBJECT, $this->frontend_model->get_object_data() );
 
 		// foreach ( $this->frontend_model->get_enabled_providers() as $provider_name ) {
 		// 	wp_enqueue_script( 'provider_' . $provider_name, $this->frontend_model->get_asset_path_url() . 'js/' . $provider_name . '-firebase-auth.js', array('firebase_login'), $this->frontend_model->get_version(), true );
@@ -69,14 +74,32 @@ class Frontend_Controller {
 	 * @since 1.0.0
 	 */
 	public function signin_auth_buttons( $message ): string {
-		$config  = $this->admin_model->get_providers();
+		$config = $this->admin_model->get_providers();
 
 		if ( $config['google']['is_active'] ) {
-			$message .= $this->frontend_model->get_template( 'Frontend', 'provider-design-1', array('provider_key' => 'google', 'label' => __( 'Sign In with Google' ), 'img_size' => 18, 'frontend_model' => $this->frontend_model) );
+			$message .= $this->frontend_model->get_template(
+				'Frontend',
+				'provider-design-1',
+				array(
+					'provider_key'   => 'google',
+					'label'          => __( 'Sign In with Google' ),
+					'img_size'       => 18,
+					'frontend_model' => $this->frontend_model,
+				)
+			);
 		}
 
 		if ( $config['facebook']['is_active'] ) {
-			$message .= $this->frontend_model->get_template( 'Frontend', 'provider-design-1', array('provider_key' => 'facebook', 'label' => __( 'Log in with Facebook' ), 'img_size' => 28, 'frontend_model' => $this->frontend_model) );
+			$message .= $this->frontend_model->get_template(
+				'Frontend',
+				'provider-design-1',
+				array(
+					'provider_key'   => 'facebook',
+					'label'          => __( 'Log in with Facebook' ),
+					'img_size'       => 28,
+					'frontend_model' => $this->frontend_model,
+				)
+			);
 		}
 
 		return $message;
@@ -114,9 +137,9 @@ class Frontend_Controller {
 		return $user;
 	}
 
-	public function add_module_attribute($tag, $handle, $src) {
-		if ( $this->frontend_model::FIREBASE_HANDLE === $handle ) {
-			$tag = '<script type="module" src=" '. $src .' "></script>';
+	public function add_module_attribute( $tag, $handle, $src ) {
+		if ( $this->frontend_model::FIREBASE_LOGIN_HANDLE === $handle ) {
+			$tag = '<script type="module" src=" ' . $src . ' "></script>';
 		}
 
 		return $tag;
@@ -129,24 +152,78 @@ class Frontend_Controller {
 	 * @return void
 	 */
 	public function get_firebase_config_callback() : void {
-		wp_send_json_success( array( 'config' => $this->admin_model->get_config(), 'providers' => $this->frontend_model->get_enabled_providers() ) );
+		wp_send_json_success(
+			array(
+				'config'    => $this->admin_model->get_config(),
+				'providers' => $this->frontend_model->get_enabled_providers(),
+			)
+		);
 		wp_die();
 	}
 
 	public function firebase_login_callback() : void {
 		if (
-			isset($_POST) && 
-			isset($_POST['nonce']) && 
-			$this->frontend_model->verify_nonce( $_POST['nonce'], $this->frontend_model::FIREBASE_HANDLE )
+			isset( $_POST ) &&
+			isset( $_POST['nonce'] ) &&
+			$this->frontend_model->verify_nonce( $_POST['nonce'], $this->frontend_model::AJAX_NONCE )
 		) {
-			$email = $_POST['email'];
-			$provider = $_POST['provider'];
-			$oauth_token = $_POST['oauth_token'];
+			$email         = $_POST['email'];
+			$provider      = $_POST['provider'];
+			$oauth_token   = $_POST['oauth_token'];
 			$refresh_token = $_POST['refresh_token'];
+
+			if ( $this->frontend_model->login_user( $email ) ) {
+				wp_send_json_success(
+					array(
+						'login' => true,
+						'meta'  => $this->frontend_model->save_firebase_meta( get_current_user_id(), $oauth_token, $refresh_token, $provider ),
+						'url'   => get_home_url(),
+					)
+				);
+			} else {
+				wp_send_json_error();
+			}
 		}
+
+		wp_die();
+	}
+
+	public function firebase_relogin_callback() : void {
+		// ini_set('display_errors', 1);
+		// ini_set('display_startup_errors', 1);
+		// error_reporting(E_ALL);
+
+		$email        = $_POST['email'];
+		$access_token = $_POST['access_token'];
+
+		if ( $this->frontend_model->relogin( $email, $access_token ) ) {
+			wp_send_json_success(
+				array(
+					'login' => true,
+					'url'   => get_home_url(),
+				)
+			);
+		} else {
+			wp_send_json_error();
+		}
+
+		wp_die();
 	}
 
 	public function handle_callback() {
-		
+		if (
+			isset( $_POST ) &&
+			isset( $_POST['nonce'] ) &&
+			$this->frontend_model->verify_nonce( $_POST['nonce'], $this->frontend_model::AJAX_NONCE )
+		) {
+			$email        = $_POST['email'];
+			$access_token = $_POST['access_token'];
+
+			if ( $this->frontend_model->relogin( $email, $access_token ) ) {
+				wp_send_json_success();
+			} else {
+				wp_send_json_error();
+			}
+		}
 	}
 }

@@ -35,6 +35,14 @@ $configs = $args['config'];
 				</td>
 			</tr>
 		<?php endforeach; ?>
+		<tr>
+			<th scope="row">
+				<label for="">Sync Email/Password in Firebase</label>
+			</th>
+			<td>
+				<input type="checkbox">
+			</td>
+		</tr>
 
 		</tbody>
 	</table>

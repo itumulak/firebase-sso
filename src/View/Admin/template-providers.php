@@ -8,6 +8,8 @@
 
  $enabled_providers = $args['providers'];
  $admin             = $args['admin_model'];
+
+ // TODO: improve the checkbox to be a toggle switch
 ?>
 <form id="sign-in-providers-form" class="provider__wrapper">
 	<?php foreach ( $enabled_providers as $provider ) { ?>
@@ -17,7 +19,10 @@
 				<?php esc_html_e( $provider['label'], 'sso-firebase' ); ?>
 			</label>
 		<div>
-			<input type="checkbox" id="<?php echo esc_attr( $provider['id'] ); ?>" name="sign-in-providers[<?php echo esc_attr( $provider['id'] ); ?>]" <?php echo $provider['is_active'] ? 'checked' : ''; ?>>
+			<label class="switch" for="<?php echo esc_attr( $provider['id'] ); ?>">
+				<input type="checkbox" id="<?php echo esc_attr( $provider['id'] ); ?>" name="sign-in-providers[<?php echo esc_attr( $provider['id'] ); ?>]" <?php echo $provider['is_active'] ? 'checked' : ''; ?>>
+				<span class="slider round"></span>
+			</label>
 		</div>
 	</div>
 	<?php } ?>

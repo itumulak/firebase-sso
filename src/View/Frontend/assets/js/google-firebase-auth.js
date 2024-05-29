@@ -15,27 +15,10 @@ export const auth = () => {
   const auth = getAuth();
 
   auth.onAuthStateChanged(async (user) => {
+    const {wpLogin, wpRelogin} = await import('./wp-auth.js');
+
     if (user) {
-      const formData = new FormData();
-      formData.append("access_token", auth.currentUser.accessToken);
-      formData.append("email", auth.currentUser.email);
-      formData.append("action", firebase_sso_object.action_relogin);
-
-      console.log( formData, user, firebase_sso_object );
-
-      await fetch(firebase_sso_object.ajaxurl, {
-        method: "POST",
-        body: formData,
-        credentials: "same-origin",
-      })
-        .then((response) => {
-          return response.json();
-        })
-        .then((response) => {
-          if (response.success) {
-            window.location.href = response.data.url;
-          }
-        });
+      wpRelogin( user.accessToken, user.email );
     } else {
       const provider = new GoogleAuthProvider();
 
@@ -44,27 +27,8 @@ export const auth = () => {
           const credential = GoogleAuthProvider.credentialFromResult(result);
           const token = credential.accessToken;
           const user = result.user;
-          const formData = new FormData();
-          formData.append("oauth_token", token);
-          formData.append("refresh_token", user.refreshToken);
-          formData.append("email", user.email);
-          formData.append("action", firebase_sso_obect.action_login);
-          formData.append("provider", "google");
-          formData.append("nonce", firebase_sso_object.nonce);
 
-          await fetch(firebase_sso_object.ajaxurl, {
-            method: "POST",
-            body: formData,
-            credentials: "same-origin",
-          })
-            .then((response) => {
-              return response.json();
-            })
-            .then((response) => {
-              if (response.success) {
-                window.location.href = response.data.url;
-              }
-            });
+          wpLogin( token, user.refreshToken, user.email, 'google' );
         })
         .catch((error) => {
           // Handle Errors here.

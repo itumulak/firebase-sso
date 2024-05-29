@@ -5,50 +5,40 @@
  * @since 2.0.0
  */
 
-import { getAuth, signInWithPopup, FacebookAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import {
+  getAuth,
+  signInWithPopup,
+  FacebookAuthProvider,
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 export const auth = () => {
   const auth = getAuth();
-  const provider = new FacebookAuthProvider();
 
-  signInWithPopup(auth, provider)
-    .then(async (result) => {
-      const user = result.user;
-      const credential = FacebookAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      const formData = new FormData();
-      formData.append("oauth_token", token);
-      formData.append("refresh_token", user.refreshToken);
-      formData.append("email", user.email);
-      formData.append("action", firebase_sso_obect.action_login);
-      formData.append('provider', 'facebook');
-      formData.append("nonce", firebase_sso_obect.nonce);
+  auth.onAuthStateChanged(async (user) => {
+    const { wpLogin, wpRelogin } = await import("./wp-auth.js");
 
-      await fetch(firebase_sso_obect.ajaxurl, {
-        method: "POST",
-        body: formData,
-        credentials: "same-origin",
-      })
-        .then((response) => {
-          return response.json();
+    if (user) {
+      wpRelogin(user.accessToken, user.email);
+    } else {
+      const provider = new FacebookAuthProvider();
+
+      signInWithPopup(auth, provider)
+        .then(async (result) => {
+          const user = result.user;
+          const credential = FacebookAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+
+          wpLogin(token, user.refreshToken, user.email, "facebook");
         })
-        .then((response) => {
-          if (response.success) {
-            window.location.href = response.data.url;
-          }
+        .catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // The email of the user's account used.
+          const email = error.email;
+          // The AuthCredential type that was used.
+          const credential = FacebookAuthProvider.credentialFromError(error);
         });
-    })
-    .catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.email;
-      // The AuthCredential type that was used.
-      const credential = FacebookAuthProvider.credentialFromError(error);
-    });
+    }
+  });
 };
-
-document.getElementById('wp-firebase-facebook-sign-in').addEventListener('click', (event) => {
-	facebookAuth();
-});

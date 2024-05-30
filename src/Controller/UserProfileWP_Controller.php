@@ -10,12 +10,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly
 
 class UserProfileWP_Controller extends Base_Controller {
-	private UserProfileWP_Model $user_profile_wp;
+	private UserProfileWP_Model $user_profile_model;
 	private Providers_Model $providers_model;
 	public array $providers;
 
 	public function __construct() {
-		$this->user_profile_wp = new UserProfileWP_Model();
+		$this->user_profile_model = new UserProfileWP_Model();
 		$this->providers_model = new Providers_Model();	
 		$this->providers = $this->providers_model->get_all();
 	}
@@ -28,7 +28,15 @@ class UserProfileWP_Controller extends Base_Controller {
 		
 	}
 
-	public function provider_user_profile_links() : void {
-		echo $this->user_profile_wp->get_template('UserProfileWP', 'template-linked-providers', array('providers' => $this->providers));
+	public function provider_user_profile_links(): void
+	{
+		echo $this->user_profile_model->get_template(
+			'UserProfileWP',
+			'template-linked-providers',
+			array(
+				'providers' => $this->providers,
+				'model' => $this->user_profile_model,
+			)
+		);
 	}
 }

@@ -33,12 +33,6 @@ class Admin_Model extends Base_Model {
 		);
 
 		$this->providers_data = array(
-			PROVIDER_EMAILPASS => array(
-				'id'        => PROVIDER_EMAILPASS,
-				'icon'      => $this->get_plugin_url() . 'src/View/Admin/assets/images/mail-logo.svg',
-				'label'     => __( 'Email/Password' ),
-				'is_active' => false,
-			),
 			PROVIDER_GOOGLE    => array(
 				'id'        => PROVIDER_GOOGLE,
 				'icon'      => $this->get_plugin_url() . 'src/View/Admin/assets/images/google-logo.svg',

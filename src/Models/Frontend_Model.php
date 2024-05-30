@@ -33,9 +33,7 @@ class Frontend_Model extends Base_Model {
 		$enabled_providers = array();
 
 		foreach ( $this->providers->get_all() as $provider => $is_enabled ) {
-			if ( $provider !== PROVIDER_EMAILPASS && $is_enabled ) {
-				$enabled_providers[] = $provider;
-			}
+			$enabled_providers[] = $provider;
 		}
 
 		return $enabled_providers;

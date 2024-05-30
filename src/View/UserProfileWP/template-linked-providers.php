@@ -14,7 +14,8 @@
     <div class="providers__list">
     <?php foreach ($providers as $provider => $set) : ?>
         <button class="providers__list-btn">
-            <img height="18" src="<?php echo $user_profile_model->get_plugin_url() . 'src/assets/images/' . $provider . '-logo.svg'; ?>"/> Connect
+            <img height="18" src="<?php echo $user_profile_model->get_plugin_url() . 'src/assets/images/' . $provider . '-logo.svg'; ?>"/> 
+            Connect
         </button>
     <?php endforeach; ?>
     </div>

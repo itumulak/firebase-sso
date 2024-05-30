@@ -93,9 +93,9 @@ class Frontend_Model extends Base_Model {
 
 	// TODO: find a relation of providers if they sign in on another provider.
 	public function check_user_related_providers() {
-		
+
 	}
-	
+
 	/**
 	 * Create a WP account if the email is not yet registred in the website.
 	 *
@@ -117,7 +117,7 @@ class Frontend_Model extends Base_Model {
 		return false;
 	}
 
-		
+
 	/**
 	 * Relogin a user if email already exist after signing in with any providers.
 	 *

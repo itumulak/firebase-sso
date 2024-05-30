@@ -16,15 +16,15 @@ class UserProfileWP_Controller extends Base_Controller {
 
 	public function __construct() {
 		$this->user_profile_model = new UserProfileWP_Model();
-		$this->providers_model = new Providers_Model();	
-		$this->providers = $this->providers_model->get_all();
+		$this->providers_model    = new Providers_Model();
+		$this->providers          = $this->providers_model->get_all();
 	}
 
 	public function init() : void {
-		add_action('show_user_profile', array($this, 'provider_user_profile_links'));
+		add_action( 'show_user_profile', array( $this, 'provider_user_profile_links' ) );
 		add_action(
 			'admin_enqueue_scripts',
-			array($this, 'scripts')
+			array( $this, 'scripts' )
 		);
 	}
 
@@ -37,14 +37,13 @@ class UserProfileWP_Controller extends Base_Controller {
 		);
 	}
 
-	public function provider_user_profile_links(): void
-	{
+	public function provider_user_profile_links(): void {
 		echo $this->user_profile_model->get_template(
 			'UserProfileWP',
 			'template-linked-providers',
 			array(
 				'providers' => $this->providers,
-				'model' => $this->user_profile_model,
+				'model'     => $this->user_profile_model,
 			)
 		);
 	}

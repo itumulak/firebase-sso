@@ -6,6 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly
 
 abstract class Base_Controller {
-    abstract public function init() : void;
-    abstract public function scripts() : void;
+	abstract public function init() : void;
+	abstract public function scripts() : void;
 }

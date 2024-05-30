@@ -33,13 +33,13 @@ class Admin_Model extends Base_Model {
 		);
 
 		$this->providers_data = array(
-			PROVIDER_GOOGLE    => array(
+			PROVIDER_GOOGLE   => array(
 				'id'        => PROVIDER_GOOGLE,
 				'icon'      => $this->get_plugin_url() . 'src/View/Admin/assets/images/google-logo.svg',
 				'label'     => __( 'Google' ),
 				'is_active' => false,
 			),
-			PROVIDER_FACEBOOK  => array(
+			PROVIDER_FACEBOOK => array(
 				'id'        => PROVIDER_FACEBOOK,
 				'icon'      => $this->get_plugin_url() . 'src/View/Admin/assets/images/facebook-logo.svg',
 				'label'     => __( 'Facebook' ),

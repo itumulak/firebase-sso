@@ -3,17 +3,17 @@ namespace Itumulak\WpSsoFirebase\Models;
 
 use Itumulak\WpSsoFirebase\Models\Interface\Data_Management_Interface;
 
-const PROVIDER_FACEBOOK  = 'facebook';
-const PROVIDER_GOOGLE    = 'google';
-const OPTION_KEY_NAME    = 'wp_firebase_signin_providers';
+const PROVIDER_FACEBOOK = 'facebook';
+const PROVIDER_GOOGLE   = 'google';
+const OPTION_KEY_NAME   = 'wp_firebase_signin_providers';
 
 class Providers_Model implements Data_Management_Interface {
 	private array $data;
 
 	public function __construct() {
 		$this->data = array(
-			PROVIDER_GOOGLE    => false,
-			PROVIDER_FACEBOOK  => false,
+			PROVIDER_GOOGLE   => false,
+			PROVIDER_FACEBOOK => false,
 		);
 	}
 

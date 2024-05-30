@@ -22,10 +22,19 @@ class UserProfileWP_Controller extends Base_Controller {
 
 	public function init() : void {
 		add_action('show_user_profile', array($this, 'provider_user_profile_links'));
+		add_action(
+			'admin_enqueue_scripts',
+			array($this, 'scripts')
+		);
 	}
 
 	public function scripts(): void {
-		
+		wp_enqueue_style(
+			$this->user_profile_model->get_handle(),
+			$this->user_profile_model->get_plugin_url() . 'src/View/UserProfileWP/assets/styles/linked-providers.css',
+			array(),
+			$this->user_profile_model->get_version()
+		);
 	}
 
 	public function provider_user_profile_links(): void

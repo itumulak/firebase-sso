@@ -8,8 +8,6 @@
 
  $enabled_providers = $args['providers'];
  $admin             = $args['admin_model'];
-
- // TODO: improve the checkbox to be a toggle switch
 ?>
 <form id="sign-in-providers-form" class="provider__wrapper">
 	<?php foreach ( $enabled_providers as $provider ) { ?>

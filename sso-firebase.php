@@ -11,6 +11,7 @@
  */
 
 use Itumulak\WpSsoFirebase\Controller\Admin_Controller;
+use Itumulak\WpSsoFirebase\Controller\UserProfileWP_Controller;
 use Itumulak\WpSsoFirebase\Controller\Frontend_Controller;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,6 +22,9 @@ require 'vendor/autoload.php';
 
 $admin = new Admin_Controller();
 $admin->init();
+
+$admin_user_profile =  new UserProfileWP_Controller();
+$admin_user_profile->init();
 
 $frontend = new Frontend_Controller();
 $frontend->init();

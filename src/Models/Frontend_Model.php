@@ -84,12 +84,18 @@ class Frontend_Model extends Base_Model {
 
 			return is_user_logged_in();
 		} else {
+			// TODO: instead of creating an account right away. Let them redirect to a page to confirm their account creation.
 			if ( $this->create_user( $email ) ) {
 				return $this->login_user( $email );
 			}
 		}
 
 		return false;
+	}
+
+	// TODO: find a relation of providers if they sign in on another provider.
+	public function check_user_related_providers() {
+		
 	}
 	
 	/**

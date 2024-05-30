@@ -6,7 +6,7 @@ use Itumulak\WpSsoFirebase\Models\Firebase_EmailPass_Auth;
 use Itumulak\WpSsoFirebase\Models\Frontend_Model;
 use WP_User;
 
-class Frontend_Controller {
+class Frontend_Controller extends Base_Controller {
 	const FIREBASE_GOOGLE_AJAX_HOOK   = 'firebase_google_login';
 	const FIREBASE_FACEBOOK_AJAX_HOOK = 'firebase_facebook_login';
 	private Frontend_Model $frontend_model;

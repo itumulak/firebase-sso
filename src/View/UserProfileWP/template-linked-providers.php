@@ -20,4 +20,3 @@
 	<?php endforeach; ?>
 	</div>
 </div>
-

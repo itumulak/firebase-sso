@@ -129,12 +129,11 @@ class Frontend_Model extends Base_Model {
 		return $this->login_user( $email );
 	}
 
-	public function save_firebase_meta( int $user_id, string $oauth_token, string $refresh_token, string $provider ) : array {
+	public function save_firebase_meta( int $user_id, array $credential, string $token, string $provider ) : array {
 		return array(
-			'url'           => get_home_url(),
-			'oauth_token'   => update_user_meta( $user_id, 'firebase_oauth_token', $oauth_token ),
-			'refresh_token' => update_user_meta( $user_id, 'firebase_refresh_token', $oauth_token ),
-			'provider'      => update_user_meta( $user_id, 'firebase_provider', $oauth_token ),
+			'url'               => get_home_url(),
+			'saved_credentials' => update_user_meta( $user_id, 'firebase_' . $provider . '_credential', $credential ),
+			'refresh_token'     => update_user_meta( $user_id, 'firebase_' . $provider . '_refresh_token', $token ),
 		);
 	}
 

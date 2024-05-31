@@ -36,13 +36,9 @@ class Frontend_Controller extends Base_Controller {
 		add_filter( 'login_message', array( $this, 'signin_auth_buttons' ) );
 		add_filter( 'wp_login_errors', array( $this, 'modify_incorrect_password' ), 10, 2 );
 		add_filter( 'script_loader_tag', array( $this, 'add_module_attribute' ), 10, 3 );
-		// add_filter( 'authenticate', array( $this, 'email_pass_auth' ), 10, 3 );
 
-		// add_action( 'wp_ajax_' . self::FIREBASE_AJAX_HANDLE, array( $this, 'get_firebase_config_callback' ), 10);
-		// add_action( 'wp_ajax_nopriv_' . self::FIREBASE_AJAX_HANDLE, array( $this, 'get_firebase_config_callback' ), 10);
 		add_action( 'wp_ajax_' . $this->frontend_model::FIREBASE_LOGIN_HANDLE, array( $this, 'firebase_login_callback' ) );
 		add_action( 'wp_ajax_nopriv_' . $this->frontend_model::FIREBASE_LOGIN_HANDLE, array( $this, 'firebase_login_callback' ) );
-
 		add_action( 'wp_ajax_' . $this->frontend_model::FIREBASE_RELOG_HANDLE, array( $this, 'firebase_relogin_callback' ), 10 );
 		add_action( 'wp_ajax_nopriv_' . $this->frontend_model::FIREBASE_RELOG_HANDLE, array( $this, 'firebase_relogin_callback' ), 10 );
 	}
@@ -57,10 +53,6 @@ class Frontend_Controller extends Base_Controller {
 		wp_enqueue_style( $this->frontend_model::FIREBASE_LOGIN_HANDLE, $this->frontend_model->get_asset_path_url() . 'styles/login.css', array(), $this->frontend_model->get_version() );
 		wp_enqueue_script( $this->frontend_model::FIREBASE_LOGIN_HANDLE, $this->frontend_model->get_asset_path_url() . 'js/firebase-auth.js', array(), $this->frontend_model->get_version(), true );
 		wp_localize_script( $this->frontend_model::FIREBASE_LOGIN_HANDLE, $this->frontend_model::FIREBASE_OBJECT, $this->frontend_model->get_object_data() );
-
-		// foreach ( $this->frontend_model->get_enabled_providers() as $provider_name ) {
-		// 	wp_enqueue_script( 'provider_' . $provider_name, $this->frontend_model->get_asset_path_url() . 'js/' . $provider_name . '-firebase-auth.js', array('firebase_login'), $this->frontend_model->get_version(), true );
-		// }
 	}
 
 	/**
@@ -169,14 +161,14 @@ class Frontend_Controller extends Base_Controller {
 		) {
 			$email         = $_POST['email'];
 			$provider      = $_POST['provider'];
-			$oauth_token   = $_POST['oauth_token'];
+			$credential    = $_POST['credential'];
 			$refresh_token = $_POST['refresh_token'];
 
 			if ( $this->frontend_model->login_user( $email ) ) {
 				wp_send_json_success(
 					array(
 						'login' => true,
-						'meta'  => $this->frontend_model->save_firebase_meta( get_current_user_id(), $oauth_token, $refresh_token, $provider ),
+						'meta'  => $this->frontend_model->save_firebase_meta( get_current_user_id(), $credential, $refresh_token, $provider ),
 						'url'   => get_home_url(),
 					)
 				);

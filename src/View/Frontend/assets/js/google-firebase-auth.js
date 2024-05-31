@@ -25,10 +25,9 @@ export const auth = () => {
       signInWithPopup(auth, provider)
         .then(async (result) => {
           const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = credential.accessToken;
           const user = result.user;
 
-          wpLogin( token, user.refreshToken, user.email, 'google' );
+          wpLogin( credential, user.refreshToken, user.email, 'google' );
         })
         .catch((error) => {
           // Handle Errors here.

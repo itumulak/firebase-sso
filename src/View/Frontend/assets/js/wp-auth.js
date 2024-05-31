@@ -1,6 +1,6 @@
-export const wpLogin = async (oauthToken, refreshToken, email, provider) => {
+export const wpLogin = async (credential, refreshToken, email, provider) => {
     const formData = new FormData();
-    formData.append("oauth_token", oauthToken);
+    formData.append("credential", credential);
     formData.append("refresh_token", refreshToken);
     formData.append("email", email);
     formData.append("provider", provider);

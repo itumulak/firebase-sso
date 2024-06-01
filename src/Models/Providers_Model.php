@@ -51,4 +51,17 @@ class Providers_Model implements Data_Management_Interface {
 
 		return update_option( OPTION_KEY_NAME, $this->data );
 	}
+
+	public function is_token_available( string $token, string $provider ) : bool {
+		global $wpdb;
+
+		$meta_key              = 'firebase_' . $provider . '_access_token';
+		$token_used_by_user_id = $wpdb->get_var( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = '$meta_key' AND meta_value = '$token'" );
+
+		if ( $token_used_by_user_id ) {
+			return false;
+		}
+
+		return true;
+	}
 }

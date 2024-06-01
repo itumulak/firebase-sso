@@ -1,7 +1,6 @@
 <?php
 namespace Itumulak\WpSsoFirebase\Controller;
 
-use Itumulak\WpSsoFirebase\Models\Admin_Model;
 use Itumulak\WpSsoFirebase\Models\Providers_Model;
 use Itumulak\WpSsoFirebase\Models\UserProfileWP_Model;
 
@@ -46,5 +45,9 @@ class UserProfileWP_Controller extends Base_Controller {
 				'model'     => $this->user_profile_model,
 			)
 		);
+	}
+
+	public function provider_auth_callback() : void {
+		$token = $_POST['token'];
 	}
 }

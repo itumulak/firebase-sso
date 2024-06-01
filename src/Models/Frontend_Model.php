@@ -5,7 +5,7 @@ use WP_Error;
 use WP_User;
 
 class Frontend_Model extends Base_Model {
-	private Providers_Model $providers;
+	private Providers_Model $provider_model;
 	private Configuration_Model $configs;
 	public array $enabled_providers;
 	const FIREBASE_LOGIN_HANDLE = 'firebase_login';
@@ -21,19 +21,19 @@ class Frontend_Model extends Base_Model {
 		$admin_model             = new Admin_Model();
 		$this->enabled_providers = $admin_model->get_providers();
 		$this->configs           = new Configuration_Model();
-		$this->providers         = new Providers_Model();
+		$this->provider_model         = new Providers_Model();
 	}
 
 	/**
-	 * Retrieve enabled providers.
+	 * Retrieve enabled provider.
 	 *
 	 * @return array
 	 */
 	public function get_enabled_providers() : array {
 		$enabled_providers = array();
 
-		foreach ( $this->providers->get_all() as $provider => $is_enabled ) {
-			$enabled_providers[] = $provider;
+		foreach ( $this->provider_model->get_all() as $provider_model => $is_enabled ) {
+			$enabled_providers[] = $provider_model;
 		}
 
 		return $enabled_providers;
@@ -48,7 +48,7 @@ class Frontend_Model extends Base_Model {
 		return array(
 			'ajaxurl'        => admin_url( 'admin-ajax.php' ),
 			'config'         => $this->configs->get_all(),
-			'providers'      => $this->get_enabled_providers(),
+			'provider_model'      => $this->get_enabled_providers(),
 			'action_login'   => self::FIREBASE_LOGIN_HANDLE,
 			'action_relogin' => self::FIREBASE_RELOG_HANDLE,
 			'nonce'          => wp_create_nonce( self::AJAX_NONCE ),
@@ -74,7 +74,7 @@ class Frontend_Model extends Base_Model {
 				$error->add( 'firebase_login', __('Login has failed. An internal issue occured please again.') );
 			}
 		} else {
-			if ( $this->is_token_available( $access_token, $provider ) ) {
+			if ( $this->provider_model->is_token_available( $access_token, $provider ) ) {
 				if ( $this->create_user( $email ) ) {
 					return $this->process_user( $email, $access_token, $provider );
 				} else {
@@ -109,20 +109,6 @@ class Frontend_Model extends Base_Model {
 		return false;
 	}
 
-	// TODO: check access token is not in used
-	public function is_token_available( string $token, string $provider ) : bool {
-		global $wpdb;
-
-		$meta_key              = 'firebase_' . $provider . '_access_token';
-		$token_used_by_user_id = $wpdb->get_var( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = '$meta_key' AND meta_value = '$token'" );
-
-		if ( $token_used_by_user_id ) {
-			return false;
-		}
-
-		return true;
-	}
-
 	/**
 	 * Create a WP account if the email is not yet registred in the website.
 	 *
@@ -144,10 +130,10 @@ class Frontend_Model extends Base_Model {
 		return false;
 	}
 
-	public function save_firebase_meta( int $user_id, string $token, string $provider ) : array {
+	public function save_firebase_meta( int $user_id, string $token, string $provider_model ) : array {
 		return array(
 			'url'               => get_home_url(),
-			'saved_credentials' => update_user_meta( $user_id, 'firebase_' . $provider . '_access_token', $token ),
+			'saved_credentials' => update_user_meta( $user_id, 'firebase_' . $provider_model . '_access_token', $token ),
 		);
 	}
 

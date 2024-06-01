@@ -8,6 +8,7 @@ class Error_Model {
 	const ACCOUNT_IN_USE = 'account_in_use';
 	const TOKEN_IN_USE   = 'token_in_use';
 	const FIREBASE_ERROR = 'firebase_error';
+	const WP_ERROR       = 'wp_error';
 	private WP_Error $wp_errors;
 	private array $error_data;
 
@@ -27,6 +28,10 @@ class Error_Model {
 			 ),
 			 self::FIREBASE_ERROR => array(
 				 'key'     => self::FIREBASE_ERROR,
+				 'message' => __( 'An error occurred. Please try again.' ),
+			 ),
+			 self::WP_ERROR       => array(
+				 'key'     => self::WP_ERROR,
 				 'message' => __( 'An error occurred. Please try again.' ),
 			 ),
 		 );
@@ -52,7 +57,7 @@ class Error_Model {
 		return $this->wp_errors->get_error_messages();
 	}
 
-    public function get_error_codes() : array {
-        return $this->wp_errors->get_error_codes();
-    }
+	public function get_error_codes() : array {
+		return $this->wp_errors->get_error_codes();
+	}
 }

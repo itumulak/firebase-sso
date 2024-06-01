@@ -19,7 +19,7 @@ class Frontend_Model extends Base_Model {
 	 */
 	public function __construct() {
 		$admin_model             = new Admin_Model();
-		$error_model             = new Error_Model();
+		$this->error_model       = new Error_Model();
 		$this->enabled_providers = $admin_model->get_providers();
 		$this->configs           = new Configuration_Model();
 		$this->provider_model    = new Providers_Model();
@@ -130,7 +130,7 @@ class Frontend_Model extends Base_Model {
 		return false;
 	}
 
-	public function save_firebase_meta( int $user_id, string $token, string $provider_model ) : array {
+	public function save_meta( int $user_id, string $token, string $provider_model ) : array {
 		return array(
 			'url'               => get_home_url(),
 			'saved_credentials' => update_user_meta( $user_id, 'firebase_' . $provider_model . '_access_token', $token ),

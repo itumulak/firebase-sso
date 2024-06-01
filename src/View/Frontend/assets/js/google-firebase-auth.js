@@ -15,7 +15,7 @@ export const auth = () => {
   const auth = getAuth();
 
   auth.onAuthStateChanged(async (user) => {
-    const {wpLogin, wpRelogin} = await import('./wp-auth.js');
+    const {wpLogin} = await import('./wp-auth.js');
 
     if (user) {
       wpLogin( user.accessToken, user.email, 'google', firebase_sso_object.action_login );

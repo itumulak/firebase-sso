@@ -64,10 +64,33 @@ class Frontend_Model extends Base_Model {
 		return $this->get_plugin_url() . 'src/View/Frontend/assets/';
 	}
 
+	public function process_user( string $email, string $access_token, string $provider ) : bool|WP_Error {
+		$error = new WP_Error();
+
+		if ( email_exists( $email ) ) {
+			if ( $this->login_user( $email ) ) {
+				return true;
+			} else {
+				$error->add( 'firebase_login', __( 'Login has failed. An internal issue occured please again.' ) );
+			}
+		} else {
+			if ( $this->is_token_available( $access_token, $provider ) ) {
+				if ( $this->create_user( $email ) ) {
+					return $this->process_user( $email, $access_token, $provider );
+				} else {
+					$error->add( 'firebase_account_creation', __( 'An error accorred. Please try again.' ) );               }
+			} else {
+				$error->add( 'firebase_token_in_use', __( 'Access provider is already in used with another account.' ) );
+			}
+		}
+
+		return $error;
+	}
+
 	/**
 	 * Login user progmatically.
 	 *
-	 * @param  mixed $email
+	 * @param  string $email
 	 * @return bool
 	 */
 	public function login_user( string $email ) : bool {
@@ -81,19 +104,23 @@ class Frontend_Model extends Base_Model {
 			update_user_caches( $user );
 
 			return is_user_logged_in();
-		} else {
-			// TODO: instead of creating an account right away. Let them redirect to a page to confirm their account creation.
-			if ( $this->create_user( $email ) ) {
-				return $this->login_user( $email );
-			}
 		}
 
 		return false;
 	}
 
-	// TODO: find a relation of providers if they sign in on another provider.
-	public function check_user_related_providers() {
+	// TODO: check access token is not in used
+	public function is_token_available( string $token, string $provider ) : bool {
+		global $wpdb;
 
+		$meta_key              = 'firebase_' . $provider . '_access_token';
+		$token_used_by_user_id = $wpdb->get_var( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = '$meta_key' AND meta_value = '$token'" );
+
+		if ( $token_used_by_user_id ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -122,18 +149,16 @@ class Frontend_Model extends Base_Model {
 	 * Relogin a user if email already exist after signing in with any providers.
 	 *
 	 * @param  string $email
-	 * @param  string $token
 	 * @return bool
 	 */
-	public function relogin( string $email, string $token ) : bool {
+	public function relogin( string $email ) : bool {
 		return $this->login_user( $email );
 	}
 
-	public function save_firebase_meta( int $user_id, array $credential, string $token, string $provider ) : array {
+	public function save_firebase_meta( int $user_id, string $token, string $provider ) : array {
 		return array(
 			'url'               => get_home_url(),
-			'saved_credentials' => update_user_meta( $user_id, 'firebase_' . $provider . '_credential', $credential ),
-			'refresh_token'     => update_user_meta( $user_id, 'firebase_' . $provider . '_refresh_token', $token ),
+			'saved_credentials' => update_user_meta( $user_id, 'firebase_' . $provider . '_access_token', $token ),
 		);
 	}
 

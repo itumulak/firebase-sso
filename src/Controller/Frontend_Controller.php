@@ -159,21 +159,27 @@ class Frontend_Controller extends Base_Controller {
 			isset( $_POST['nonce'] ) &&
 			$this->frontend_model->verify_nonce( $_POST['nonce'], $this->frontend_model::AJAX_NONCE )
 		) {
-			$email         = $_POST['email'];
-			$provider      = $_POST['provider'];
-			$credential    = $_POST['credential'];
-			$refresh_token = $_POST['refresh_token'];
+			$email        = $_POST['email'];
+			$provider     = $_POST['provider'];
+			$access_token = $_POST['access_token'];
 
-			if ( $this->frontend_model->login_user( $email ) ) {
+			$prosessed_user = $this->frontend_model->process_user( $email, $access_token, $provider );
+
+			if ( is_bool( $prosessed_user ) && $prosessed_user === true ) {
 				wp_send_json_success(
 					array(
 						'login' => true,
-						'meta'  => $this->frontend_model->save_firebase_meta( get_current_user_id(), $credential, $refresh_token, $provider ),
+						'meta'  => $this->frontend_model->save_firebase_meta( get_current_user_id(), $access_token, $provider ),
 						'url'   => get_home_url(),
 					)
 				);
-			} else {
-				wp_send_json_error();
+			} else if ( is_wp_error( $prosessed_user ) ) {
+				wp_send_json_error(
+					array(
+						'error_messages' => $prosessed_user->get_error_messages(),
+						'error_codes'    => $prosessed_user->get_error_codes(),
+					)
+				);
 			}
 		}
 
@@ -181,18 +187,18 @@ class Frontend_Controller extends Base_Controller {
 	}
 
 	public function firebase_relogin_callback() : void {
-		// ini_set('display_errors', 1);
-		// ini_set('display_startup_errors', 1);
-		// error_reporting(E_ALL);
+		$email         = $_POST['email'];
+		$access_token  = $_POST['access_token'];
+		$provider      = $_POST['provider'];
+		$credential    = $_POST['credential'];
+		$refresh_token = $_POST['refresh_token'];
 
-		$email        = $_POST['email'];
-		$access_token = $_POST['access_token'];
-
-		if ( $this->frontend_model->relogin( $email, $access_token ) ) {
+		if ( $this->frontend_model->relogin( $email ) ) {
 			wp_send_json_success(
 				array(
 					'login' => true,
 					'url'   => get_home_url(),
+					'meta'  => $this->frontend_model->save_firebase_meta( get_current_user_id(), $credential, $refresh_token, $provider ),
 				)
 			);
 		} else {

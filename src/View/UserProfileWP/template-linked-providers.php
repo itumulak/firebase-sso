@@ -8,6 +8,7 @@
 
  $providers          = $args['providers'];
  $user_profile_model = $args['model'];
+ $linked = $args['linked'];
 ?>
 <div class="providers">
 	<h3 class="providers__headline"><?php esc_html_e( 'Linked Providers' ); ?></h3>
@@ -15,7 +16,7 @@
 	<?php foreach ( $providers as $provider => $set ) : ?>
 		<button class="providers__list-btn btn btn-<?php echo $provider; ?>">
 			<img height="18" src="<?php echo $user_profile_model->get_plugin_url() . 'src/assets/images/' . $provider . '-logo.svg'; ?>"/> 
-			Connect
+			<?php echo $linked[$provider] ? 'Disconnect' : 'Connect'; ?>
 		</button>
 	<?php endforeach; ?>
 	</div>

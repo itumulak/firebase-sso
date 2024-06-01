@@ -3,18 +3,21 @@ namespace Itumulak\WpSsoFirebase\Models;
 
 use Itumulak\WpSsoFirebase\Models\Interface\Data_Management_Interface;
 
-const PROVIDER_FACEBOOK = 'facebook';
-const PROVIDER_GOOGLE   = 'google';
-const OPTION_KEY_NAME   = 'wp_firebase_signin_providers';
-
 class Providers_Model implements Data_Management_Interface {
-	private array $data;
+	private array $providers;
+	const PROVIDER_FACEBOOK = 'facebook';
+	const PROVIDER_GOOGLE   = 'google';
+	const OPTION_KEY_NAME   = 'wp_firebase_signin_providers';
 
 	public function __construct() {
-		$this->data = array(
-			PROVIDER_GOOGLE   => false,
-			PROVIDER_FACEBOOK => false,
+		$this->providers = array(
+			self::PROVIDER_GOOGLE   => false,
+			self::PROVIDER_FACEBOOK => false,
 		);
+	}
+
+	public function get_providers() : array {
+		return $this->providers;
 	}
 
 	/**
@@ -33,7 +36,7 @@ class Providers_Model implements Data_Management_Interface {
 	 * @return array
 	 */
 	public function get_all() : array {
-		 return wp_parse_args( get_option( OPTION_KEY_NAME ), $this->data );
+		 return wp_parse_args( get_option( self::OPTION_KEY_NAME ), $this->providers );
 	}
 
 	/**
@@ -45,17 +48,17 @@ class Providers_Model implements Data_Management_Interface {
 	public function save( array $data ) : bool {
 		if ( $data ) {
 			foreach ( array_keys( $data ) as $key ) {
-				$this->data[ $key ] = $data[ $key ];
+				$this->providers[ $key ] = $data[ $key ];
 			}
 		}
 
-		return update_option( OPTION_KEY_NAME, $this->data );
+		return update_option( self::OPTION_KEY_NAME, $this->providers );
 	}
 
 	public function is_token_available( string $token, string $provider ) : bool {
 		global $wpdb;
 
-		$meta_key              = 'firebase_' . $provider . '_access_token';
+		$meta_key              = $this->get_provider_meta_key( $provider );
 		$token_used_by_user_id = $wpdb->get_var( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = '$meta_key' AND meta_value = '$token'" );
 
 		if ( $token_used_by_user_id ) {
@@ -63,5 +66,17 @@ class Providers_Model implements Data_Management_Interface {
 		}
 
 		return true;
+	}
+
+	public function get_provider_meta( int $user_id, $provider ) : mixed {
+		return get_user_meta( $user_id, $this->get_provider_meta_key( $provider ), true );
+	}
+
+	public function save_provider_meta( int $user_id, string $token, string $provider ) : int|bool {
+		return update_user_meta( $user_id, $this->get_provider_meta_key( $provider ), $token );
+	}
+
+	private function get_provider_meta_key( string $provider ) : string {
+		return sprintf( 'firebase_%s_access_token', $provider );
 	}
 }

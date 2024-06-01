@@ -2,7 +2,6 @@
 namespace Itumulak\WpSsoFirebase\Controller;
 
 use Itumulak\WpSsoFirebase\Models\Admin_Model;
-use Itumulak\WpSsoFirebase\Models\Firebase_EmailPass_Auth;
 use Itumulak\WpSsoFirebase\Models\Frontend_Model;
 use WP_User;
 
@@ -11,7 +10,6 @@ class Frontend_Controller extends Base_Controller {
 	const FIREBASE_FACEBOOK_AJAX_HOOK = 'firebase_facebook_login';
 	private Frontend_Model $frontend_model;
 	private Admin_Model $admin_model;
-	private Firebase_EmailPass_Auth $email_auth;
 
 	/**
 	 * Constructor.
@@ -21,7 +19,6 @@ class Frontend_Controller extends Base_Controller {
 	public function __construct() {
 		$this->frontend_model = new Frontend_Model();
 		$this->admin_model    = new Admin_Model();
-		$this->email_auth     = new Firebase_EmailPass_Auth();
 	}
 
 	/**
@@ -169,7 +166,7 @@ class Frontend_Controller extends Base_Controller {
 				wp_send_json_success(
 					array(
 						'login' => true,
-						'meta'  => $this->frontend_model->save_firebase_meta( get_current_user_id(), $access_token, $provider ),
+						'meta'  => $this->frontend_model->save_meta( get_current_user_id(), $access_token, $provider ),
 						'url'   => get_home_url(),
 					)
 				);

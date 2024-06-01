@@ -42,6 +42,7 @@ class UserProfileWP_Controller extends Base_Controller {
 			'template-linked-providers',
 			array(
 				'providers' => $this->providers,
+				'linked'    => $this->user_profile_model->get_linked_providers( get_current_user_id() ),
 				'model'     => $this->user_profile_model,
 			)
 		);
@@ -50,15 +51,33 @@ class UserProfileWP_Controller extends Base_Controller {
 	public function provider_auth_callback() : void {
 		$token    = $_POST['token'];
 		$provider = $_POST['provider'];
+		$user_id  = $_POST['user_id'];
 
-		$process_link = $this->user_profile_model->check_token_availability($token, $provider);
+		$process_linking = $this->user_profile_model->check_token_availability( $token, $provider );
 
-		if ( is_bool($process_link) && $process_link === true ) {
-			// wp_send_json_success();				
+		if ( is_bool( $process_linking ) && $process_linking === true ) {
+			$meta = $this->user_profile_model->link_provider( $user_id, $token, $provider );
+
+			if ( is_bool( $meta ) && $meta === true ) {
+				wp_send_json_success(
+					array(
+						'linked' => true,
+						'meta'   => $meta,
+					)
+				);
+			} else {
+				wp_send_json_error(
+					array(
+						'linked' => false,
+						'errors' => $meta->get_error_messages(),
+					)
+				);
+			}
 		} else {
 			wp_send_json_error(
 				array(
-					'errors' => $process_link->get_error_messages()
+					'linked' => false,
+					'errors' => $process_linking->get_error_messages(),
 				)
 			);
 		}

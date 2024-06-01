@@ -33,8 +33,8 @@ class Frontend_Model extends Base_Model {
 	public function get_enabled_providers() : array {
 		$enabled_providers = array();
 
-		foreach ( $this->provider_model->get_all() as $provider_model => $is_enabled ) {
-			$enabled_providers[] = $provider_model;
+		foreach ( $this->provider_model->get_all() as $provider => $is_enabled ) {
+			$enabled_providers[] = $provider;
 		}
 
 		return $enabled_providers;
@@ -49,7 +49,7 @@ class Frontend_Model extends Base_Model {
 		return array(
 			'ajaxurl'        => admin_url( 'admin-ajax.php' ),
 			'config'         => $this->configs->get_all(),
-			'provider_model' => $this->get_enabled_providers(),
+			'providers'      => $this->get_enabled_providers(),
 			'action_login'   => self::FIREBASE_LOGIN_HANDLE,
 			'action_relogin' => self::FIREBASE_RELOG_HANDLE,
 			'nonce'          => wp_create_nonce( self::AJAX_NONCE ),

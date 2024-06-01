@@ -34,6 +34,21 @@ class UserProfileWP_Controller extends Base_Controller {
 			array(),
 			$this->user_profile_model->get_version()
 		);
+
+		wp_enqueue_script(
+			$this->user_profile_model->get_handle(),
+			$this->user_profile_model->get_plugin_url() . 'src/View/UserProfileWP/assets/js/link-providers.js',
+			array(),
+			$this->user_profile_model->get_version()
+		);
+
+		wp_localize_script(
+			$this->user_profile_model->get_handle(),
+			'firebase_sso',
+			array(
+				'providers' => array_keys($this->providers)
+			)
+		);
 	}
 
 	public function provider_user_profile_links(): void {

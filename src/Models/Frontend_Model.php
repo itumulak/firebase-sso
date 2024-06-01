@@ -2,10 +2,10 @@
 namespace Itumulak\WpSsoFirebase\Models;
 
 use WP_Error;
-use WP_User;
 
 class Frontend_Model extends Base_Model {
 	private Providers_Model $provider_model;
+	private Error_Model $error_model;
 	private Configuration_Model $configs;
 	public array $enabled_providers;
 	const FIREBASE_LOGIN_HANDLE = 'firebase_login';
@@ -19,9 +19,10 @@ class Frontend_Model extends Base_Model {
 	 */
 	public function __construct() {
 		$admin_model             = new Admin_Model();
+		$error_model             = new Error_Model();
 		$this->enabled_providers = $admin_model->get_providers();
 		$this->configs           = new Configuration_Model();
-		$this->provider_model         = new Providers_Model();
+		$this->provider_model    = new Providers_Model();
 	}
 
 	/**
@@ -48,7 +49,7 @@ class Frontend_Model extends Base_Model {
 		return array(
 			'ajaxurl'        => admin_url( 'admin-ajax.php' ),
 			'config'         => $this->configs->get_all(),
-			'provider_model'      => $this->get_enabled_providers(),
+			'provider_model' => $this->get_enabled_providers(),
 			'action_login'   => self::FIREBASE_LOGIN_HANDLE,
 			'action_relogin' => self::FIREBASE_RELOG_HANDLE,
 			'nonce'          => wp_create_nonce( self::AJAX_NONCE ),
@@ -64,27 +65,26 @@ class Frontend_Model extends Base_Model {
 		return $this->get_plugin_url() . 'src/View/Frontend/assets/';
 	}
 
-	public function process_user( string $email, string $access_token, string $provider ) : bool|WP_Error {
-		$error = new WP_Error();
-
+	public function process_user( string $email, string $access_token, string $provider ) : bool|Error_Model {
 		if ( email_exists( $email ) ) {
 			if ( $this->login_user( $email ) ) {
 				return true;
 			} else {
-				$error->add( 'firebase_login', __('Login has failed. An internal issue occured please again.') );
+				$this->error_model->add( $this->error_model::LOGIN_FAILED );
 			}
 		} else {
 			if ( $this->provider_model->is_token_available( $access_token, $provider ) ) {
 				if ( $this->create_user( $email ) ) {
 					return $this->process_user( $email, $access_token, $provider );
 				} else {
-					$error->add( 'firebase_account_creation', __('An error accorred. Please try again.') );               }
+					$this->error_model->add( $this->error_model::ACCOUNT_IN_USE );
+				}
 			} else {
-				$error->add( 'firebase_token_in_use', __() );
+				$this->error_model->add( $this->error_model::TOKEN_IN_USE );
 			}
 		}
 
-		return $error;
+		return $this->error_model->get_errors();
 	}
 
 	/**

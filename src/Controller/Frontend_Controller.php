@@ -173,7 +173,7 @@ class Frontend_Controller extends Base_Controller {
 						'url'   => get_home_url(),
 					)
 				);
-			} else if ( is_wp_error( $prosessed_user ) ) {
+			} elseif ( is_wp_error( $prosessed_user ) ) {
 				wp_send_json_error(
 					array(
 						'error_messages' => $prosessed_user->get_error_messages(),

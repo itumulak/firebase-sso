@@ -48,6 +48,21 @@ class UserProfileWP_Controller extends Base_Controller {
 	}
 
 	public function provider_auth_callback() : void {
-		$token = $_POST['token'];
+		$token    = $_POST['token'];
+		$provider = $_POST['provider'];
+
+		$process_link = $this->user_profile_model->check_token_availability($token, $provider);
+
+		if ( is_bool($process_link) && $process_link === true ) {
+			// wp_send_json_success();				
+		} else {
+			wp_send_json_error(
+				array(
+					'errors' => $process_link->get_error_messages()
+				)
+			);
+		}
+
+		wp_die();
 	}
 }

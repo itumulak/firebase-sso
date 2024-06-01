@@ -71,16 +71,16 @@ class Frontend_Model extends Base_Model {
 			if ( $this->login_user( $email ) ) {
 				return true;
 			} else {
-				$error->add( 'firebase_login', __( 'Login has failed. An internal issue occured please again.' ) );
+				$error->add( 'firebase_login', __('Login has failed. An internal issue occured please again.') );
 			}
 		} else {
 			if ( $this->is_token_available( $access_token, $provider ) ) {
 				if ( $this->create_user( $email ) ) {
 					return $this->process_user( $email, $access_token, $provider );
 				} else {
-					$error->add( 'firebase_account_creation', __( 'An error accorred. Please try again.' ) );               }
+					$error->add( 'firebase_account_creation', __('An error accorred. Please try again.') );               }
 			} else {
-				$error->add( 'firebase_token_in_use', __( 'Access provider is already in used with another account.' ) );
+				$error->add( 'firebase_token_in_use', __() );
 			}
 		}
 
@@ -142,17 +142,6 @@ class Frontend_Model extends Base_Model {
 		}
 
 		return false;
-	}
-
-
-	/**
-	 * Relogin a user if email already exist after signing in with any providers.
-	 *
-	 * @param  string $email
-	 * @return bool
-	 */
-	public function relogin( string $email ) : bool {
-		return $this->login_user( $email );
 	}
 
 	public function save_firebase_meta( int $user_id, string $token, string $provider ) : array {

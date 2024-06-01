@@ -185,43 +185,4 @@ class Frontend_Controller extends Base_Controller {
 
 		wp_die();
 	}
-
-	public function firebase_relogin_callback() : void {
-		$email         = $_POST['email'];
-		$access_token  = $_POST['access_token'];
-		$provider      = $_POST['provider'];
-		$credential    = $_POST['credential'];
-		$refresh_token = $_POST['refresh_token'];
-
-		if ( $this->frontend_model->relogin( $email ) ) {
-			wp_send_json_success(
-				array(
-					'login' => true,
-					'url'   => get_home_url(),
-					'meta'  => $this->frontend_model->save_firebase_meta( get_current_user_id(), $credential, $refresh_token, $provider ),
-				)
-			);
-		} else {
-			wp_send_json_error();
-		}
-
-		wp_die();
-	}
-
-	public function handle_callback() {
-		if (
-			isset( $_POST ) &&
-			isset( $_POST['nonce'] ) &&
-			$this->frontend_model->verify_nonce( $_POST['nonce'], $this->frontend_model::AJAX_NONCE )
-		) {
-			$email        = $_POST['email'];
-			$access_token = $_POST['access_token'];
-
-			if ( $this->frontend_model->relogin( $email, $access_token ) ) {
-				wp_send_json_success();
-			} else {
-				wp_send_json_error();
-			}
-		}
-	}
 }

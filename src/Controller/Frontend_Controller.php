@@ -3,6 +3,7 @@ namespace Itumulak\WpSsoFirebase\Controller;
 
 use Itumulak\WpSsoFirebase\Models\Admin_Model;
 use Itumulak\WpSsoFirebase\Models\Frontend_Model;
+use Itumulak\WpSsoFirebase\Models\Scripts_Model;
 use WP_User;
 
 class Frontend_Controller extends Base_Controller {
@@ -10,6 +11,7 @@ class Frontend_Controller extends Base_Controller {
 	const FIREBASE_FACEBOOK_AJAX_HOOK = 'firebase_facebook_login';
 	private Frontend_Model $frontend_model;
 	private Admin_Model $admin_model;
+	private Scripts_Model $js;
 
 	/**
 	 * Constructor.
@@ -17,6 +19,7 @@ class Frontend_Controller extends Base_Controller {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
+		$this->js             = new Scripts_Model();
 		$this->frontend_model = new Frontend_Model();
 		$this->admin_model    = new Admin_Model();
 	}
@@ -32,7 +35,6 @@ class Frontend_Controller extends Base_Controller {
 		add_action( 'login_enqueue_scripts', array( $this, 'scripts' ) );
 		add_filter( 'login_message', array( $this, 'signin_auth_buttons' ) );
 		add_filter( 'wp_login_errors', array( $this, 'modify_incorrect_password' ), 10, 2 );
-		add_filter( 'script_loader_tag', array( $this, 'add_module_attribute' ), 10, 3 );
 
 		add_action( 'wp_ajax_' . $this->frontend_model::FIREBASE_LOGIN_HANDLE, array( $this, 'firebase_login_callback' ) );
 		add_action( 'wp_ajax_nopriv_' . $this->frontend_model::FIREBASE_LOGIN_HANDLE, array( $this, 'firebase_login_callback' ) );
@@ -48,8 +50,23 @@ class Frontend_Controller extends Base_Controller {
 	 */
 	public function scripts() : void {
 		wp_enqueue_style( $this->frontend_model::FIREBASE_LOGIN_HANDLE, $this->frontend_model->get_asset_path_url() . 'styles/login.css', array(), $this->frontend_model->get_version() );
-		wp_enqueue_script( $this->frontend_model::FIREBASE_LOGIN_HANDLE, $this->frontend_model->get_asset_path_url() . 'js/firebase-auth.js', array(), $this->frontend_model->get_version(), true );
-		wp_localize_script( $this->frontend_model::FIREBASE_LOGIN_HANDLE, $this->frontend_model::FIREBASE_OBJECT, $this->frontend_model->get_object_data() );
+
+		$this->js->register(
+			$this->frontend_model::FIREBASE_LOGIN_HANDLE,
+			$this->frontend_model->get_asset_path_url() . 'js/firebase-auth.js',
+			array(),
+			array(
+				'is_module' => true,
+			)
+		);
+
+		$this->js->register_localization(
+			$this->frontend_model::FIREBASE_LOGIN_HANDLE,
+			$this->frontend_model::FIREBASE_OBJECT,
+			$this->frontend_model->get_object_data()
+		);
+
+		$this->js->enqueue_all();
 	}
 
 	/**
@@ -124,14 +141,6 @@ class Frontend_Controller extends Base_Controller {
 
 	public function email_pass_firebase_auth( $user, $email_address, $password ) : false|WP_User {
 		return $user;
-	}
-
-	public function add_module_attribute( $tag, $handle, $src ) {
-		if ( $this->frontend_model::FIREBASE_LOGIN_HANDLE === $handle ) {
-			$tag = '<script type="module" src=" ' . $src . ' "></script>';
-		}
-
-		return $tag;
 	}
 
 	/**

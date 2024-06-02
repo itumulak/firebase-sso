@@ -10,15 +10,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	// Bug: Script Module cannot be registered in wp admin. Fix in v6.6.
 class Scripts_Model extends Base_Model {
 	private array $js_handles;
-	private array $js_modules;
-    private array $js_localization;
+	private array $js_localization;
 	private array $wpjs_strategies;
 	private string $current_js_handler;
 
 	public function __construct() {
 		$this->wpjs_strategies = array(
 			'in_footer' => true,
-			'strategy'  => 'async',
+			'strategy'  => 'defer',
 			'is_module' => false,
 		);
 	}
@@ -40,35 +39,34 @@ class Scripts_Model extends Base_Model {
 			'handle'   => $handle,
 			'src'      => $src,
 			'deps'     => $deps,
-			'strategy' => $this->get_wpjs_strategy( $strategy ),
+			'strategy' => wp_parse_args( $strategy, $this->wpjs_strategies ),
 			'version'  => ! $version ? $version : $this->get_version(),
 		);
-
-		if ( isset( $strategy['is_module'] ) && is_bool( $strategy['is_module'] ) ) {
-			if ( true === $strategy['is_module'] ) {
-				$this->js_modules[] = $handle;
-			}
-		}
 	}
 
-    public function register_localization( string $handle, string $object_name, array $data ) : void {
-        $this->js_localization[$handle] = array(
-            'handle' => $handle,
-            'name' => $object_name,
-            'data' => $data
-        );
-    }
+	public function register_localization( string $handle, string $object_name, array $data ) : void {
+		$this->js_localization[ $handle ] = array(
+			'handle' => $handle,
+			'name'   => $object_name,
+			'data'   => $data,
+		);
+	}
 
-	public function add_attribute_module( $tag, $handle, $src ) {
+	public function add_attributes( $tag, $handle, $src ) {
 		if ( $this->current_js_handler === $handle ) {
-			$strategy_output = '';
+			$strategy_attributes = '';
+			$module_attribute    = '';
 
 			if ( isset( $this->js_handles[ $handle ]['strategy'] ) ) {
-				$strategy        = $this->js_handles[ $handle ]['strategy']['strategy'];
-				$strategy_output = $strategy . ' data-wp-strategy="' . $strategy . '"';
+				$strategy            = $this->js_handles[ $handle ]['strategy']['strategy'];
+				$strategy_attributes = $strategy . ' data-wp-strategy="' . $strategy . '"';
+
+				if ( $this->js_handles[ $handle ]['strategy']['is_module'] ) {
+					$module_attribute = 'type="module"';
+				}
 			}
 
-			$tag = '<script type="module" ' . $strategy_output . ' src="' . $src . '"></script>';
+			$tag = sprintf('<script %s %s src="%s"></script>', $module_attribute, $strategy_attributes, $src);
 		}
 
 		return $tag;
@@ -77,41 +75,24 @@ class Scripts_Model extends Base_Model {
 	private function enqueue( $js ) {
 		$this->current_js_handler = $js['handle'];
 
-        wp_enqueue_script(
-            $js['handle'],
-            $js['src'],
-            $js['deps'],
-            $js['version'],
-            $js['strategy']
-        );
+		wp_enqueue_script(
+			$js['handle'],
+			$js['src'],
+			$js['deps'],
+			$js['version'],
+			$js['strategy']
+		);
 
-        if ( isset($this->js_localization[$js['handle']]) ) {
-            wp_localize_script(
-                $js['handle'],
-                $this->js_localization[$js['handle']]['name'],
-                $this->js_localization[$js['handle']]['data']
-            );
-        }
-
-		if ( $this->js_modules ) {
-			// Is there a performance issue when enqueue method is loop together with this filter?
-			// the current handle is save in $this->current_js_handler then gets compared later in `add_attribute_module` method.
-			add_filter( 'script_loader_tag', array( $this, 'add_attribute_module' ), 10, 3 );
-		}
-    }
-
-	private function get_wpjs_strategy( array $strategies ) : array {
-		$wpjs_strategies = $this->wpjs_strategies;
-		unset( $wpjs_strategies['in_module'] );
-
-		if ( isset( $strategies['in_footer'] ) && is_bool( $strategies['in_footer'] ) ) {
-			$wpjs_strategies['in_footer'] = $strategies['in_footer'];
+		if ( isset( $this->js_localization[ $js['handle'] ] ) ) {
+			wp_localize_script(
+				$js['handle'],
+				$this->js_localization[ $js['handle'] ]['name'],
+				$this->js_localization[ $js['handle'] ]['data']
+			);
 		}
 
-		if ( isset( $strategies['strategy'] ) && in_array( $strategies['strategy'], array( 'async', 'defer' ), true ) ) {
-			$wpjs_strategies['strategy'] = $strategies['strategy'];
-		}
-
-		return $wpjs_strategies;
+		// Is there a performance issue when enqueue method is loop together with this filter?
+		// the current handle is save in $this->current_js_handler then gets compared later in `add_attributes` method.
+		add_filter( 'script_loader_tag', array( $this, 'add_attributes' ), 10, 3 );
 	}
 }

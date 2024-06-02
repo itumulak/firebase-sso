@@ -19,7 +19,7 @@ class UserProfileWP_Controller extends Base_Controller {
 		$this->user_profile_model = new UserProfileWP_Model();
 		$this->providers_model    = new Providers_Model();
 		$this->providers          = $this->providers_model->get_all();
-		$this->js      = new Scripts_Model();
+		$this->js                 = new Scripts_Model();
 	}
 
 	public function init() : void {

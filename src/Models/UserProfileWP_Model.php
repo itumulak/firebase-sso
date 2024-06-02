@@ -9,8 +9,8 @@ class UserProfileWP_Model extends Base_Model {
 	private Configuration_Model $configs;
 
 	public function __construct() {
-		
-		 $this->configs           = new Configuration_Model();
+
+		 $this->configs        = new Configuration_Model();
 		 $this->handle         = 'wp_firebase_profile';
 		 $this->handle_object  = 'sso_admin_object';
 		 $this->provider_model = new Providers_Model();
@@ -27,9 +27,9 @@ class UserProfileWP_Model extends Base_Model {
 
 	public function get_object_data() : array {
 		return array(
-			'ajaxurl'        => admin_url( 'admin-ajax.php' ),
-			'config'         => $this->configs->get_all(),
-			'providers' => $this->provider_model->get_all()
+			'ajaxurl'   => admin_url( 'admin-ajax.php' ),
+			'config'    => $this->configs->get_all(),
+			'providers' => $this->provider_model->get_all(),
 		);
 	}
 

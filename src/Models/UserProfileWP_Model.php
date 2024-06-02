@@ -7,12 +7,13 @@ class UserProfileWP_Model extends Base_Model {
 	private string $handle_object;
 	private Providers_Model $provider_model;
 	private Configuration_Model $configs;
+	const AJAX_HANDLE = 'firebase_link_provider';
 
 	public function __construct() {
 
 		 $this->configs        = new Configuration_Model();
 		 $this->handle         = 'wp_firebase_profile';
-		 $this->handle_object  = 'sso_admin_object';
+		 $this->handle_object  = 'firebase_sso_object';
 		 $this->provider_model = new Providers_Model();
 		 $this->error_model    = new Error_Model();
 	}
@@ -30,6 +31,7 @@ class UserProfileWP_Model extends Base_Model {
 			'ajaxurl'   => admin_url( 'admin-ajax.php' ),
 			'config'    => $this->configs->get_all(),
 			'providers' => $this->provider_model->get_all(),
+			'user_id' => get_current_user_id()
 		);
 	}
 

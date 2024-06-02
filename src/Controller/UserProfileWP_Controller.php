@@ -25,6 +25,7 @@ class UserProfileWP_Controller extends Base_Controller {
 	public function init() : void {
 		add_action( 'show_user_profile', array( $this, 'provider_user_profile_links' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
+		add_action('wp_ajax_' . $this->user_profile_model::AJAX_HANDLE, array($this, 'provider_auth_callback'));
 	}
 
 	public function scripts(): void {
@@ -52,28 +53,6 @@ class UserProfileWP_Controller extends Base_Controller {
 		);
 
 		$this->js->enqueue_all();
-
-		// wp_enqueue_script_module(
-		// 	$this->user_profile_model->get_handle(),
-		// 	$this->user_profile_model->get_plugin_url() . 'src/View/UserProfileWP/assets/js/link-providers.js',
-		// 	array(),
-		// 	$this->user_profile_model->get_version()
-		// );
-
-		// wp_enqueue_script(
-		// 	$this->user_profile_model->get_handle(),
-		// 	$this->user_profile_model->get_plugin_url() . 'src/View/UserProfileWP/assets/js/link-providers.js',
-		// 	array(),
-		// 	$this->user_profile_model->get_version()
-		// );
-
-		// wp_localize_script(
-		// 	$this->user_profile_model->get_handle(),
-		// 	'firebase_sso',
-		// 	array(
-		// 		'providers' => array_keys( $this->providers ),
-		// 	)
-		// );
 	}
 
 	public function provider_user_profile_links(): void {

@@ -11,8 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const provider = button.getAttribute('data-provider');
 
         if (action === 'connect') {
-          const firebaseConfig = firebase_sso_object.config;
+          const firebaseConfig = sso_admin_object.config;
           initializeApp(firebaseConfig);
+          console.log('hello');
         }
     });
   });

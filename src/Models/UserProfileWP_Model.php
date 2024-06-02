@@ -4,16 +4,33 @@ namespace Itumulak\WpSsoFirebase\Models;
 class UserProfileWP_Model extends Base_Model {
 	private Error_Model $error_model;
 	private string $handle;
+	private string $handle_object;
 	private Providers_Model $provider_model;
+	private Configuration_Model $configs;
 
 	public function __construct() {
+		
+		 $this->configs           = new Configuration_Model();
 		 $this->handle         = 'wp_firebase_profile';
+		 $this->handle_object  = 'sso_admin_object';
 		 $this->provider_model = new Providers_Model();
 		 $this->error_model    = new Error_Model();
 	}
 
 	public function get_handle() {
 		return $this->handle;
+	}
+
+	public function get_handle_object() {
+		return $this->handle_object;
+	}
+
+	public function get_object_data() : array {
+		return array(
+			'ajaxurl'        => admin_url( 'admin-ajax.php' ),
+			'config'         => $this->configs->get_all(),
+			'providers' => $this->provider_model->get_all()
+		);
 	}
 
 	public function check_token_availability( string $token, string $provider ) : bool|Error_Model {
@@ -42,7 +59,7 @@ class UserProfileWP_Model extends Base_Model {
 		$active_providers = $this->provider_model->get_all();
 		$linked_providers = $this->provider_model->get_providers();
 
-		foreach ( array_keys($active_providers) as $provider ) {
+		foreach ( array_keys( $active_providers ) as $provider ) {
 			if ( $this->provider_model->get_provider_meta( $user_id, $provider ) ) {
 				$linked_providers[ $provider ] = true;
 			}

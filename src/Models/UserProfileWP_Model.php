@@ -9,7 +9,8 @@ class UserProfileWP_Model extends Base_Model {
 	private string $handle_object;
 	private Providers_Model $provider_model;
 	private Configuration_Model $configs;
-	const AJAX_HANDLE = 'firebase_link_provider';
+	const AJAX_HANDLE        = 'firebase_link_provider';
+	const AJAX_UNLINK_HANDLE = 'firebase_unlink_provider';
 
 
 	public function __construct() {
@@ -31,16 +32,17 @@ class UserProfileWP_Model extends Base_Model {
 
 	public function get_object_data() : array {
 		return array(
-			'ajaxurl'   => admin_url( 'admin-ajax.php' ),
-			'config'    => $this->configs->get_all(),
-			'providers' => $this->provider_model->get_all(),
-			'user_id' => get_current_user_id(),
-			'action' => self::AJAX_HANDLE,
-			'nonce' => wp_create_nonce( self::AJAX_NONCE )
+			'ajaxurl'       => admin_url( 'admin-ajax.php' ),
+			'config'        => $this->configs->get_all(),
+			'providers'     => $this->provider_model->get_all(),
+			'user_id'       => get_current_user_id(),
+			'action'        => self::AJAX_HANDLE,
+			'unlink_action' => self::AJAX_UNLINK_HANDLE,
+			'nonce'         => wp_create_nonce( self::AJAX_NONCE ),
 		);
 	}
 
-	public function check_uid_availability( string $uid, $provider) : bool|WP_Error {
+	public function check_uid_availability( string $uid, $provider ) : bool|WP_Error {
 		if ( $this->provider_model->is_uid_available( $uid, $provider ) ) {
 			return true;
 		} else {
@@ -54,6 +56,18 @@ class UserProfileWP_Model extends Base_Model {
 		$linked_status = $this->provider_model->save_provider_meta( $user_id, $uid, $provider );
 
 		if ( $linked_status > 0 ) {
+			return true;
+		} else {
+			$this->error_model->add( $this->error_model::WP_ERROR );
+		}
+
+		return $this->error_model->get_errors();
+	}
+
+	public function unlink_provider( int $user_id, string $provider ) : bool|WP_Error {
+		$unlink_status = $this->provider_model->delete_provider_meta( $user_id, $provider );
+
+		if ( $unlink_status > 0 ) {
 			return true;
 		} else {
 			$this->error_model->add( $this->error_model::WP_ERROR );

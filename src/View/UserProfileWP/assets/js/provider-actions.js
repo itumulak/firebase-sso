@@ -19,6 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
             module.auth();  
           });
         }
+        else if ('disconnect' === action) {
+          const {unlinkCallback} = await import('./callback.js');
+
+          unlinkCallback(firebase_sso_object.user_id, provider);
+        }
     });
   });
 });

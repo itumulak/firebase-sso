@@ -25,7 +25,8 @@ class UserProfileWP_Controller extends Base_Controller {
 	public function init() : void {
 		add_action( 'show_user_profile', array( $this, 'provider_user_profile_links' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
-		add_action('wp_ajax_' . $this->user_profile_model::AJAX_HANDLE, array($this, 'provider_auth_callback'));
+		add_action( 'wp_ajax_' . $this->user_profile_model::AJAX_HANDLE, array( $this, 'provider_link_callback' ) );
+		add_action( 'wp_ajax_' . $this->user_profile_model::AJAX_UNLINK_HANDLE, array( $this, 'provider_unlink_callback' ) );
 	}
 
 	public function scripts(): void {
@@ -33,20 +34,20 @@ class UserProfileWP_Controller extends Base_Controller {
 		wp_enqueue_style(
 			$this->user_profile_model->get_handle(),
 			$this->user_profile_model->get_plugin_url() . 'src/View/UserProfileWP/assets/styles/linked-providers.css',
-			array('toast'),
+			array( 'toast' ),
 			$this->user_profile_model->get_version()
 		);
 
 		$this->js->register(
 			'toast',
 			$this->user_profile_model->get_plugin_url() . 'lib/toast/jquery.toast.min.js',
-			array('jquery')
+			array( 'jquery' )
 		);
 
 		$this->js->register(
 			$this->user_profile_model->get_handle(),
-			$this->user_profile_model->get_plugin_url() . 'src/View/UserProfileWP/assets/js/linking-provider.js',
-			array('toast'),
+			$this->user_profile_model->get_plugin_url() . 'src/View/UserProfileWP/assets/js/provider-actions.js',
+			array( 'toast' ),
 			array(
 				'strategy'  => 'defer',
 				'is_module' => true,
@@ -74,21 +75,21 @@ class UserProfileWP_Controller extends Base_Controller {
 		);
 	}
 
-	public function provider_auth_callback() : void {
+	public function provider_link_callback() : void {
 		if (
 			isset( $_POST ) &&
 			isset( $_POST['nonce'] ) &&
 			$this->user_profile_model->verify_nonce( $_POST['nonce'], $this->user_profile_model::AJAX_NONCE )
 		) {
 			$user_id  = $_POST['user_id'];
-			$uid    = $_POST['uid'];
+			$uid      = $_POST['uid'];
 			$provider = $_POST['provider'];
-	
+
 			$process_linking = $this->user_profile_model->check_uid_availability( $uid, $provider );
-	
+
 			if ( is_bool( $process_linking ) && $process_linking === true ) {
 				$meta = $this->user_profile_model->link_provider( $user_id, $uid, $provider );
-	
+
 				if ( is_bool( $meta ) && $meta === true ) {
 					wp_send_json_success(
 						array(
@@ -111,9 +112,40 @@ class UserProfileWP_Controller extends Base_Controller {
 						'errors' => $process_linking->get_error_messages(),
 					)
 				);
-			}	
+			}
 		}
-		
+
+		wp_die();
+	}
+
+	public function provider_unlink_callback() : void {
+		if (
+			isset( $_POST ) &&
+			isset( $_POST['nonce'] ) &&
+			$this->user_profile_model->verify_nonce( $_POST['nonce'], $this->user_profile_model::AJAX_NONCE )
+		) {
+			$user_id  = $_POST['user_id'];
+			$provider = $_POST['provider'];
+
+			$meta = $this->user_profile_model->unlink_provider( $user_id, $provider );
+
+			if ( is_bool( $meta ) && $meta === true ) {
+				wp_send_json_success(
+					array(
+						'unlinked' => true,
+						'meta'   => $meta,
+					)
+				);
+			} else {
+				wp_send_json_error(
+					array(
+						'unlinked' => false,
+						'errors' => $meta->get_error_messages(),
+					)
+				);
+			}
+		}
+
 		wp_die();
 	}
 }

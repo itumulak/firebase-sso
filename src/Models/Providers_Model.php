@@ -58,7 +58,7 @@ class Providers_Model implements Data_Management_Interface {
 	public function is_uid_available( string $id, $provider ) : bool {
 		global $wpdb;
 
-		$meta_key              = $this->get_provider_meta_key( $provider );
+		$meta_key            = $this->get_provider_meta_key( $provider );
 		$uid_used_by_user_id = $wpdb->get_var( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = '$meta_key' AND meta_value = '$id'" );
 
 		if ( $uid_used_by_user_id ) {
@@ -74,6 +74,10 @@ class Providers_Model implements Data_Management_Interface {
 
 	public function save_provider_meta( int $user_id, string $uid, string $provider ) : int|bool {
 		return update_user_meta( $user_id, $this->get_provider_meta_key( $provider ), $uid );
+	}
+
+	public function delete_provider_meta( int $user_id, string $provider ) : int|bool {
+		return delete_user_meta( $user_id, $this->get_provider_meta_key( $provider ) );
 	}
 
 	private function get_provider_meta_key( string $provider ) : string {

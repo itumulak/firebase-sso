@@ -14,12 +14,15 @@
 	<h3 class="providers__headline"><?php esc_html_e( 'Linked Providers' ); ?></h3>
 	<div class="providers__list">
 	<?php foreach ( $providers as $provider => $set ) : ?>
-		<button 
+		<button
+			id="provider-<?php echo $provider; ?>" 
 			data-provider="<?php echo $provider; ?>" 
 			data-action="<?php echo $linked[ $provider ] ? 'disconnect' : 'connect'; ?>" 
 			class="providers__list-btn btn btn-<?php echo $provider; ?>">
 			<img height="18" src="<?php echo $user_profile_model->get_plugin_url() . 'src/assets/images/' . $provider . '-logo.svg'; ?>"/> 
-			<?php echo $linked[ $provider ] ? 'Disconnect' : 'Connect'; ?>
+			<span>
+				<?php echo $linked[ $provider ] ? 'Disconnect' : 'Connect'; ?>
+			</span>
 		</button>
 	<?php endforeach; ?>
 	</div>

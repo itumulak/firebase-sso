@@ -168,9 +168,9 @@ class Frontend_Controller extends Base_Controller {
 			isset( $_POST['nonce'] ) &&
 			$this->frontend_model->verify_nonce( $_POST['nonce'], $this->frontend_model::AJAX_NONCE )
 		) {
-			$email        = $_POST['email'];
-			$provider     = $_POST['provider'];
-			$uid          = $_POST['uid'];
+			$email    = $_POST['email'];
+			$provider = $_POST['provider'];
+			$uid      = $_POST['uid'];
 
 			$prosessed_user = $this->frontend_model->process_user( $email, $uid, $provider );
 

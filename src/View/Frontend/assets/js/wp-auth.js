@@ -1,7 +1,7 @@
-export const wpLogin = async (token, email, provider, action) => {
+export const wpLogin = async (uid, email, provider, action) => {
     const formData = new FormData();
     formData.append("email", email);
-    formData.append("access_token", token);
+    formData.append("uid", uid);
     formData.append("provider", provider);
     formData.append("action", action);
     formData.append("nonce", firebase_sso_object.nonce);

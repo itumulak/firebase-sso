@@ -1,6 +1,8 @@
 <?php
 namespace Itumulak\WpSsoFirebase\Models;
 
+use WP_Error;
+
 class UserProfileWP_Model extends Base_Model {
 	private Error_Model $error_model;
 	private string $handle;
@@ -8,6 +10,7 @@ class UserProfileWP_Model extends Base_Model {
 	private Providers_Model $provider_model;
 	private Configuration_Model $configs;
 	const AJAX_HANDLE = 'firebase_link_provider';
+
 
 	public function __construct() {
 
@@ -31,12 +34,14 @@ class UserProfileWP_Model extends Base_Model {
 			'ajaxurl'   => admin_url( 'admin-ajax.php' ),
 			'config'    => $this->configs->get_all(),
 			'providers' => $this->provider_model->get_all(),
-			'user_id' => get_current_user_id()
+			'user_id' => get_current_user_id(),
+			'action' => self::AJAX_HANDLE,
+			'nonce' => wp_create_nonce( self::AJAX_NONCE )
 		);
 	}
 
-	public function check_token_availability( string $token, string $provider ) : bool|Error_Model {
-		if ( $this->provider_model->is_token_available( $token, $provider ) ) {
+	public function check_uid_availability( string $uid, $provider) : bool|WP_Error {
+		if ( $this->provider_model->is_uid_available( $uid, $provider ) ) {
 			return true;
 		} else {
 			$this->error_model->add( $this->error_model::TOKEN_IN_USE );
@@ -45,8 +50,8 @@ class UserProfileWP_Model extends Base_Model {
 		return $this->error_model->get_errors();
 	}
 
-	public function link_provider( int $user_id, string $token, string $provider ) : bool|Error_Model {
-		$linked_status = $this->provider_model->save_provider_meta( $user_id, $token, $provider );
+	public function link_provider( int $user_id, string $uid, string $provider ) : bool|Error_Model {
+		$linked_status = $this->provider_model->save_provider_meta( $user_id, $uid, $provider );
 
 		if ( $linked_status > 0 ) {
 			return true;

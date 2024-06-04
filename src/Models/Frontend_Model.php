@@ -65,7 +65,7 @@ class Frontend_Model extends Base_Model {
 		return $this->get_plugin_url() . 'src/View/Frontend/assets/';
 	}
 
-	public function process_user( string $email, string $access_token, string $provider ) : bool|Error_Model {
+	public function process_user( string $email, string $uid, string $provider ) : bool|Error_Model {
 		if ( email_exists( $email ) ) {
 			if ( $this->login_user( $email ) ) {
 				return true;
@@ -73,9 +73,9 @@ class Frontend_Model extends Base_Model {
 				$this->error_model->add( $this->error_model::LOGIN_FAILED );
 			}
 		} else {
-			if ( $this->provider_model->is_token_available( $access_token, $provider ) ) {
+			if ( $this->provider_model->is_uid_available( $uid, $provider ) ) {
 				if ( $this->create_user( $email ) ) {
-					return $this->process_user( $email, $access_token, $provider );
+					return $this->process_user( $email, $uid, $provider );
 				} else {
 					$this->error_model->add( $this->error_model::ACCOUNT_IN_USE );
 				}
@@ -128,13 +128,6 @@ class Frontend_Model extends Base_Model {
 		}
 
 		return false;
-	}
-
-	public function save_meta( int $user_id, string $token, string $provider_model ) : array {
-		return array(
-			'url'               => get_home_url(),
-			'saved_credentials' => update_user_meta( $user_id, 'firebase_' . $provider_model . '_access_token', $token ),
-		);
 	}
 
 	protected function is_valid_email( string $email ) : bool {

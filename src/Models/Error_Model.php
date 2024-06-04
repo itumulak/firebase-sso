@@ -13,6 +13,8 @@ class Error_Model {
 	private array $error_data;
 
 	public function __construct() {
+		$this->wp_errors = new WP_Error();
+
 		 $this->error_data = array(
 			 self::ACCOUNT_IN_USE => array(
 				 'key'     => self::ACCOUNT_IN_USE,

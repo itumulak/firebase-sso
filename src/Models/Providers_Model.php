@@ -55,13 +55,13 @@ class Providers_Model implements Data_Management_Interface {
 		return update_option( self::OPTION_KEY_NAME, $this->providers );
 	}
 
-	public function is_token_available( string $token, string $provider ) : bool {
+	public function is_uid_available( string $id, $provider ) : bool {
 		global $wpdb;
 
 		$meta_key              = $this->get_provider_meta_key( $provider );
-		$token_used_by_user_id = $wpdb->get_var( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = '$meta_key' AND meta_value = '$token'" );
+		$uid_used_by_user_id = $wpdb->get_var( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = '$meta_key' AND meta_value = '$id'" );
 
-		if ( $token_used_by_user_id ) {
+		if ( $uid_used_by_user_id ) {
 			return false;
 		}
 
@@ -72,11 +72,11 @@ class Providers_Model implements Data_Management_Interface {
 		return get_user_meta( $user_id, $this->get_provider_meta_key( $provider ), true );
 	}
 
-	public function save_provider_meta( int $user_id, string $token, string $provider ) : int|bool {
-		return update_user_meta( $user_id, $this->get_provider_meta_key( $provider ), $token );
+	public function save_provider_meta( int $user_id, string $uid, string $provider ) : int|bool {
+		return update_user_meta( $user_id, $this->get_provider_meta_key( $provider ), $uid );
 	}
 
 	private function get_provider_meta_key( string $provider ) : string {
-		return sprintf( 'firebase_%s_access_token', $provider );
+		return sprintf( 'firebase_%s_uid', $provider );
 	}
 }

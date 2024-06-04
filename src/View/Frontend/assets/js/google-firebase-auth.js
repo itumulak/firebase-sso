@@ -18,17 +18,15 @@ export const auth = () => {
     const {wpLogin} = await import('./wp-auth.js');
 
     if (user) {
-      wpLogin( user.accessToken, user.email, 'google', firebase_sso_object.action_login );
+      wpLogin( user.uid, user.email, 'google', firebase_sso_object.action_login );
     } else {
       const provider = new GoogleAuthProvider();
 
       signInWithPopup(auth, provider)
         .then(async (result) => {
-          const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = credential.accessToken;
           const user = result.user;
 
-          wpLogin( token, user.email, 'google', firebase_sso_object.action_login);
+          wpLogin( user.uid, user.email, 'google', firebase_sso_object.action_login);
         })
         .catch((error) => {
           // Handle Errors here.

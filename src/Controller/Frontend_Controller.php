@@ -3,6 +3,7 @@ namespace Itumulak\WpSsoFirebase\Controller;
 
 use Itumulak\WpSsoFirebase\Models\Admin_Model;
 use Itumulak\WpSsoFirebase\Models\Frontend_Model;
+use Itumulak\WpSsoFirebase\Models\Providers_Model;
 use Itumulak\WpSsoFirebase\Models\Scripts_Model;
 use WP_User;
 
@@ -12,6 +13,7 @@ class Frontend_Controller extends Base_Controller {
 	private Frontend_Model $frontend_model;
 	private Admin_Model $admin_model;
 	private Scripts_Model $js;
+	private Providers_Model $provider_model;
 
 	/**
 	 * Constructor.
@@ -22,6 +24,7 @@ class Frontend_Controller extends Base_Controller {
 		$this->js             = new Scripts_Model();
 		$this->frontend_model = new Frontend_Model();
 		$this->admin_model    = new Admin_Model();
+		$this->provider_model = new Providers_Model();
 	}
 
 	/**
@@ -167,15 +170,15 @@ class Frontend_Controller extends Base_Controller {
 		) {
 			$email        = $_POST['email'];
 			$provider     = $_POST['provider'];
-			$access_token = $_POST['access_token'];
+			$uid          = $_POST['uid'];
 
-			$prosessed_user = $this->frontend_model->process_user( $email, $access_token, $provider );
+			$prosessed_user = $this->frontend_model->process_user( $email, $uid, $provider );
 
 			if ( is_bool( $prosessed_user ) && $prosessed_user === true ) {
 				wp_send_json_success(
 					array(
 						'login' => true,
-						'meta'  => $this->frontend_model->save_meta( get_current_user_id(), $access_token, $provider ),
+						'meta'  => $this->provider_model->save_provider_meta( get_current_user_id(), $uid, $provider ),
 						'url'   => get_home_url(),
 					)
 				);

@@ -12,15 +12,23 @@ export const auth = () => {
     if (user) {
       signOut(auth)
         .then(() => {
-          const provider = new GoogleAuthProvider();
-          signInWithPopup(auth, provider)
-            .then(async (result) => {
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
-                const user = result.user;
-            });
+          signIn();
         })
-        .catch((error) => {});
+        .catch((error) => {}); 
+    } else {
+      signIn();
     }
+  });
+};
+
+const signIn = async () => {
+  const { linkCallback } = await import("./callback.js");
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+
+  await signInWithPopup(auth, provider).then((result) => {
+    const user = result.user;
+
+    linkCallback(firebase_sso_object.user_id, user.uid, "google");
   });
 };

@@ -25,10 +25,8 @@ export const auth = () => {
       signInWithPopup(auth, provider)
         .then(async (result) => {
           const user = result.user;
-          const credential = FacebookAuthProvider.credentialFromResult(result);
-          const token = credential.accessToken;
 
-          wpLogin(token, user.refreshToken, user.email, "facebook");
+          wpLogin(user.uid, user.refreshToken, user.email, "facebook");
         })
         .catch((error) => {
           // Handle Errors here.

@@ -15,7 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const provider = button.getAttribute('data-provider');
 
         if (action === 'connect') {
-          
+          await import(`./${provider}-provider.js`).then((module) => {
+            module.auth();  
+          });
         }
     });
   });

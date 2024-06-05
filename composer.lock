@@ -1,0 +1,87 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "713498e4b593686fbabd6b58347d9c3a",
+    "packages": [
+        {
+            "name": "pablo-sg-pacheco/wp-namespace-autoloader",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pablo-sg-pacheco/wp-namespace-autoloader.git",
+                "reference": "069163f215743c83381613749ace0c5a642720b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pablo-sg-pacheco/wp-namespace-autoloader/zipball/069163f215743c83381613749ace0c5a642720b4",
+                "reference": "069163f215743c83381613749ace0c5a642720b4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "cweagans/composer-patches": "^1.0",
+                "dealerdirect/phpcodesniffer-composer-installer": "0.7.0",
+                "phpunit/phpunit": "^7",
+                "squizlabs/php_codesniffer": "dev-master",
+                "wp-coding-standards/wpcs": "^2.3"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "patches": {
+                    "squizlabs/php_codesniffer": {
+                        "Add GitHub Actions Annotations report type": "https://github.com/squizlabs/PHP_CodeSniffer/pull/2918.patch"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pablo_Pacheco\\WP_Namespace_Autoloader\\": "src"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Pablo_Pacheco\\WP_Namespace_Autoloader\\Tests\\": "tests"
+                }
+            },
+            "license": [
+                "GPLv2"
+            ],
+            "authors": [
+                {
+                    "name": "Pablo dos S G Pacheco",
+                    "email": "pablo.sg.pacheco@gmail.com"
+                }
+            ],
+            "description": "A PHP autoloader class that follows the WordPress coding standards 2.0 and proposed 3.0 for class/interface/trait names and filenames",
+            "homepage": "https://github.com/pablo-pacheco/wp-namespace-autoloader",
+            "keywords": [
+                "autoload",
+                "namespace",
+                "wordpress",
+                "wp"
+            ],
+            "support": {
+                "source": "https://github.com/pablo-sg-pacheco/wp-namespace-autoloader/tree/master",
+                "issues": "https://github.com/pablo-sg-pacheco/wp-namespace-autoloader/issues"
+            },
+            "time": "2022-12-02T14:49:51+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "pablo-sg-pacheco/wp-namespace-autoloader": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.2.0"
+}

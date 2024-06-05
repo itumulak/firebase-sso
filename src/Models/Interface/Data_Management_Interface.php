@@ -14,7 +14,7 @@ interface Data_Management_Interface {
 	/**
 	 * Get a datum.
 	 *
-	 * @param  string $key
+	 * @param  string $key Key.
 	 * @return string|bool|array
 	 */
 	public function get( string $key ) : string|bool|array;
@@ -29,7 +29,7 @@ interface Data_Management_Interface {
 	/**
 	 * Save data.
 	 *
-	 * @param  array $data
+	 * @param  array $data Data.
 	 * @return bool
 	 */
 	public function save( array $data ) : bool;

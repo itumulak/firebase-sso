@@ -91,10 +91,10 @@ class Base_Model {
 	/**
 	 * Load our admin template parts.
 	 *
-	 * @param string $path
-	 * @param string $slugfile_name
-	 * @param array  $args
-	 * @param bool   $require_once
+	 * @param string $path Path.
+	 * @param string $file_name File name.
+	 * @param array  $args Pass additional data as argument.
+	 * @param bool   $require_once Load the file as required once or not.
 	 *
 	 * @since 1.0.0
 	 * @return void
@@ -106,8 +106,8 @@ class Base_Model {
 	/**
 	 * Verify our AJAX nonce.
 	 *
-	 * @param string $nonce
-	 * @param string $action
+	 * @param string $nonce Unique nonce key.
+	 * @param string $action The action handler to associate to the nonce variable.
 	 * @return boolean
 	 * @since 1.0.0
 	 */

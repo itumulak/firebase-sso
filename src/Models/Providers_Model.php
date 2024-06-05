@@ -4,6 +4,7 @@
  *
  * @package firebase-sso
  */
+
 namespace Itumulak\WpSsoFirebase\Models;
 
 use Itumulak\WpSsoFirebase\Models\Interface\Data_Management_Interface;
@@ -12,6 +13,11 @@ use Itumulak\WpSsoFirebase\Models\Interface\Data_Management_Interface;
  * Providers_Model
  */
 class Providers_Model implements Data_Management_Interface {
+	/**
+	 * Holds the available the supported firebase providers.
+	 *
+	 * @var array
+	 */
 	private array $providers;
 	const PROVIDER_FACEBOOK = 'facebook';
 	const PROVIDER_GOOGLE   = 'google';
@@ -41,7 +47,7 @@ class Providers_Model implements Data_Management_Interface {
 	/**
 	 * Retrieve a specific configuration value in the database.
 	 *
-	 * @param string $key
+	 * @param string $key Provider Key.
 	 * @return string|boolean|array
 	 */
 	public function get( string $key ) : string|bool|array {
@@ -60,7 +66,7 @@ class Providers_Model implements Data_Management_Interface {
 	/**
 	 * Save the enabled providers in the database.
 	 *
-	 * @param array $data
+	 * @param array $data Providers data.
 	 * @return bool
 	 */
 	public function save( array $data ) : bool {
@@ -76,8 +82,8 @@ class Providers_Model implements Data_Management_Interface {
 	/**
 	 * Check if uid is still available.
 	 *
-	 * @param  string $id
-	 * @param  string $provider
+	 * @param  string $id UID.
+	 * @param  string $provider Provider type.
 	 * @return bool
 	 */
 	public function is_uid_available( string $id, string $provider ) : bool {
@@ -96,8 +102,8 @@ class Providers_Model implements Data_Management_Interface {
 	/**
 	 * Get the user's provider uid.
 	 *
-	 * @param  int    $user_id
-	 * @param  string $provider
+	 * @param  int    $user_id User Id.
+	 * @param  string $provider Provider type.
 	 * @return mixed
 	 */
 	public function get_provider_meta( int $user_id, string $provider ) : mixed {
@@ -107,9 +113,9 @@ class Providers_Model implements Data_Management_Interface {
 	/**
 	 * Save the user's provider uid.
 	 *
-	 * @param  int    $user_id
-	 * @param  string $uid
-	 * @param  string $provider
+	 * @param  int    $user_id User Id.
+	 * @param  string $uid UID.
+	 * @param  string $provider Provider type.
 	 * @return int|bool
 	 */
 	public function save_provider_meta( int $user_id, string $uid, string $provider ) : int|bool {
@@ -119,8 +125,8 @@ class Providers_Model implements Data_Management_Interface {
 	/**
 	 * Delete the user's provider uid.
 	 *
-	 * @param  int    $user_id
-	 * @param  string $provider
+	 * @param  int    $user_id User Id.
+	 * @param  string $provider Provider type.
 	 * @return int|bool
 	 */
 	public function delete_provider_meta( int $user_id, string $provider ) : int|bool {
@@ -130,7 +136,7 @@ class Providers_Model implements Data_Management_Interface {
 	/**
 	 * Get the provider's meta key.
 	 *
-	 * @param  string $provider
+	 * @param  string $provider Provider type.
 	 * @return string
 	 */
 	private function get_provider_meta_key( string $provider ) : string {

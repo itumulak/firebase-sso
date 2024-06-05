@@ -4,6 +4,7 @@
  *
  * @package firebase-sso
  */
+
 namespace Itumulak\WpSsoFirebase\Models;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -14,9 +15,32 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Scripts_Model
  */
 class Scripts_Model extends Base_Model {
+	/**
+	 * Holds all js to be enqueued.
+	 *
+	 * @var array
+	 */
 	private array $js_handles;
+
+	/**
+	 * Holds all js localization.
+	 *
+	 * @var array
+	 */
 	private array $js_localization;
+
+	/**
+	 * Holds all script js strategies.
+	 *
+	 * @var array
+	 */
 	private array $wpjs_strategies;
+
+	/**
+	 * Holds the current js handler.
+	 *
+	 * @var string
+	 */
 	private string $current_js_handler;
 
 	/**
@@ -49,11 +73,11 @@ class Scripts_Model extends Base_Model {
 	 * Register a JavaScript.
 	 * Accepts the same parameter as `wp_enqueue_script`.
 	 *
-	 * @param  string          $handle
-	 * @param  string          $src
-	 * @param  array           $deps
-	 * @param  array|bool      $strategy
-	 * @param  string|int|null $version
+	 * @param  string          $handle JS handle.
+	 * @param  string          $src Path to the js file.
+	 * @param  array           $deps Dependencies.
+	 * @param  array|bool      $strategy Strategies.
+	 * @param  string|int|null $version JS version.
 	 * @return void
 	 */
 	public function register( string $handle, string $src, array $deps = array(), array|bool $strategy = array(), string|int|null $version = null ) : void {
@@ -74,9 +98,9 @@ class Scripts_Model extends Base_Model {
 	 * Register localized script.
 	 * Accepts the same parameter as `wp_localize_script`.
 	 *
-	 * @param  string $handle
-	 * @param  string $object_name
-	 * @param  array  $data
+	 * @param  string $handle JS Handle.
+	 * @param  string $object_name Object name.
+	 * @param  array  $data Object data.
 	 * @return void
 	 */
 	public function register_localization( string $handle, string $object_name, array $data ) : void {
@@ -90,9 +114,9 @@ class Scripts_Model extends Base_Model {
 	/**
 	 * Override the script loader tag to include a module attribute.
 	 *
-	 * @param  string $tag
-	 * @param  string $handle
-	 * @param  string $src
+	 * @param  string $tag Script tag.
+	 * @param  string $handle JS handle.
+	 * @param  string $src Path to the JS file.
 	 * @return string
 	 */
 	public function add_attributes( string $tag, string $handle, string $src ) : string {
@@ -118,10 +142,10 @@ class Scripts_Model extends Base_Model {
 	/**
 	 * Enqueue a js file.
 	 *
-	 * @param  mixed $js
+	 * @param  array $js Data of the enqueued js file.
 	 * @return void
 	 */
-	private function enqueue( $js ) {
+	private function enqueue( array $js ) {
 		$this->current_js_handler = $js['handle'];
 
 		wp_enqueue_script(

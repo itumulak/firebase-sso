@@ -1,11 +1,31 @@
 <?php
+/**
+ * Firebase email/password authentication class.
+ *
+ * @package firebase-sso
+ */
+
 namespace Itumulak\WpSsoFirebase\Models;
 
+/**
+ * Firebase_EmailPass_Auth
+ */
 class Firebase_EmailPass_Auth {
 	const BASE_URI      = 'https://identitytoolkit.googleapis.com/v1/accounts';
 	const COOKIE_LOGOUT = 'wp_firebase_logout';
+
+	/**
+	 * Holds the API key.
+	 *
+	 * @var string
+	 */
 	private string $api_key;
 
+	/**
+	 * __construct
+	 *
+	 * @return void
+	 */
 	public function __construct() {
 		$admin_model   = new Admin_Model();
 		$config        = $admin_model->get_config();
@@ -15,8 +35,8 @@ class Firebase_EmailPass_Auth {
 	/**
 	 * Sign-in Method.
 	 *
-	 * @param string $email_address
-	 * @param string $password
+	 * @param string $email_address Email address.
+	 * @param string $password Password.
 	 * @since 1.0.0
 	 *
 	 * @return array JSON
@@ -34,8 +54,8 @@ class Firebase_EmailPass_Auth {
 	/**
 	 * Sign-up method.
 	 *
-	 * @param string $email_address
-	 * @param strin $password
+	 * @param string $email_address Email address.
+	 * @param string $password Password.
 	 * @since 1.0.0
 	 *
 	 * @return array
@@ -53,8 +73,8 @@ class Firebase_EmailPass_Auth {
 	/**
 	 * Fetch providers from User's email.
 	 *
-	 * @param string $email_address
-	 * @param string $continue_uri
+	 * @param string $email_address Email address.
+	 * @param string $continue_uri Continue URL.
 	 * @since 1.0.0
 	 *
 	 * @return array
@@ -71,8 +91,8 @@ class Firebase_EmailPass_Auth {
 	/**
 	 * Perform HTTP Request from Firebase.
 	 *
-	 * @param string $auth
-	 * @param array $data
+	 * @param string $auth Authentication key.
+	 * @param array  $data Data.
 	 * @since 1.0.0
 	 *
 	 * @return array JSON
@@ -81,8 +101,8 @@ class Firebase_EmailPass_Auth {
 		$args = array(
 			'method'    => 'POST',
 			'headers'   => array( 'Content-Type' => 'application/json' ),
-			'sslverify' => apply_filters( 'https_local_ssl_verify', false ),
-			'timeout'   => apply_filters( 'http_request_timeout', 600 ),
+			'sslverify' => apply_filters( 'https_local_ssl_verify', false ), //phpcs:ignore.
+			'timeout'   => apply_filters( 'http_request_timeout', 600 ), //phpcs:ignore.
 			'body'      => wp_json_encode( $data ),
 		);
 

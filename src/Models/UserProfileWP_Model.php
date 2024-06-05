@@ -13,11 +13,41 @@ use WP_Error;
  * UserProfileWP_Model
  */
 class UserProfileWP_Model extends Base_Model {
+	/**
+	 * Holds error model class.
+	 *
+	 * @var Error_Model
+	 */
 	private Error_Model $error_model;
+
+	/**
+	 * Holds the js handle key.
+	 *
+	 * @var string
+	 */
 	private string $handle;
+
+	/**
+	 * Holds the handle object name.
+	 *
+	 * @var string
+	 */
 	private string $handle_object;
+
+	/**
+	 * Holds the providers model class.
+	 *
+	 * @var Providers_Model
+	 */
 	private Providers_Model $provider_model;
+
+	/**
+	 * Holds the configuration model class.
+	 *
+	 * @var Configuration_Model
+	 */
 	private Configuration_Model $configs;
+
 	const AJAX_HANDLE        = 'firebase_link_provider';
 	const AJAX_UNLINK_HANDLE = 'firebase_unlink_provider';
 
@@ -73,8 +103,8 @@ class UserProfileWP_Model extends Base_Model {
 	 * Verify UID and its associated provider to be available.
 	 * Throw an error message if the UID is already in use by another wp account.
 	 *
-	 * @param  string $uid
-	 * @param  string $provider
+	 * @param  string $uid UID.
+	 * @param  string $provider Provider type.
 	 * @return bool|WP_Error
 	 */
 	public function check_uid_availability( string $uid, $provider ) : bool|WP_Error {
@@ -90,9 +120,9 @@ class UserProfileWP_Model extends Base_Model {
 	/**
 	 * Link the provider to the wp account.
 	 *
-	 * @param  int    $user_id
-	 * @param  string $uid
-	 * @param  string $provider
+	 * @param  int    $user_id User Id.
+	 * @param  string $uid UID.
+	 * @param  string $provider Provider type.
 	 * @return bool|WP_Error
 	 */
 	public function link_provider( int $user_id, string $uid, string $provider ) : bool|Error_Model {
@@ -110,8 +140,8 @@ class UserProfileWP_Model extends Base_Model {
 	/**
 	 * Unlink the provider to the wp account.
 	 *
-	 * @param  int    $user_id
-	 * @param  string $provider
+	 * @param  int    $user_id User Id.
+	 * @param  string $provider Provider type.
 	 * @return bool|WP_Error
 	 */
 	public function unlink_provider( int $user_id, string $provider ) : bool|WP_Error {
@@ -129,7 +159,7 @@ class UserProfileWP_Model extends Base_Model {
 	/**
 	 * Return the linked providers for this wp account.
 	 *
-	 * @param  int $user_id
+	 * @param  int $user_id User Id.
 	 * @return array
 	 */
 	public function get_linked_providers( int $user_id ) : array {

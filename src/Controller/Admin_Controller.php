@@ -17,6 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Admin_Controller
  */
 class Admin_Controller {
+	/**
+	 * Holds admin model class.
+	 *
+	 * @var Admin_Model
+	 */
 	private Admin_Model $admin_model;
 	const SAVE_CONFIG_FUNC    = 'save_config_callback';
 	const SAVE_PROVIDERS_FUNC = 'save_providers_callback';
@@ -144,7 +149,7 @@ class Admin_Controller {
 	/**
 	 * Handle WordPress callbacks.
 	 *
-	 * @param mixed $callback
+	 * @param mixed $callback Callback function.
 	 * @return void
 	 * @since 1.0.0
 	 */

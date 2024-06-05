@@ -19,9 +19,32 @@ if ( ! defined( 'ABSPATH' ) ) {
  * UserProfileWP_Controller
  */
 class UserProfileWP_Controller extends Base_Controller {
+	/**
+	 * Holds the script model class.
+	 *
+	 * @var Scripts_Model
+	 */
 	private Scripts_Model $js;
+
+	/**
+	 * Holds the WP user profile model class.
+	 *
+	 * @var UserProfileWP_Model
+	 */
 	private UserProfileWP_Model $user_profile_model;
+
+	/**
+	 * Holds the providers model class.
+	 *
+	 * @var Providers_Model
+	 */
 	private Providers_Model $providers_model;
+
+	/**
+	 * Holds the provider list.
+	 *
+	 * @var array
+	 */
 	public array $providers;
 
 	/**
@@ -114,12 +137,11 @@ class UserProfileWP_Controller extends Base_Controller {
 	public function provider_link_callback() : void {
 		$post = wp_unslash( $_POST );
 
-		if ( 
-			! isset( $post['user_id'] ) ||
+		if ( ! isset( $post['user_id'] ) ||
 			! isset( $post['uid'] ) ||
 			! isset( $post['provider'] ) ||
 			! isset( $post['nonce'] ) ||
-			! wp_verify_nonce( $post['nonce'], $this->user_profile_model::AJAX_NONCE ) 
+			! wp_verify_nonce( $post['nonce'], $this->user_profile_model::AJAX_NONCE )
 		) {
 			wp_die();
 		}

@@ -13,10 +13,34 @@ use WP_Error;
  * Frontend_Model
  */
 class Frontend_Model extends Base_Model {
+	/**
+	 * Holds the providers model class.
+	 *
+	 * @var Providers_Model
+	 */
 	private Providers_Model $provider_model;
+
+	/**
+	 * Holds the error model class.
+	 *
+	 * @var Error_Model
+	 */
 	private Error_Model $error_model;
+
+	/**
+	 * Holds the configuration model class.
+	 *
+	 * @var Configuration_Model
+	 */
 	private Configuration_Model $configs;
+
+	/**
+	 * Holds the enabled providers set in the admin.
+	 *
+	 * @var array
+	 */
 	public array $enabled_providers;
+
 	const FIREBASE_LOGIN_HANDLE = 'firebase_login';
 	const FIREBASE_RELOG_HANDLE = 'firebase_relog';
 	const FIREBASE_OBJECT       = 'firebase_sso_object';
@@ -78,9 +102,9 @@ class Frontend_Model extends Base_Model {
 	 * Process the user to login to its provider.
 	 * First time login with no existing account will be created and link the provider.
 	 *
-	 * @param  string $email
-	 * @param  string $uid
-	 * @param  string $provider
+	 * @param  string $email Email address.
+	 * @param  string $uid Firebase UID.
+	 * @param  string $provider Provider type.
 	 * @return bool|WP_Error
 	 */
 	public function process_user( string $email, string $uid, string $provider ) : bool|Error_Model {
@@ -108,7 +132,7 @@ class Frontend_Model extends Base_Model {
 	/**
 	 * Login user progmatically.
 	 *
-	 * @param  string $email
+	 * @param  string $email Email address.
 	 * @return bool
 	 */
 	public function login_user( string $email ) : bool {
@@ -130,7 +154,7 @@ class Frontend_Model extends Base_Model {
 	/**
 	 * Create a WP account if the email is not yet registred in the website.
 	 *
-	 * @param  string $email
+	 * @param  string $email Email address.
 	 * @return bool
 	 */
 	public function create_user( string $email ) : bool {
@@ -151,7 +175,7 @@ class Frontend_Model extends Base_Model {
 	/**
 	 * Validate email.
 	 *
-	 * @param  string $email
+	 * @param  string $email Email address.
 	 * @return bool
 	 */
 	protected function is_valid_email( string $email ) : bool {
@@ -180,7 +204,7 @@ class Frontend_Model extends Base_Model {
 	/**
 	 * Generate a username for new account.
 	 *
-	 * @param  string $suggested_username
+	 * @param  string $suggested_username Username.
 	 * @return string
 	 */
 	protected function generate_username( string $suggested_username ) : string {
@@ -198,7 +222,7 @@ class Frontend_Model extends Base_Model {
 	/**
 	 * Generate a random alphanumeric string to be used a prepend for existing email.
 	 *
-	 * @param  int $length
+	 * @param  int $length Length.
 	 * @return string
 	 */
 	protected function random_alphanumeric( int $length = 5 ) : string {

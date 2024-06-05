@@ -19,9 +19,33 @@ use WP_Error;
 class Frontend_Controller extends Base_Controller {
 	const FIREBASE_GOOGLE_AJAX_HOOK   = 'firebase_google_login';
 	const FIREBASE_FACEBOOK_AJAX_HOOK = 'firebase_facebook_login';
+
+	/**
+	 * Holds the frontend model class.
+	 *
+	 * @var Frontend_Model
+	 */
 	private Frontend_Model $frontend_model;
+
+	/**
+	 * Holds the admin model class.
+	 *
+	 * @var Admin_Model
+	 */
 	private Admin_Model $admin_model;
+
+	/**
+	 * Holds the scripts model class.
+	 *
+	 * @var Scripts_Model;
+	 */
 	private Scripts_Model $js;
+
+	/**
+	 * Holds the providers model class.
+	 *
+	 * @var Providers_Model
+	 */
 	private Providers_Model $provider_model;
 
 	/**
@@ -86,7 +110,7 @@ class Frontend_Controller extends Base_Controller {
 	 *
 	 * @use Hook/Filter
 	 *
-	 * @param string $message
+	 * @param string $message Holds the HTML message output. We will append our provider buttons here.
 	 *
 	 * @return string
 	 * @since 1.0.0
@@ -100,7 +124,7 @@ class Frontend_Controller extends Base_Controller {
 				'provider-design-1',
 				array(
 					'provider_key'   => 'google',
-					'label'          => __( 'Sign In with Google' ),
+					'label'          => __( 'Sign In with Google', 'firebase-sso' ),
 					'img_size'       => 18,
 					'frontend_model' => $this->frontend_model,
 				)
@@ -113,7 +137,7 @@ class Frontend_Controller extends Base_Controller {
 				'provider-design-1',
 				array(
 					'provider_key'   => 'facebook',
-					'label'          => __( 'Log in with Facebook' ),
+					'label'          => __( 'Log in with Facebook', 'firebase-sso' ),
 					'img_size'       => 28,
 					'frontend_model' => $this->frontend_model,
 				)
@@ -129,18 +153,21 @@ class Frontend_Controller extends Base_Controller {
 	 *
 	 * @use Hook/Filter
 	 *
-	 * @param WP_Error $errors
-	 * @param string   $redirect_to
+	 * @param WP_Error $errors We will append our wp errors here.
+	 * @param string   $redirect_to // phpcs:ignore.
 	 *
 	 * @return mixed
 	 * @since 1.0.0
 	 */
-	public function modify_incorrect_password( WP_Error $errors, string $redirect_to ) : mixed {
+	public function modify_incorrect_password( // phpcs:ignore.
+		WP_Error $errors,
+		string $redirect_to
+	) : mixed {
 		if ( isset( $errors->errors['incorrect_password'] ) ) {
 			$tmp = $errors->errors;
 
 			foreach ( $tmp['incorrect_password'] as $index => $msg ) {
-				$tmp['incorrect_password'][ $index ] = __( '<strong>Error</strong>: The password you entered is incorrect or too many attempts.' );
+				$tmp['incorrect_password'][ $index ] = __( '<strong>Error</strong>: The password you entered is incorrect or too many attempts.', 'firebase-sso' );
 			}
 
 			$errors->errors = $tmp;

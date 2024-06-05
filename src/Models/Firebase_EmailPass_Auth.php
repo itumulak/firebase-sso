@@ -83,7 +83,7 @@ class Firebase_EmailPass_Auth {
 			'headers'   => array( 'Content-Type' => 'application/json' ),
 			'sslverify' => apply_filters( 'https_local_ssl_verify', false ),
 			'timeout'   => apply_filters( 'http_request_timeout', 600 ),
-			'body'      => json_encode( $data ),
+			'body'      => wp_json_encode( $data ),
 		);
 
 		$end_point = self::BASE_URI . $auth;

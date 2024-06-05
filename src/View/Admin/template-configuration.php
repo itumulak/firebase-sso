@@ -2,8 +2,8 @@
 /**
  * Displays the configuration form.
  *
- * @type template-part
  * @since 1.0.0
+ * @package firebase-sso
  */
 
 $configs = $args['config'];

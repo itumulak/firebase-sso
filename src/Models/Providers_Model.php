@@ -59,7 +59,7 @@ class Providers_Model implements Data_Management_Interface {
 		global $wpdb;
 
 		$meta_key            = $this->get_provider_meta_key( $provider );
-		$uid_used_by_user_id = $wpdb->get_var( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = '$meta_key' AND meta_value = '$id'" );
+		$uid_used_by_user_id = $wpdb->get_var( $wpdb->prepare( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = %s AND meta_value = %d", esc_attr( $meta_key ), esc_attr( $id ) ) );
 
 		if ( $uid_used_by_user_id ) {
 			return false;

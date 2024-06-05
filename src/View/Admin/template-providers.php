@@ -2,19 +2,19 @@
 /**
  * Displays the Firebase provider that are available.
  *
- * @type template-type
  * @since 1.0.0
+ * @package firebase-sso
  */
 
- $enabled_providers = $args['providers'];
- $admin             = $args['admin_model'];
+$enabled_providers = $args['providers'];
+$admin             = $args['admin_model'];
 ?>
 <form id="sign-in-providers-form" class="provider__wrapper">
 	<?php foreach ( $enabled_providers as $provider ) { ?>
 	<div class="provider">
 			<label	label class="provider__label" for="<?php echo esc_attr( $provider['id'] ); ?>">
-				<img height="24" src="<?php echo esc_attr( $provider['icon'] ); ?>"/>
-				<?php esc_html_e( $provider['label'], 'sso-firebase' ); ?>
+				<img height="24" src="<?php echo esc_url( $provider['icon'] ); ?>"/>
+				<?php echo esc_html( $provider['label'] ); ?>
 			</label>
 		<div>
 			<label class="switch" for="<?php echo esc_attr( $provider['id'] ); ?>">

@@ -14,12 +14,11 @@ class UserProfileWP_Model extends Base_Model {
 
 
 	public function __construct() {
-
-		 $this->configs        = new Configuration_Model();
-		 $this->handle         = 'wp_firebase_profile';
-		 $this->handle_object  = 'firebase_sso_object';
-		 $this->provider_model = new Providers_Model();
-		 $this->error_model    = new Error_Model();
+		$this->configs        = new Configuration_Model();
+		$this->handle         = 'wp_firebase_profile';
+		$this->handle_object  = 'firebase_sso_object';
+		$this->provider_model = new Providers_Model();
+		$this->error_model    = new Error_Model();
 	}
 
 	public function get_handle() {

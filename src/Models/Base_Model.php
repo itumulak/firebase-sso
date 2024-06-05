@@ -83,8 +83,8 @@ class Base_Model {
 	 *
 	 * @param string $path
 	 * @param string $slugfile_name
-	 * @param array $args
-	 * @param bool $require_once
+	 * @param array  $args
+	 * @param bool   $require_once
 	 *
 	 * @since 1.0.0
 	 * @return void

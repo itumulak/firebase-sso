@@ -81,16 +81,16 @@ class UserProfileWP_Controller extends Base_Controller {
 			isset( $_POST['nonce'] ) &&
 			$this->user_profile_model->verify_nonce( $_POST['nonce'], $this->user_profile_model::AJAX_NONCE )
 		) {
-			$user_id  = $_POST['user_id'];
-			$uid      = $_POST['uid'];
-			$provider = $_POST['provider'];
+			$user_id  = esc_attr( $_POST['user_id'] );
+			$uid      = esc_attr( $_POST['uid'] );
+			$provider = esc_attr( $_POST['provider'] );
 
 			$process_linking = $this->user_profile_model->check_uid_availability( $uid, $provider );
 
-			if ( is_bool( $process_linking ) && $process_linking === true ) {
+			if ( is_bool( $process_linking ) && true === $process_linking ) {
 				$meta = $this->user_profile_model->link_provider( $user_id, $uid, $provider );
 
-				if ( is_bool( $meta ) && $meta === true ) {
+				if ( is_bool( $meta ) && true === $meta ) {
 					wp_send_json_success(
 						array(
 							'linked' => true,
@@ -124,23 +124,23 @@ class UserProfileWP_Controller extends Base_Controller {
 			isset( $_POST['nonce'] ) &&
 			$this->user_profile_model->verify_nonce( $_POST['nonce'], $this->user_profile_model::AJAX_NONCE )
 		) {
-			$user_id  = $_POST['user_id'];
-			$provider = $_POST['provider'];
+			$user_id  = esc_attr( $_POST['user_id'] );
+			$provider = esc_attr( $_POST['provider'] );
 
 			$meta = $this->user_profile_model->unlink_provider( $user_id, $provider );
 
-			if ( is_bool( $meta ) && $meta === true ) {
+			if ( is_bool( $meta ) && true === $meta ) {
 				wp_send_json_success(
 					array(
 						'unlinked' => true,
-						'meta'   => $meta,
+						'meta'     => $meta,
 					)
 				);
 			} else {
 				wp_send_json_error(
 					array(
 						'unlinked' => false,
-						'errors' => $meta->get_error_messages(),
+						'errors'   => $meta->get_error_messages(),
 					)
 				);
 			}

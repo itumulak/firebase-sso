@@ -8,10 +8,10 @@ class Configuration_Model implements Data_Management_Interface {
 	const OPTION_KEY_NAME = 'wp_firebase_config';
 
 	public function __construct() {
-		 $this->data = array(
-			 'apiKey'     => '',
-			 'authDomain' => '',
-		 );
+		$this->data = array(
+			'apiKey'     => '',
+			'authDomain' => '',
+		);
 	}
 
 	/**

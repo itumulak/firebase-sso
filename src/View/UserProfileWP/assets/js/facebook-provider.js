@@ -12,7 +12,7 @@ import {
       if (user) {
         signOut(auth)
           .then(() => {
-            signIn();
+            signIn(); 
           })
           .catch((error) => {}); 
       } else {

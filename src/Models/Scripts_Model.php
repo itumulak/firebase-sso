@@ -66,7 +66,7 @@ class Scripts_Model extends Base_Model {
 				}
 			}
 
-			$tag = sprintf( '<script %s %s src="%s"></script>', $module_attribute, $strategy_attributes, $src );
+			$tag = sprintf( '<script %s %s src="%s"></script>', $module_attribute, $strategy_attributes, $src ); // phpcs:ignore
 		}
 
 		return $tag;

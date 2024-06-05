@@ -15,13 +15,13 @@ class Firebase_EmailPass_Auth {
 	/**
 	 * Sign-in Method.
 	 *
-	 * @param $email_address
-	 * @param $password
+	 * @param string $email_address
+	 * @param string $password
 	 * @since 1.0.0
 	 *
 	 * @return array JSON
 	 */
-	public function signin_from_email_password( $email_address, $password ) : array {
+	public function signin_from_email_password( string $email_address, string $password ) : array {
 		$data = array(
 			'email'             => $email_address,
 			'password'          => $password,
@@ -34,13 +34,13 @@ class Firebase_EmailPass_Auth {
 	/**
 	 * Sign-up method.
 	 *
-	 * @param $email_address
-	 * @param $password
+	 * @param string $email_address
+	 * @param strin $password
 	 * @since 1.0.0
 	 *
 	 * @return array
 	 */
-	public function signup_from_email_password( $email_address, $password ) : array {
+	public function signup_from_email_password( string $email_address, string $password ) : array {
 		$data = array(
 			'email'             => $email_address,
 			'password'          => $password,
@@ -53,13 +53,13 @@ class Firebase_EmailPass_Auth {
 	/**
 	 * Fetch providers from User's email.
 	 *
-	 * @param $email_address
-	 * @param $continue_uri
+	 * @param string $email_address
+	 * @param string $continue_uri
 	 * @since 1.0.0
 	 *
 	 * @return array
 	 */
-	public function get_providers_from_email( $email_address, $continue_uri ) : array {
+	public function get_providers_from_email( string $email_address, string $continue_uri ) : array {
 		$data = array(
 			'identifier'  => $email_address,
 			'continueUri' => $continue_uri,
@@ -71,13 +71,13 @@ class Firebase_EmailPass_Auth {
 	/**
 	 * Perform HTTP Request from Firebase.
 	 *
-	 * @param $auth
+	 * @param string $auth
 	 * @param array $data
 	 * @since 1.0.0
 	 *
 	 * @return array JSON
 	 */
-	protected function handle_request( $auth, $data = array() ) : array {
+	protected function handle_request( string $auth, array $data = array() ) : array {
 		$args = array(
 			'method'    => 'POST',
 			'headers'   => array( 'Content-Type' => 'application/json' ),

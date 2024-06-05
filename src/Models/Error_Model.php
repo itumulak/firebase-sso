@@ -1,9 +1,17 @@
 <?php
+/**
+ * Error model class.
+ *
+ * @package firebase-sso
+ */
 
 namespace Itumulak\WpSsoFirebase\Models;
 
 use WP_Error;
 
+/**
+ * Error_Model
+ */
 class Error_Model {
 
 	const LOGIN_FAILED   = 'login_failed';
@@ -14,6 +22,11 @@ class Error_Model {
 	private WP_Error $wp_errors;
 	private array $error_data;
 
+	/**
+	 * __construct
+	 *
+	 * @return void
+	 */
 	public function __construct() {
 		$this->wp_errors = new WP_Error();
 
@@ -41,6 +54,13 @@ class Error_Model {
 		);
 	}
 
+	/**
+	 * Add an error message.
+	 *
+	 * @param  string $key
+	 * @param  string $message
+	 * @return void
+	 */
 	public function add( string $key, string $message = '' ): void {
 		if ( ! $message && isset( $this->error_data[ $key ] ) ) {
 			$message = $this->get_message( $key );
@@ -49,18 +69,39 @@ class Error_Model {
 		$this->wp_errors->add( $key, $message );
 	}
 
+	/**
+	 * Return an error message.
+	 *
+	 * @param  string $key
+	 * @return string
+	 */
 	public function get_message( string $key ): string {
 		return $this->error_data[ $key ]['message'];
 	}
 
+	/**
+	 * Return the wp errors.
+	 *
+	 * @return WP_Error
+	 */
 	public function get_errors(): WP_Error {
 		return $this->wp_errors;
 	}
 
+	/**
+	 * Return the error messages.
+	 *
+	 * @return array
+	 */
 	public function get_error_messages(): array {
 		return $this->wp_errors->get_error_messages();
 	}
 
+	/**
+	 * Return the error codes.
+	 *
+	 * @return array
+	 */
 	public function get_error_codes(): array {
 		return $this->wp_errors->get_error_codes();
 	}

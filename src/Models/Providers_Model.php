@@ -1,14 +1,27 @@
 <?php
+/**
+ * Providers model.
+ *
+ * @package firebase-sso
+ */
 namespace Itumulak\WpSsoFirebase\Models;
 
 use Itumulak\WpSsoFirebase\Models\Interface\Data_Management_Interface;
 
+/**
+ * Providers_Model
+ */
 class Providers_Model implements Data_Management_Interface {
 	private array $providers;
 	const PROVIDER_FACEBOOK = 'facebook';
 	const PROVIDER_GOOGLE   = 'google';
 	const OPTION_KEY_NAME   = 'wp_firebase_signin_providers';
 
+	/**
+	 * __construct
+	 *
+	 * @return void
+	 */
 	public function __construct() {
 		$this->providers = array(
 			self::PROVIDER_GOOGLE   => false,
@@ -16,6 +29,11 @@ class Providers_Model implements Data_Management_Interface {
 		);
 	}
 
+	/**
+	 * Return the available providers.
+	 *
+	 * @return array
+	 */
 	public function get_providers() : array {
 		return $this->providers;
 	}
@@ -23,10 +41,10 @@ class Providers_Model implements Data_Management_Interface {
 	/**
 	 * Retrieve a specific configuration value in the database.
 	 *
-	 * @param [type] $key
+	 * @param string $key
 	 * @return string|boolean|array
 	 */
-	public function get( $key ) : string|bool|array {
+	public function get( string $key ) : string|bool|array {
 		return $this->get_all()[ $key ];
 	}
 
@@ -36,7 +54,7 @@ class Providers_Model implements Data_Management_Interface {
 	 * @return array
 	 */
 	public function get_all() : array {
-		 return wp_parse_args( get_option( self::OPTION_KEY_NAME ), $this->providers );
+		return wp_parse_args( get_option( self::OPTION_KEY_NAME ), $this->providers );
 	}
 
 	/**
@@ -55,11 +73,18 @@ class Providers_Model implements Data_Management_Interface {
 		return update_option( self::OPTION_KEY_NAME, $this->providers );
 	}
 
-	public function is_uid_available( string $id, $provider ) : bool {
+	/**
+	 * Check if uid is still available.
+	 *
+	 * @param  string $id
+	 * @param  string $provider
+	 * @return bool
+	 */
+	public function is_uid_available( string $id, string $provider ) : bool {
 		global $wpdb;
 
 		$meta_key            = $this->get_provider_meta_key( $provider );
-		$uid_used_by_user_id = $wpdb->get_var( $wpdb->prepare( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = %s AND meta_value = %d", esc_attr( $meta_key ), esc_attr( $id ) ) );
+		$uid_used_by_user_id = $wpdb->get_var( $wpdb->prepare( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = %s AND meta_value = %d", esc_attr( $meta_key ), esc_attr( $id ) ) ); // db call ok. no-cache ok.
 
 		if ( $uid_used_by_user_id ) {
 			return false;
@@ -68,18 +93,46 @@ class Providers_Model implements Data_Management_Interface {
 		return true;
 	}
 
-	public function get_provider_meta( int $user_id, $provider ) : mixed {
+	/**
+	 * Get the user's provider uid.
+	 *
+	 * @param  int    $user_id
+	 * @param  string $provider
+	 * @return mixed
+	 */
+	public function get_provider_meta( int $user_id, string $provider ) : mixed {
 		return get_user_meta( $user_id, $this->get_provider_meta_key( $provider ), true );
 	}
 
+	/**
+	 * Save the user's provider uid.
+	 *
+	 * @param  int    $user_id
+	 * @param  string $uid
+	 * @param  string $provider
+	 * @return int|bool
+	 */
 	public function save_provider_meta( int $user_id, string $uid, string $provider ) : int|bool {
 		return update_user_meta( $user_id, $this->get_provider_meta_key( $provider ), $uid );
 	}
 
+	/**
+	 * Delete the user's provider uid.
+	 *
+	 * @param  int    $user_id
+	 * @param  string $provider
+	 * @return int|bool
+	 */
 	public function delete_provider_meta( int $user_id, string $provider ) : int|bool {
 		return delete_user_meta( $user_id, $this->get_provider_meta_key( $provider ) );
 	}
 
+	/**
+	 * Get the provider's meta key.
+	 *
+	 * @param  string $provider
+	 * @return string
+	 */
 	private function get_provider_meta_key( string $provider ) : string {
 		return sprintf( 'firebase_%s_uid', $provider );
 	}

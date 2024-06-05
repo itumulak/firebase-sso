@@ -1,8 +1,17 @@
 <?php
+/**
+ * WordPress user profile class.
+ *
+ * @package firebase-sso
+ */
+
 namespace Itumulak\WpSsoFirebase\Models;
 
 use WP_Error;
 
+/**
+ * UserProfileWP_Model
+ */
 class UserProfileWP_Model extends Base_Model {
 	private Error_Model $error_model;
 	private string $handle;
@@ -12,7 +21,11 @@ class UserProfileWP_Model extends Base_Model {
 	const AJAX_HANDLE        = 'firebase_link_provider';
 	const AJAX_UNLINK_HANDLE = 'firebase_unlink_provider';
 
-
+	/**
+	 * Initialize variables.
+	 *
+	 * @return void
+	 */
 	public function __construct() {
 		$this->configs        = new Configuration_Model();
 		$this->handle         = 'wp_firebase_profile';
@@ -21,14 +34,29 @@ class UserProfileWP_Model extends Base_Model {
 		$this->error_model    = new Error_Model();
 	}
 
-	public function get_handle() {
+	/**
+	 * Return the name of the script to handle.
+	 *
+	 * @return string
+	 */
+	public function get_handle() : string {
 		return $this->handle;
 	}
 
-	public function get_handle_object() {
+	/**
+	 * Return the script's object name.
+	 *
+	 * @return string
+	 */
+	public function get_handle_object() : string {
 		return $this->handle_object;
 	}
 
+	/**
+	 * Return the script's object data.
+	 *
+	 * @return array
+	 */
 	public function get_object_data() : array {
 		return array(
 			'ajaxurl'       => admin_url( 'admin-ajax.php' ),
@@ -41,6 +69,14 @@ class UserProfileWP_Model extends Base_Model {
 		);
 	}
 
+	/**
+	 * Verify UID and its associated provider to be available.
+	 * Throw an error message if the UID is already in use by another wp account.
+	 *
+	 * @param  string $uid
+	 * @param  string $provider
+	 * @return bool|WP_Error
+	 */
 	public function check_uid_availability( string $uid, $provider ) : bool|WP_Error {
 		if ( $this->provider_model->is_uid_available( $uid, $provider ) ) {
 			return true;
@@ -51,6 +87,14 @@ class UserProfileWP_Model extends Base_Model {
 		return $this->error_model->get_errors();
 	}
 
+	/**
+	 * Link the provider to the wp account.
+	 *
+	 * @param  int    $user_id
+	 * @param  string $uid
+	 * @param  string $provider
+	 * @return bool|WP_Error
+	 */
 	public function link_provider( int $user_id, string $uid, string $provider ) : bool|Error_Model {
 		$linked_status = $this->provider_model->save_provider_meta( $user_id, $uid, $provider );
 
@@ -63,6 +107,13 @@ class UserProfileWP_Model extends Base_Model {
 		return $this->error_model->get_errors();
 	}
 
+	/**
+	 * Unlink the provider to the wp account.
+	 *
+	 * @param  int    $user_id
+	 * @param  string $provider
+	 * @return bool|WP_Error
+	 */
 	public function unlink_provider( int $user_id, string $provider ) : bool|WP_Error {
 		$unlink_status = $this->provider_model->delete_provider_meta( $user_id, $provider );
 
@@ -75,6 +126,12 @@ class UserProfileWP_Model extends Base_Model {
 		return $this->error_model->get_errors();
 	}
 
+	/**
+	 * Return the linked providers for this wp account.
+	 *
+	 * @param  int $user_id
+	 * @return array
+	 */
 	public function get_linked_providers( int $user_id ) : array {
 		$active_providers = $this->provider_model->get_all();
 		$linked_providers = $this->provider_model->get_providers();

@@ -1,12 +1,26 @@
 <?php
+/**
+ * Configuration model class.
+ *
+ * @package firebase-sso
+ */
+
 namespace Itumulak\WpSsoFirebase\Models;
 
 use Itumulak\WpSsoFirebase\Models\Interface\Data_Management_Interface;
 
+/**
+ * Configuration_Model
+ */
 class Configuration_Model implements Data_Management_Interface {
 	private array $data;
 	const OPTION_KEY_NAME = 'wp_firebase_config';
-
+	
+	/**
+	 * __construct
+	 *
+	 * @return void
+	 */
 	public function __construct() {
 		$this->data = array(
 			'apiKey'     => '',
@@ -17,10 +31,10 @@ class Configuration_Model implements Data_Management_Interface {
 	/**
 	 * Retrieve a specific configuration value in the database.
 	 *
-	 * @param [type] $key
+	 * @param string $key
 	 * @return string|boolean|array
 	 */
-	public function get( $key ) : string|bool|array {
+	public function get( string $key ) : string|bool|array {
 		return $this->get_all()[ $key ];
 	}
 

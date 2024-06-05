@@ -1,9 +1,19 @@
-<?php namespace Itumulak\WpSsoFirebase\Models;
+<?php
+/**
+ * Base model class.
+ *
+ * @package firebase-sso
+ */
+
+namespace Itumulak\WpSsoFirebase\Models;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
+/**
+ * Base_Model
+ */
 class Base_Model {
 	/**
 	 * Default Firebase slugs for WordPress.
@@ -101,7 +111,7 @@ class Base_Model {
 	 * @return boolean
 	 * @since 1.0.0
 	 */
-	public function verify_nonce( $nonce, $action ): bool {
+	public function verify_nonce( string $nonce, string $action ): bool {
 		if ( ! wp_verify_nonce( $nonce, $action ) ) {
 			return false;
 		}

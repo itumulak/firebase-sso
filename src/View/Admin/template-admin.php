@@ -2,8 +2,8 @@
 /**
  * Output the Admin page.
  *
- * @type template
  * @since 1.0.0
+ * @package firebase-sso
  */
 
 $admin = $args['admin_model'];
@@ -12,7 +12,7 @@ $admin = $args['admin_model'];
 // @todo Implement Material 3?
 
 ?>
- <div class="wrap">
+<div class="wrap">
 	<!-- Print the page title -->
 	<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 	<!-- Here are our tabs -->
@@ -24,13 +24,15 @@ $admin = $args['admin_model'];
 		<div id="sign-in-providers-tab" class="group">
 			<div id="sign-in-providers-list">
 				<?php
-				echo $admin->get_template(
-					'Admin',
-					'template-providers',
-					array(
-						'providers'   => $admin->get_providers(),
-						'admin_model' => $admin,
-						'plugin_url'  => $admin->get_plugin_url(),
+				echo esc_html(
+					$admin->get_template(
+						'Admin',
+						'template-providers',
+						array(
+							'providers'   => $admin->get_providers(),
+							'admin_model' => $admin,
+							'plugin_url'  => $admin->get_plugin_url(),
+						)
 					)
 				);
 				?>
@@ -39,12 +41,14 @@ $admin = $args['admin_model'];
 		<div id="configurations-tab" class="group">
 			<div id="config-textarea-wrapper">
 				<?php
-				echo $admin->get_template(
-					'Admin',
-					'template-configuration',
-					array(
-						'config'      => $admin->get_config(),
-						'admin_model' => $admin,
+				echo esc_html(
+					$admin->get_template(
+						'Admin',
+						'template-configuration',
+						array(
+							'config'      => $admin->get_config(),
+							'admin_model' => $admin,
+						)
 					)
 				);
 				?>

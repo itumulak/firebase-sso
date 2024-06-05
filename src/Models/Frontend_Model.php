@@ -1,8 +1,17 @@
 <?php
+/**
+ * Frontend model class.
+ *
+ * @package firebase-sso
+ */
+
 namespace Itumulak\WpSsoFirebase\Models;
 
 use WP_Error;
 
+/**
+ * Frontend_Model
+ */
 class Frontend_Model extends Base_Model {
 	private Providers_Model $provider_model;
 	private Error_Model $error_model;
@@ -65,6 +74,15 @@ class Frontend_Model extends Base_Model {
 		return $this->get_plugin_url() . 'src/View/Frontend/assets/';
 	}
 
+	/**
+	 * Process the user to login to its provider.
+	 * First time login with no existing account will be created and link the provider.
+	 *
+	 * @param  string $email
+	 * @param  string $uid
+	 * @param  string $provider
+	 * @return bool|WP_Error
+	 */
 	public function process_user( string $email, string $uid, string $provider ) : bool|Error_Model {
 		if ( email_exists( $email ) ) {
 			if ( $this->login_user( $email ) ) {
@@ -130,6 +148,12 @@ class Frontend_Model extends Base_Model {
 		return false;
 	}
 
+	/**
+	 * Validate email.
+	 *
+	 * @param  string $email
+	 * @return bool
+	 */
 	protected function is_valid_email( string $email ) : bool {
 		if ( ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
 			return false;
@@ -153,7 +177,13 @@ class Frontend_Model extends Base_Model {
 		return true;
 	}
 
-	protected function generate_username( string $suggested_username ) {
+	/**
+	 * Generate a username for new account.
+	 *
+	 * @param  string $suggested_username
+	 * @return string
+	 */
+	protected function generate_username( string $suggested_username ) : string {
 		$suggested_username = preg_replace( '/[^a-z0-9]/i', '', $suggested_username );
 
 		if ( ! username_exists( $suggested_username ) ) {
@@ -165,6 +195,12 @@ class Frontend_Model extends Base_Model {
 		return $this->generate_username( $suggested_username );
 	}
 
+	/**
+	 * Generate a random alphanumeric string to be used a prepend for existing email.
+	 *
+	 * @param  int $length
+	 * @return string
+	 */
 	protected function random_alphanumeric( int $length = 5 ) : string {
 		$chars     = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345689';
 		$my_string = '';

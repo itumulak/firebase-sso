@@ -1,8 +1,17 @@
 <?php
+/**
+ * Admin model class.
+ *
+ * @package firebase-sso
+ */
+
 namespace Itumulak\WpSsoFirebase\Models;
 
 use Itumulak\WpSsoFirebase\Models\Providers_Model;
 
+/**
+ * Admin_Model
+ */
 class Admin_Model extends Base_Model {
 	private array $configuration_data;
 	private array $providers_data;

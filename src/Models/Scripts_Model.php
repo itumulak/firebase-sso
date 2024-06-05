@@ -1,19 +1,29 @@
 <?php
+/**
+ * Script model class.
+ *
+ * @package firebase-sso
+ */
 namespace Itumulak\WpSsoFirebase\Models;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-// TODO: Implement Script Module.
-	// Drawback: Script Module does not support Localize Script.
-	// Bug: Script Module cannot be registered in wp admin. Fix in v6.6.
+/**
+ * Scripts_Model
+ */
 class Scripts_Model extends Base_Model {
 	private array $js_handles;
 	private array $js_localization;
 	private array $wpjs_strategies;
 	private string $current_js_handler;
 
+	/**
+	 * __construct
+	 *
+	 * @return void
+	 */
 	public function __construct() {
 		$this->wpjs_strategies = array(
 			'in_footer' => true,
@@ -22,6 +32,11 @@ class Scripts_Model extends Base_Model {
 		);
 	}
 
+	/**
+	 * Enqueue registered scripts.
+	 *
+	 * @return void
+	 */
 	public function enqueue_all() : void {
 		if ( $this->js_handles ) {
 			foreach ( $this->js_handles as $js ) {
@@ -30,6 +45,17 @@ class Scripts_Model extends Base_Model {
 		}
 	}
 
+	/**
+	 * Register a JavaScript.
+	 * Accepts the same parameter as `wp_enqueue_script`.
+	 *
+	 * @param  string          $handle
+	 * @param  string          $src
+	 * @param  array           $deps
+	 * @param  array|bool      $strategy
+	 * @param  string|int|null $version
+	 * @return void
+	 */
 	public function register( string $handle, string $src, array $deps = array(), array|bool $strategy = array(), string|int|null $version = null ) : void {
 		if ( is_bool( $strategy ) ) {
 			$strategy = wp_parse_args( array( 'in_footer' => (bool) $strategy ), $this->wpjs_strategies );
@@ -44,6 +70,15 @@ class Scripts_Model extends Base_Model {
 		);
 	}
 
+	/**
+	 * Register localized script.
+	 * Accepts the same parameter as `wp_localize_script`.
+	 *
+	 * @param  string $handle
+	 * @param  string $object_name
+	 * @param  array  $data
+	 * @return void
+	 */
 	public function register_localization( string $handle, string $object_name, array $data ) : void {
 		$this->js_localization[ $handle ] = array(
 			'handle' => $handle,
@@ -52,7 +87,15 @@ class Scripts_Model extends Base_Model {
 		);
 	}
 
-	public function add_attributes( $tag, $handle, $src ) {
+	/**
+	 * Override the script loader tag to include a module attribute.
+	 *
+	 * @param  string $tag
+	 * @param  string $handle
+	 * @param  string $src
+	 * @return string
+	 */
+	public function add_attributes( string $tag, string $handle, string $src ) : string {
 		if ( $this->current_js_handler === $handle ) {
 			$strategy_attributes = '';
 			$module_attribute    = '';
@@ -72,6 +115,12 @@ class Scripts_Model extends Base_Model {
 		return $tag;
 	}
 
+	/**
+	 * Enqueue a js file.
+	 *
+	 * @param  mixed $js
+	 * @return void
+	 */
 	private function enqueue( $js ) {
 		$this->current_js_handler = $js['handle'];
 

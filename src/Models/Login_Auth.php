@@ -1,6 +1,15 @@
 <?php
+/**
+ * Login Auth class.
+ *
+ * @package firebase-sso
+ */
+
 namespace Itumulak\WpSsoFirebase\Models;
 
+/**
+ * Login_Auth
+ */
 class Login_Auth extends Base_Model {
 	/**
 	 * Set cookie logout.

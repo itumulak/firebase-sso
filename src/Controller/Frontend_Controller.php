@@ -1,12 +1,21 @@
 <?php
+/**
+ * Frontend class controller.
+ *
+ * @package firebase-sso
+ */
+
 namespace Itumulak\WpSsoFirebase\Controller;
 
 use Itumulak\WpSsoFirebase\Models\Admin_Model;
 use Itumulak\WpSsoFirebase\Models\Frontend_Model;
 use Itumulak\WpSsoFirebase\Models\Providers_Model;
 use Itumulak\WpSsoFirebase\Models\Scripts_Model;
-use WP_User;
+use WP_Error;
 
+/**
+ * Frontend_Controller
+ */
 class Frontend_Controller extends Base_Controller {
 	const FIREBASE_GOOGLE_AJAX_HOOK   = 'firebase_google_login';
 	const FIREBASE_FACEBOOK_AJAX_HOOK = 'firebase_facebook_login';
@@ -82,7 +91,7 @@ class Frontend_Controller extends Base_Controller {
 	 * @return string
 	 * @since 1.0.0
 	 */
-	public function signin_auth_buttons( $message ): string {
+	public function signin_auth_buttons( string $message ): string {
 		$config = $this->admin_model->get_providers();
 
 		if ( $config['google']['is_active'] ) {
@@ -120,13 +129,13 @@ class Frontend_Controller extends Base_Controller {
 	 *
 	 * @use Hook/Filter
 	 *
-	 * @param $errors
-	 * @param $redirect_to
+	 * @param WP_Error $errors
+	 * @param string   $redirect_to
 	 *
 	 * @return mixed
 	 * @since 1.0.0
 	 */
-	public function modify_incorrect_password( $errors, $redirect_to ) : mixed {
+	public function modify_incorrect_password( WP_Error $errors, string $redirect_to ) : mixed {
 		if ( isset( $errors->errors['incorrect_password'] ) ) {
 			$tmp = $errors->errors;
 
@@ -142,10 +151,6 @@ class Frontend_Controller extends Base_Controller {
 		return $errors;
 	}
 
-	public function email_pass_firebase_auth( $user, $email_address, $password ) : false|WP_User {
-		return $user;
-	}
-
 	/**
 	 * Return the Firebase configs AJAX callback.
 	 *
@@ -159,37 +164,49 @@ class Frontend_Controller extends Base_Controller {
 				'providers' => $this->frontend_model->get_enabled_providers(),
 			)
 		);
+
 		wp_die();
 	}
 
+	/**
+	 * AJAX callback for logging in with firebase provider.
+	 *
+	 * @return void
+	 */
 	public function firebase_login_callback() : void {
+		$post = wp_unslash( $_POST );
+
 		if (
-			isset( $_POST ) &&
-			isset( $_POST['nonce'] ) &&
-			$this->frontend_model->verify_nonce( $_POST['nonce'], $this->frontend_model::AJAX_NONCE )
+			! isset( $post['email'] ) ||
+			! isset( $post['provider'] ) ||
+			! isset( $post['uid'] ) ||
+			! isset( $post['nonce'] ) ||
+			! wp_verify_nonce( $post['nonce'], $this->frontend_model::AJAX_NONCE )
 		) {
-			$email    = esc_attr( $_POST['email'] );
-			$provider = esc_attr( $_POST['provider'] );
-			$uid      = esc_attr( $_POST['uid'] );
+			wp_die();
+		}
 
-			$prosessed_user = $this->frontend_model->process_user( $email, $uid, $provider );
+		$email    = esc_attr( $post['email'] );
+		$provider = esc_attr( $post['provider'] );
+		$uid      = esc_attr( $post['uid'] );
 
-			if ( is_bool( $prosessed_user ) && $prosessed_user === true ) {
-				wp_send_json_success(
-					array(
-						'login' => true,
-						'meta'  => $this->provider_model->save_provider_meta( get_current_user_id(), $uid, $provider ),
-						'url'   => get_home_url(),
-					)
-				);
-			} elseif ( is_wp_error( $prosessed_user ) ) {
-				wp_send_json_error(
-					array(
-						'error_messages' => $prosessed_user->get_error_messages(),
-						'error_codes'    => $prosessed_user->get_error_codes(),
-					)
-				);
-			}
+		$prosessed_user = $this->frontend_model->process_user( $email, $uid, $provider );
+
+		if ( is_bool( $prosessed_user ) && true === $prosessed_user ) {
+			wp_send_json_success(
+				array(
+					'login' => true,
+					'meta'  => $this->provider_model->save_provider_meta( get_current_user_id(), $uid, $provider ),
+					'url'   => get_home_url(),
+				)
+			);
+		} elseif ( is_wp_error( $prosessed_user ) ) {
+			wp_send_json_error(
+				array(
+					'error_messages' => $prosessed_user->get_error_messages(),
+					'error_codes'    => $prosessed_user->get_error_codes(),
+				)
+			);
 		}
 
 		wp_die();

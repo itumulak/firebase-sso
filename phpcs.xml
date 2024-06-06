@@ -39,7 +39,8 @@
 		<exclude name="WordPress.Security.EscapeOutput"/>
 		-->
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
-	        <exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+		<exclude name="WordPress.NamingConventions.PrefixAllGlobals" />
 	</rule>
 
 	<!-- Let's also check that everything is properly documented. -->
@@ -78,14 +79,6 @@
 		<properties>
 			<property name="text_domain" type="array">
 				<element value="firebase-sso"/>				
-			</property>
-		</properties>
-	</rule>
-
-	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
-		<properties>
-			<property name="prefixes" type="array">
-				<element value="Itumulak"/>
 			</property>
 		</properties>
 	</rule>

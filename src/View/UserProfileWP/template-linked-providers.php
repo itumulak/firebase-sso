@@ -12,7 +12,7 @@ $user_profile_model = $args['model'];
 $linked             = $args['linked'];
 ?>
 <div class="providers">
-	<h3 class="providers__headline"><?php esc_html_e( 'Linked Providers' ); ?></h3>
+	<h3 class="providers__headline"><?php esc_html_e( 'Linked Providers', 'firebase-sso' ); ?></h3>
 	<div class="providers__list">
 	<?php foreach ( $providers as $provider => $set ) : ?>
 		<button

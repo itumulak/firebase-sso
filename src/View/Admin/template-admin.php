@@ -8,8 +8,8 @@
 
 $admin = $args['admin_model'];
 
-// @todo Fix tab styling in mobile view.
-// @todo Implement Material 3?
+// @todo Fix tab styling in mobile view. phpcs:ignore.
+// @todo Implement Material 3? phpcs:ignore.
 
 ?>
 <div class="wrap">
@@ -17,8 +17,8 @@ $admin = $args['admin_model'];
 	<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 	<!-- Here are our tabs -->
 	<h2 class="nav-tab-wrapper hide-if-js" style="display: block;">
-		<a class="nav-tab" href="#configurations" id="configurations" title="<?php esc_attr__( 'Configuration', 'sso-firebase' ); ?>"><?php esc_html_e( 'Configuration', 'sso-firebase' ); ?></a>
-		<a class="nav-tab" href="#sign-in-providers" id="sign-in-providers" title="<?php esc_attr__( 'Sign-in Providers', 'sso-firebase' ); ?>"><?php esc_html_e( 'Sign-in providers', 'sso-firebase' ); ?></a>
+		<a class="nav-tab" href="#configurations" id="configurations" title="<?php esc_attr__( 'Configuration', 'firebase-sso' ); ?>"><?php esc_html_e( 'Configuration', 'firebase-sso' ); ?></a>
+		<a class="nav-tab" href="#sign-in-providers" id="sign-in-providers" title="<?php esc_attr__( 'Sign-in Providers', 'firebase-sso' ); ?>"><?php esc_html_e( 'Sign-in providers', 'firebase-sso' ); ?></a>
 	</h2>
 	<div class="tabs-holder">
 		<div id="sign-in-providers-tab" class="group">

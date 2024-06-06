@@ -24,5 +24,5 @@ $admin             = $args['admin_model'];
 		</div>
 	</div>
 	<?php } ?>
-	<button type="submit" class="button button-primary"><?php esc_html_e( 'Save' ); ?></button>
+	<button type="submit" class="button button-primary"><?php esc_html_e( 'Save', 'firebase-sso' ); ?></button>
 </form>

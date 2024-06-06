@@ -1,0 +1,23 @@
+@import '../../../Frontend/assets/styles/login.scss';
+
+.btn {
+    &-facebook {
+        img {
+            height: 28px;
+        }
+    }
+}
+
+.providers {
+    &__list {
+        margin: auto;
+        
+        @media screen and (min-width: 768px) {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 1rem;
+            row-gap: 0.5rem;
+            width: 50vw;
+        }
+    }
+}

@@ -1,13 +1,46 @@
 <?php
+/**
+ * Admin model class.
+ *
+ * @package firebase-sso
+ */
+
 namespace Itumulak\WpSsoFirebase\Models;
 
 use Itumulak\WpSsoFirebase\Models\Providers_Model;
 
+/**
+ * Admin_Model
+ */
 class Admin_Model extends Base_Model {
+	/**
+	 * Holds the API and authorize domain data from firebase.
+	 *
+	 * @var array
+	 */
 	private array $configuration_data;
+
+	/**
+	 * Holds the available the supported firebase providers.
+	 *
+	 * @var array
+	 */
 	private array $providers_data;
+
+	/**
+	 * Holds the configuration model class.
+	 *
+	 * @var Configuration_Model
+	 */
 	private Configuration_Model $configuration_model;
+
+	/**
+	 * Holds the providers model class.
+	 *
+	 * @var Providers_Model
+	 */
 	private Providers_Model $providers_model;
+
 	const PROVIDER_ACTION = 'provider_action';
 	const CONFIG_ACTION   = 'config_action';
 
@@ -33,22 +66,16 @@ class Admin_Model extends Base_Model {
 		);
 
 		$this->providers_data = array(
-			$this->providers_model::PROVIDER_EMAILPASS => array(
-				'id'        => $this->providers_model::PROVIDER_EMAILPASS,
-				'icon'      => $this->get_plugin_url() . 'src/View/Admin/assets/images/mail-logo.svg',
-				'label'     => __( 'Email/Password' ),
-				'is_active' => false,
-			),
-			$this->providers_model::PROVIDER_GOOGLE    => array(
+			$this->providers_model::PROVIDER_GOOGLE   => array(
 				'id'        => $this->providers_model::PROVIDER_GOOGLE,
-				'icon'      => $this->get_plugin_url() . 'src/View/Admin/assets/images/google-logo.svg',
-				'label'     => __( 'Google' ),
+				'icon'      => esc_url( $this->get_plugin_url() . 'src/View/Admin/assets/images/google-logo.svg' ),
+				'label'     => __( 'Google', 'firebase-sso' ),
 				'is_active' => false,
 			),
-			$this->providers_model::PROVIDER_FACEBOOK  => array(
+			$this->providers_model::PROVIDER_FACEBOOK => array(
 				'id'        => $this->providers_model::PROVIDER_FACEBOOK,
-				'icon'      => $this->get_plugin_url() . 'src/View/Admin/assets/images/facebook-logo.svg',
-				'label'     => __( 'Facebook' ),
+				'icon'      => esc_url( $this->get_plugin_url() . 'src/View/Admin/assets/images/facebook-logo.svg' ),
+				'label'     => __( 'Facebook', 'firebase-sso' ),
 				'is_active' => false,
 			),
 		);
@@ -57,13 +84,13 @@ class Admin_Model extends Base_Model {
 	/**
 	 * Save Firebase Config
 	 *
-	 * @param array $configuration_data
+	 * @param array $configuration_data Configuration data.
 	 * @return bool
 	 *
 	 * @since 1.0.0
 	 */
-	public function save_config( array $data ): bool {
-		return $this->configuration_model->save( $data );
+	public function save_config( array $configuration_data ): bool {
+		return $this->configuration_model->save( $configuration_data );
 	}
 
 	/**
@@ -101,7 +128,7 @@ class Admin_Model extends Base_Model {
 	/**
 	 * Save Firebase Sign-in Providers
 	 *
-	 * @param array $data
+	 * @param array $data Data providers.
 	 * @return bool
 	 *
 	 * @since 1.0.0
@@ -111,7 +138,7 @@ class Admin_Model extends Base_Model {
 	}
 
 	/**
-	 * Return an imitating "•" to prevent revealing sensitive datum.
+	 * Return an imitating "•" for extra security.
 	 *
 	 * @return string
 	 */

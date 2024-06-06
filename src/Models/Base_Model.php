@@ -1,9 +1,19 @@
-<?php namespace Itumulak\WpSsoFirebase\Models;
+<?php
+/**
+ * Base model class.
+ *
+ * @package firebase-sso
+ */
+
+namespace Itumulak\WpSsoFirebase\Models;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
+/**
+ * Base_Model
+ */
 class Base_Model {
 	/**
 	 * Default Firebase slugs for WordPress.
@@ -81,27 +91,27 @@ class Base_Model {
 	/**
 	 * Load our admin template parts.
 	 *
-	 * @param string $path
-	 * @param string $slugfile_name
-	 * @param array $args
-	 * @param bool $require_once
+	 * @param string $path Path.
+	 * @param string $file_name File name.
+	 * @param array  $args Pass additional data as argument.
+	 * @param bool   $require_once Load the file as required once or not.
 	 *
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function get_template(string $path, string $file_name, array $args = array(), bool $require_once = false ) {
+	public function get_template( string $path, string $file_name, array $args = array(), bool $require_once = false ) {
 		load_template( $this->get_plugin_dir() . "src/View/{$path}/{$file_name}.php", $require_once, $args );
 	}
 
 	/**
 	 * Verify our AJAX nonce.
 	 *
-	 * @param string $nonce
-	 * @param string $action
+	 * @param string $nonce Unique nonce key.
+	 * @param string $action The action handler to associate to the nonce variable.
 	 * @return boolean
 	 * @since 1.0.0
 	 */
-	public function verify_nonce( $nonce, $action ): bool {
+	public function verify_nonce( string $nonce, string $action ): bool {
 		if ( ! wp_verify_nonce( $nonce, $action ) ) {
 			return false;
 		}

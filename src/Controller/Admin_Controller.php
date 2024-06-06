@@ -1,4 +1,10 @@
-<?php 
+<?php
+/**
+ * Admin class controller.
+ *
+ * @package firebase-sso
+ */
+
 namespace Itumulak\WpSsoFirebase\Controller;
 
 use Itumulak\WpSsoFirebase\Models\Admin_Model;
@@ -7,12 +13,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
+/**
+ * Admin_Controller
+ */
 class Admin_Controller {
-    private Admin_Model $admin_model;
-    const SAVE_CONFIG_FUNC    = 'save_config_callback';
+	/**
+	 * Holds admin model class.
+	 *
+	 * @var Admin_Model
+	 */
+	private Admin_Model $admin_model;
+	const SAVE_CONFIG_FUNC    = 'save_config_callback';
 	const SAVE_PROVIDERS_FUNC = 'save_providers_callback';
 
-    /**
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -61,11 +75,8 @@ class Admin_Controller {
 	 */
 	public function admin_scripts() {
 		if ( isset( $_GET['page'] ) && $this->admin_model::MENU_SLUG === $_GET['page'] ) { // phpcs:ignore
-			/** Toast */
 			wp_enqueue_script( 'toast', $this->admin_model->get_plugin_url() . 'lib/toast/jquery.toast.min.js', array( 'jquery' ), '1.0.0', 'true' );
 			wp_enqueue_style( 'toast', $this->admin_model->get_plugin_url() . 'lib/toast/jquery.toast.min.css', array(), '1.0.0' );
-			/**  */
-
 			wp_enqueue_style( $this->admin_model::JS_ADMIN_HANDLE, $this->admin_model->get_plugin_url() . 'src/View/Admin/assets/styles/admin.css', array(), $this->admin_model->get_version() );
 			wp_enqueue_script( $this->admin_model::JS_ADMIN_HANDLE, $this->admin_model->get_plugin_url() . 'src/View/Admin/assets/js/admin.js', array( 'toast', 'jquery' ), $this->admin_model->get_version(), 'true' );
 			wp_localize_script(
@@ -88,10 +99,10 @@ class Admin_Controller {
 	 * @since 1.0.0
 	 */
 	public function admin_page() {
-		echo $this->admin_model->get_template( 'Admin', 'template-admin', array( 'admin_model' => $this->admin_model ) );
+		echo esc_html( $this->admin_model->get_template( 'Admin', 'template-admin', array( 'admin_model' => $this->admin_model ) ) );
 	}
 
-    /**
+	/**
 	 * Save Firebase Config.
 	 * Ajax request callback.
 	 *
@@ -106,7 +117,7 @@ class Admin_Controller {
 		$this->handle_callback( $this->admin_model->save_config( $_REQUEST ) ); // phpcs:ignore
 	}
 
-    /**
+	/**
 	 * Save Firebase Sign-in Providers
 	 * Ajax request callback
 	 *
@@ -114,12 +125,19 @@ class Admin_Controller {
 	 * @since 1.0.0
 	 */
 	public function save_providers_callback() : void {
-		if ( ! isset( $_REQUEST['nonce'] ) && ! $this->admin_model->verify_nonce( $_REQUEST['nonce'], $this->admin_model::JS_ADMIN_NONCE ) ) { // phpcs:ignore
+		$post = wp_unslash( $_POST );
+
+		if (
+			! isset( $post['enabled_providers'] ) ||
+			! isset( $post['nonce'] ) ||
+			! wp_verify_nonce( $post['nonce'], $this->admin_model::AJAX_NONCE )
+		) {
 			$this->handle_callback( false );
+			wp_die();
 		}
 
-		if ( isset( $_POST['enabled_providers'] ) ) {
-			$providers = array_map( 'sanitize_key', $_POST['enabled_providers'] ); // phpcs:ignore
+		if ( isset( $post['enabled_providers'] ) ) {
+			$providers = array_map( 'sanitize_key', $post['enabled_providers'] ); // phpcs:ignore
 			$providers = array_fill_keys( $providers, true );
 
 			$this->handle_callback( $this->admin_model->save_providers( $providers ) );
@@ -131,11 +149,11 @@ class Admin_Controller {
 	/**
 	 * Handle WordPress callbacks.
 	 *
-	 * @param Function|bool $callback
+	 * @param mixed $callback Callback function.
 	 * @return void
 	 * @since 1.0.0
 	 */
-	private function handle_callback( $callback ) : void {
+	private function handle_callback( mixed $callback ) : void {
 		if ( $callback ) {
 			wp_send_json_success();
 		} else {

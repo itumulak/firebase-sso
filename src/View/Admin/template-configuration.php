@@ -2,22 +2,22 @@
 /**
  * Displays the configuration form.
  *
- * @type template-part
  * @since 1.0.0
+ * @package firebase-sso
  */
 
 $configs = $args['config'];
 ?>
 <form id="configuration-fields">
-	<h1><?php esc_html_e( 'Firebase Configurations' ); ?></h1>
+	<h1><?php esc_html_e( 'Firebase Configurations', 'firebase-sso' ); ?></h1>
 	<p>
 	<?php
 	echo wp_sprintf(
 		'%s <a target="_blank" href="%s">%s</a> %s',
-		esc_html__( 'Get a copy, and paste your' ),
+		esc_html__( 'Get a copy, and paste your', 'firebase-sso' ),
 		esc_url( 'https://firebase.google.com/docs/web/setup?authuser=0#config-object' ),
-		esc_html__( 'Firebase config object' ),
-		esc_html__( 'found at your project settings.' ),
+		esc_html__( 'Firebase config object', 'firebase-sso' ),
+		esc_html__( 'found at your project settings.', 'firebase-sso' ),
 	);
 	?>
 	</p>
@@ -35,12 +35,11 @@ $configs = $args['config'];
 				</td>
 			</tr>
 		<?php endforeach; ?>
-
 		</tbody>
 	</table>
 	<p>
 		<button type="submit"
-				class="button button-primary"><?php esc_html_e( 'Save Config' ); ?></button>
+				class="button button-primary"><?php esc_html_e( 'Save Config', 'firebase-sso' ); ?></button>
 	</p>
 </form>
 

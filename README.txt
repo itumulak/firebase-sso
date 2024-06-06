@@ -1,6 +1,5 @@
 === Single Sign-On with Firebase ===
 Contributors: itumulak
-Donate link: https://itumulak.com
 Tags: firebase, authentication, sso, login
 Requires at least: 4.7
 Tested up to: 5.4

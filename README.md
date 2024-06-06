@@ -12,8 +12,8 @@ This plugin let's you sign-in your user with their Google or Facebook account wi
 
 ### Sign-in Options
 
-    * Google
-    * Facebook
+* Google
+* Facebook
 
 ## License
 

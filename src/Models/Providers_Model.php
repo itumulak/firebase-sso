@@ -8,6 +8,7 @@
 namespace Itumulak\WpSsoFirebase\Models;
 
 use Itumulak\WpSsoFirebase\Models\Interface\Data_Management_Interface;
+use WP_User;
 
 /**
  * Providers_Model
@@ -87,16 +88,26 @@ class Providers_Model implements Data_Management_Interface {
 	 * @return bool
 	 */
 	public function is_uid_available( string $id, string $provider ) : bool {
-		global $wpdb;
-
-		$meta_key            = $this->get_provider_meta_key( $provider );
-		$uid_used_by_user_id = $wpdb->get_var( $wpdb->prepare( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = %s AND meta_value = %d", esc_attr( $meta_key ), esc_attr( $id ) ) ); // db call ok. no-cache ok.
+		$uid_used_by_user_id = $this->get_account_uid_assoc( $id, $provider );
 
 		if ( $uid_used_by_user_id ) {
 			return false;
 		}
 
 		return true;
+	}
+
+	public function get_account_uid_assoc(string $uid, string $provider) : WP_User|false { 
+		global $wpdb;
+
+		$meta_key            = $this->get_provider_meta_key( $provider );
+		$user_id = $wpdb->get_var( $wpdb->prepare( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = %s AND meta_value = %d", esc_attr( $meta_key ), esc_attr( $uid ) ) ); // db call ok. no-cache ok.
+
+		if ( $user_id ) {
+			return get_user_by('id', $user_id);
+		} 
+
+		return false;
 	}
 
 	/**

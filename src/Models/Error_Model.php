@@ -19,6 +19,7 @@ class Error_Model {
 	const TOKEN_IN_USE   = 'token_in_use';
 	const FIREBASE_ERROR = 'firebase_error';
 	const WP_ERROR       = 'wp_error';
+	const UID_IN_USE = 'in_use';
 
 	/**
 	 * Holds the wp error class;
@@ -63,6 +64,10 @@ class Error_Model {
 				'key'     => self::WP_ERROR,
 				'message' => __( 'An error occurred. Please try again.', 'firebase-sso' ),
 			),
+			self::UID_IN_USE => array(
+				'key' => self::UID_IN_USE,
+				'message' => __('An error occured. Already linked to another account.', 'firebase-sso')
+			)
 		);
 	}
 

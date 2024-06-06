@@ -89,7 +89,7 @@ class Frontend_Controller extends Base_Controller {
 
 		$this->js->register(
 			$this->frontend_model::FIREBASE_LOGIN_HANDLE,
-			$this->frontend_model->get_asset_path_url() . 'js/firebase-auth.js',
+			$this->frontend_model->get_asset_path_url() . 'js/authentication.js',
 			array(),
 			array(
 				'is_module' => true,
@@ -204,7 +204,6 @@ class Frontend_Controller extends Base_Controller {
 		$post = wp_unslash( $_POST );
 
 		if (
-			! isset( $post['email'] ) ||
 			! isset( $post['provider'] ) ||
 			! isset( $post['uid'] ) ||
 			! isset( $post['nonce'] ) ||
@@ -213,11 +212,10 @@ class Frontend_Controller extends Base_Controller {
 			wp_die();
 		}
 
-		$email    = esc_attr( $post['email'] );
 		$provider = esc_attr( $post['provider'] );
 		$uid      = esc_attr( $post['uid'] );
 
-		$prosessed_user = $this->frontend_model->process_user( $email, $uid, $provider );
+		$prosessed_user = $this->frontend_model->process_user( $uid, $provider );
 
 		if ( is_bool( $prosessed_user ) && true === $prosessed_user ) {
 			wp_send_json_success(

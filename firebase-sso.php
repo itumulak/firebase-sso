@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name: Single Sign-On with Firebase
- * Plugin URI:
+ * Plugin URI: https://github.com/itumulak
  * Description: Utilize Firebase to sign-in to your website.
  * Version: 1.0.0
  * Author: Ian Tumulak
- * Author URI: https://itumulak.com
+ * Author URI: https://github.com/itumulak
  * License: GPLv2 or later
- * Text Domain: sso-firebase
+ * Text Domain: firebase-sso
  */
 
 use Itumulak\WpSsoFirebase\Controller\Admin_Controller;

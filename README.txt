@@ -10,17 +10,12 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-This plugin let's you sign-in your user with Firebase as the middleware for authentication. With Single sign-on technology, your user will only have to register once and manage your users credential in a single source; in the Firebase console.
+This plugin let's you sign-in your user with their Google or Facebook account with more sign-in options in future update. This plugin use firebase as middleware for sign-in authentication.
 
 = Features =
 *   **Firebase Single Sign-on Authentication**
-    a) Email/Password
+    a) Google
     b) Facebook
-    c) Google
-*   **Account Creation**
-    a) Once a WordPress user is validated and created, they are added to Firebase.
-    b) Once authenticated from Firebase, WordPress User credentials is created if it does not exist.
-
 
 == Installation ==
 

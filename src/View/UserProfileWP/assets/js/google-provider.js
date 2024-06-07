@@ -14,7 +14,7 @@ export const auth = () => {
         .then(() => {
           signIn();
         })
-        .catch((error) => {}); 
+        .catch((error) => {});
     } else {
       signIn();
     }
@@ -26,9 +26,25 @@ const signIn = async () => {
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
 
-  await signInWithPopup(auth, provider).then((result) => {
-    const user = result.user;
+  try {
+    await signInWithPopup(auth, provider).then((result) => {
+      const user = result.user;
 
-    linkCallback(firebase_sso_object.user_id, user.uid, "google");
-  });
+      linkCallback(firebase_sso_object.user_id, user.uid, "google");
+    });
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+
+    console.log(errorCode, errorMessage);
+
+    jQuery.toast({
+      heading: "Error",
+      text: "An internal error occured. Please try again or contact plugin owner.",
+      showHideTransition: "slide",
+      icon: "error",
+      position: { top: 40, right: 80 },
+      duration: 8000
+    });
+  }
 };

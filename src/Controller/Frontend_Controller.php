@@ -85,12 +85,14 @@ class Frontend_Controller extends Base_Controller {
 	 * @since 1.0.0
 	 */
 	public function scripts() : void {
+		wp_enqueue_script( 'toast', $this->admin_model->get_plugin_url() . 'lib/toast/jquery.toast.min.js', array( 'jquery' ), '1.0.0', 'true' );
+		wp_enqueue_style( 'toast', $this->admin_model->get_plugin_url() . 'lib/toast/jquery.toast.min.css', array(), '1.0.0' );
 		wp_enqueue_style( $this->frontend_model::FIREBASE_LOGIN_HANDLE, $this->frontend_model->get_asset_path_url() . 'styles/login.css', array(), $this->frontend_model->get_version() );
 
 		$this->js->register(
 			$this->frontend_model::FIREBASE_LOGIN_HANDLE,
 			$this->frontend_model->get_asset_path_url() . 'js/authentication.js',
-			array(),
+			array('toast'),
 			array(
 				'is_module' => true,
 			)

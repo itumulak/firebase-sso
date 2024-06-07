@@ -8,6 +8,7 @@
 namespace Itumulak\WpSsoFirebase\Controller;
 
 use Itumulak\WpSsoFirebase\Models\Admin_Model;
+use Itumulak\WpSsoFirebase\Models\Scripts_Model;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -23,6 +24,14 @@ class Admin_Controller {
 	 * @var Admin_Model
 	 */
 	private Admin_Model $admin_model;
+
+	/**
+	 * Holds the scripts model class.
+	 *
+	 * @var Scripts_Model;
+	 */
+	private Scripts_Model $js;
+
 	const SAVE_CONFIG_FUNC    = 'save_config_callback';
 	const SAVE_PROVIDERS_FUNC = 'save_providers_callback';
 
@@ -30,6 +39,7 @@ class Admin_Controller {
 	 * Constructor.
 	 */
 	public function __construct() {
+		$this->js = new Scripts_Model();
 		$this->admin_model = new Admin_Model();
 	}
 
@@ -78,8 +88,17 @@ class Admin_Controller {
 			wp_enqueue_script( 'toast', $this->admin_model->get_plugin_url() . 'lib/toast/jquery.toast.min.js', array( 'jquery' ), '1.0.0', 'true' );
 			wp_enqueue_style( 'toast', $this->admin_model->get_plugin_url() . 'lib/toast/jquery.toast.min.css', array(), '1.0.0' );
 			wp_enqueue_style( $this->admin_model::JS_ADMIN_HANDLE, $this->admin_model->get_plugin_url() . 'src/View/Admin/assets/styles/admin.css', array(), $this->admin_model->get_version() );
-			wp_enqueue_script( $this->admin_model::JS_ADMIN_HANDLE, $this->admin_model->get_plugin_url() . 'src/View/Admin/assets/js/admin.js', array( 'toast', 'jquery' ), $this->admin_model->get_version(), 'true' );
-			wp_localize_script(
+
+			$this->js->register(
+				$this->admin_model::JS_ADMIN_HANDLE,
+				$this->admin_model->get_plugin_url() . 'src/View/Admin/assets/js/admin.js',
+				array( 'toast', 'jquery' ),
+				array(
+					'is_module' => true,
+				)
+			);
+
+			$this->js->register_localization(
 				$this->admin_model::JS_ADMIN_HANDLE,
 				$this->admin_model::JS_ADMIN_OBJECT_NAME,
 				array(
@@ -89,6 +108,8 @@ class Admin_Controller {
 					'nonce'           => wp_create_nonce( $this->admin_model::AJAX_NONCE ),
 				)
 			);
+
+			$this->js->enqueue_all();
 		}
 	}
 
@@ -110,11 +131,21 @@ class Admin_Controller {
 	 * @since 1.0.0
 	 */
 	public function save_config_callback() : void {
-		if ( ! isset( $_REQUEST['nonce'] ) && ! $this->admin_model->verify_nonce( $_REQUEST['nonce'], $this->admin_model::JS_ADMIN_NONCE ) ) { // phpcs:ignore
+		$post = wp_unslash($_POST);
+
+		if (
+			! isset( $post['apiKey'] ) ||
+			! isset( $post['authDomain'] ) ||
+			! isset($post['nonce']) ||
+			! wp_verify_nonce( $post['nonce'], $this->admin_model::AJAX_NONCE )
+		) {
 			$this->handle_callback( false );
+			wp_die();
 		}
 
-		$this->handle_callback( $this->admin_model->save_config( $_REQUEST ) ); // phpcs:ignore
+		$this->handle_callback( $this->admin_model->save_config( $post ) ); // phpcs:ignore
+
+		wp_die();
 	}
 
 	/**

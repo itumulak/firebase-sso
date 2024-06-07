@@ -90,9 +90,22 @@ const providerLogin = async (auth, provider) => {
       // Handle Errors here.
       const errorCode = error.code;
       const errorMessage = error.message;
+      
       // The email of the user's account used.
       const email = error.email;
+      
       // The AuthCredential type that was used.
       // const credential = GoogleAuthProvider.credentialFromError(error);
+
+      console.log(errorCode, errorMessage);
+
+      jQuery.toast({
+        heading: "Error",
+        text: "An internal error occured. Please try again or contact plugin owner.",
+        showHideTransition: "slide",
+        icon: "error",
+        position: { top: 40, right: 80 },
+        duration: 8000,
+      });
     });
 };

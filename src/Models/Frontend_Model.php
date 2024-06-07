@@ -112,12 +112,10 @@ class Frontend_Model extends Base_Model {
 		if ( $user ) {
 			if ( $this->login_user( $user->user_email ) ) {
 				return true;
-			}
-			else {
+			} else {
 				$this->error_model->add( $this->error_model::LOGIN_FAILED );
 			}
-		}
-		else {
+		} else {
 			$this->error_model->add( $this->error_model::UID_IN_USE );
 		}
 

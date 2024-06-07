@@ -39,7 +39,7 @@ class Admin_Controller {
 	 * Constructor.
 	 */
 	public function __construct() {
-		$this->js = new Scripts_Model();
+		$this->js          = new Scripts_Model();
 		$this->admin_model = new Admin_Model();
 	}
 
@@ -131,12 +131,12 @@ class Admin_Controller {
 	 * @since 1.0.0
 	 */
 	public function save_config_callback() : void {
-		$post = wp_unslash($_POST);
+		$post = wp_unslash( $_POST );
 
 		if (
 			! isset( $post['apiKey'] ) ||
 			! isset( $post['authDomain'] ) ||
-			! isset($post['nonce']) ||
+			! isset( $post['nonce'] ) ||
 			! wp_verify_nonce( $post['nonce'], $this->admin_model::AJAX_NONCE )
 		) {
 			$this->handle_callback( false );

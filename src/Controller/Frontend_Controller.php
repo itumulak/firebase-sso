@@ -92,7 +92,7 @@ class Frontend_Controller extends Base_Controller {
 		$this->js->register(
 			$this->frontend_model::FIREBASE_LOGIN_HANDLE,
 			$this->frontend_model->get_asset_path_url() . 'js/authentication.js',
-			array('toast'),
+			array( 'toast' ),
 			array(
 				'is_module' => true,
 			)

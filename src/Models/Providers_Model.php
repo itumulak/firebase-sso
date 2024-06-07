@@ -91,16 +91,16 @@ class Providers_Model implements Data_Management_Interface {
 		global $wpdb;
 
 		$meta_key            = $this->get_provider_meta_key( $provider );
-		$uid_used_by_user_id = $wpdb->get_var( 
-			$wpdb->prepare( 
-					"SELECT user_id 
+		$uid_used_by_user_id = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT user_id 
 						FROM $wpdb->usermeta 
 						WHERE meta_key = %s 
-						AND meta_value = %d", 
-					esc_attr( $meta_key ), 
-					esc_attr( $uid ) 
-				) 
-			); // db call ok. no-cache ok.
+						AND meta_value = %d",
+				esc_attr( $meta_key ),
+				esc_attr( $uid )
+			)
+		); // db call ok. no-cache ok.
 
 		if ( $uid_used_by_user_id ) {
 			return false;
@@ -109,24 +109,32 @@ class Providers_Model implements Data_Management_Interface {
 		return true;
 	}
 
-	public function get_account_uid_assoc(string $uid, string $email) : WP_User|false { 
+	/**
+	 * Check the account associated to the firebase uid.
+	 *
+	 * @param  string $uid UID.
+	 * @param  string $email Email address.
+	 * @return WP_User|bool
+	 */
+	public function get_account_uid_assoc( string $uid, string $email ) : WP_User|false {
 		global $wpdb;
 
-		$user_id  = $wpdb->get_var( 
-			$wpdb->prepare( 
+		$user_id = $wpdb->get_var(
+			$wpdb->prepare(
 				"SELECT $wpdb->users.ID 
 				 FROM $wpdb->users 
 				 	LEFT JOIN $wpdb->usermeta
 				 	ON $wpdb->users.ID = $wpdb->usermeta.user_id
 				 		WHERE $wpdb->users.user_email = %s 
 				 		AND $wpdb->usermeta.meta_value = %d",
-				esc_attr( $email ), 
-				esc_attr( $uid ) ) 
-			); // db call ok. no-cache ok.
+				esc_attr( $email ),
+				esc_attr( $uid )
+			)
+		); // db call ok. no-cache ok.
 
 		if ( $user_id ) {
-			return get_user_by('id', $user_id);
-		} 
+			return get_user_by( 'id', $user_id );
+		}
 
 		return false;
 	}

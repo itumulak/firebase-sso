@@ -11,27 +11,46 @@ import {
   FacebookAuthProvider,
   signOut,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+const firebaseConfig = firebase_sso_object.config;
+initializeApp(firebaseConfig);
+
+const auth = getAuth();
+
+getRedirectResult(auth).then((result) => {
+  
+  if (result) {
+    const user = result.user;
+    wpLogin(user.uid, user.email, firebase_sso_object.action_login);
+  }
+  
+
+  // if ( user ) {
+  //   wpLogin(user.uid, provider, firebase_sso_object.action_login);
+  // }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
-  const firebaseConfig = firebase_sso_object.config;
-  initializeApp(firebaseConfig);
 
   if (firebase_sso_object.providers) {
     firebase_sso_object.providers.forEach((provider) => {
-      document
-        .getElementById(`wp-firebase-${provider}-sign-in`)
-        .addEventListener("click", (event) => {
-          event.preventDefault();
+      const providerBtn = document.getElementById(
+        `wp-firebase-${provider}-sign-in`
+      );
 
-          firebaseAuth(provider);
-        });
+      providerBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        firebaseAuth(provider);
+      });
     });
   }
 });
 
 const firebaseAuth = (provider) => {
-  const auth = getAuth();
   let authProvider;
 
   switch (provider) {
@@ -59,10 +78,10 @@ const firebaseAuth = (provider) => {
   }
 };
 
-const wpLogin = async (uid, provider, action) => {
+const wpLogin = async (uid, email, action) => {
   const formData = new FormData();
   formData.append("uid", uid);
-  formData.append("provider", provider);
+  formData.append("email", email);
   formData.append("action", action);
   formData.append("nonce", firebase_sso_object.nonce);
 
@@ -82,7 +101,7 @@ const wpLogin = async (uid, provider, action) => {
 };
 
 const providerLogin = async (auth, provider) => {
-  return await signInWithPopup(auth, provider)
+  return await signInWithRedirect(auth, provider)
     .then((result) => {
       return result.user;
     })
@@ -90,10 +109,10 @@ const providerLogin = async (auth, provider) => {
       // Handle Errors here.
       const errorCode = error.code;
       const errorMessage = error.message;
-      
+
       // The email of the user's account used.
       const email = error.email;
-      
+
       // The AuthCredential type that was used.
       // const credential = GoogleAuthProvider.credentialFromError(error);
 
@@ -109,3 +128,18 @@ const providerLogin = async (auth, provider) => {
       });
     });
 };
+
+// signInWithRedirect(provider).then(() => {
+//   return this.afAuth.auth
+//     .getRedirectResult()
+//     .then((result) => {
+//       console.log(result);
+//       const that = this;
+//       this.storage.set(TOKEN_KEY, result.user.refreshToken).then((res) => {
+//         that.authenticationState.next(true);
+//       });
+//     })
+//     .catch(function (error) {
+//       alert(error.message);
+//     });
+// });

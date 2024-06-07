@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Single Sign-On with Firebase
+ * Plugin Name: Single Sign-On with Firebase DEV
  * Plugin URI: https://github.com/itumulak
  * Description: Utilize Firebase to sign-in to your website.
  * Version: 1.0.0

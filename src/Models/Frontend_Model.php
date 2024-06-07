@@ -103,11 +103,11 @@ class Frontend_Model extends Base_Model {
 	 * First time login with no existing account will be created and link the provider.
 	 *
 	 * @param  string $uid Firebase UID.
-	 * @param  string $provider Provider type.
+	 * @param  string $email Email address.
 	 * @return bool|WP_Error
 	 */
-	public function process_user( string $uid, string $provider ) : bool|Error_Model {
-		$user = $this->provider_model->get_account_uid_assoc( $uid, $provider );
+	public function process_user( string $uid, string $email ) : bool|Error_Model {
+		$user = $this->provider_model->get_account_uid_assoc( $uid, $email );
 
 		if ( $user ) {
 			if ( $this->login_user( $user->user_email ) ) {

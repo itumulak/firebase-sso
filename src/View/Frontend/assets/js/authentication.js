@@ -10,7 +10,6 @@ import {
   GoogleAuthProvider,
   FacebookAuthProvider,
   signOut,
-  signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -21,20 +20,13 @@ initializeApp(firebaseConfig);
 const auth = getAuth();
 
 getRedirectResult(auth).then((result) => {
-  
   if (result) {
     const user = result.user;
     wpLogin(user.uid, user.email, firebase_sso_object.action_login);
   }
-  
-
-  // if ( user ) {
-  //   wpLogin(user.uid, provider, firebase_sso_object.action_login);
-  // }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-
   if (firebase_sso_object.providers) {
     firebase_sso_object.providers.forEach((provider) => {
       const providerBtn = document.getElementById(
@@ -128,18 +120,3 @@ const providerLogin = async (auth, provider) => {
       });
     });
 };
-
-// signInWithRedirect(provider).then(() => {
-//   return this.afAuth.auth
-//     .getRedirectResult()
-//     .then((result) => {
-//       console.log(result);
-//       const that = this;
-//       this.storage.set(TOKEN_KEY, result.user.refreshToken).then((res) => {
-//         that.authenticationState.next(true);
-//       });
-//     })
-//     .catch(function (error) {
-//       alert(error.message);
-//     });
-// });

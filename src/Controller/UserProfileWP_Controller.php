@@ -93,7 +93,7 @@ class UserProfileWP_Controller extends Base_Controller {
 
 		$this->js->register(
 			$this->user_profile_model->get_handle(),
-			$this->user_profile_model->get_plugin_url() . 'src/View/UserProfileWP/assets/js/provider-actions.js',
+			$this->user_profile_model->get_plugin_url() . 'src/View/UserProfileWP/assets/js/linking.js',
 			array( 'toast' ),
 			array(
 				'strategy'  => 'defer',

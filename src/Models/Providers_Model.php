@@ -90,7 +90,7 @@ class Providers_Model implements Data_Management_Interface {
 	public function is_uid_available( string $uid, string $provider ) : bool {
 		global $wpdb;
 
-		$uid_used_by_user_id = $this->get_account_uid_assoc($uid, $provider);
+		$uid_used_by_user_id = $this->get_account_uid_assoc( $uid, $provider );
 
 		if ( $uid_used_by_user_id ) {
 			return false;
@@ -110,7 +110,7 @@ class Providers_Model implements Data_Management_Interface {
 		global $wpdb;
 
 		$meta_key = $this->get_provider_meta_key( $provider );
-		$user_id = $wpdb->get_var(
+		$user_id  = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT user_id 
 						FROM $wpdb->usermeta 

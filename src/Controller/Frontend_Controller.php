@@ -215,7 +215,7 @@ class Frontend_Controller extends Base_Controller {
 		}
 
 		$provider = esc_attr( $post['provider'] );
-		$uid   = esc_attr( $post['uid'] );
+		$uid      = esc_attr( $post['uid'] );
 
 		$prosessed_user = $this->frontend_model->process_user( $uid, $provider );
 

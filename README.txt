@@ -1,15 +1,19 @@
 === Single Sign-On with Firebase ===
 Contributors: itumulak
-Tags: firebase, authentication, sso, login
+Tags: firebase, authentication, sso, login, wordpress firebase
 Requires at least: 4.7
 Tested up to: 5.4
 Requires PHP: 5.4
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
+This plugin let's you sign-in your user sign-in with Firebase sign-in providers.
+
 == Description ==
 
-This plugin let's you sign-in your user with their Google or Facebook account with more sign-in options in future update. This plugin use firebase as middleware for sign-in authentication.
+Single Sign-On with Firebase is a plugin that let's you sign-in your user with their Google or Facebook account with more sign-in options in future update. 
+This plugin uses firebase as the middleware for sign-in authentication.
 
 = Features =
 *   **Firebase Single Sign-on Authentication**
@@ -38,3 +42,8 @@ Please email at <a href="mailto:edden87@gmail.com" target="_blank">edden87@gmail
 
 = 1.0.0 =
 * Initial Release
+
+== Upgrade Notice ==
+
+= 1.0.0 =
+* Initial release

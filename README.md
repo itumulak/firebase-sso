@@ -1,6 +1,6 @@
 # Single Sign-On with Firebase
 
-This plugin let's you sign-in your user with their Google or Facebook account with more sign-in options in future update. This plugin use firebase as middleware for sign-in authentication.
+This plugin let's you sign-in your user with their Google or Facebook account with more sign-in options in the future update. This plugin use firebase as a middleware for sign-in authentication.
 
 ## Features
 

@@ -22,7 +22,9 @@ const auth = getAuth();
 getRedirectResult(auth).then((result) => {
   if (result) {
     const user = result.user;
-    wpLogin(user.uid, user.email, firebase_sso_object.action_login);
+    const providerId = result.providerId;
+    const provider = providerId.split("."); 
+    wpLogin(user.uid, provider[0], firebase_sso_object.action_login);
   }
 });
 
@@ -70,10 +72,10 @@ const firebaseAuth = (provider) => {
   }
 };
 
-const wpLogin = async (uid, email, action) => {
+const wpLogin = async (uid, provider, action) => {
   const formData = new FormData();
   formData.append("uid", uid);
-  formData.append("email", email);
+  formData.append("provider", provider);
   formData.append("action", action);
   formData.append("nonce", firebase_sso_object.nonce);
 

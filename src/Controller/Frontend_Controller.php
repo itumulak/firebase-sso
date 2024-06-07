@@ -206,7 +206,7 @@ class Frontend_Controller extends Base_Controller {
 		$post = wp_unslash( $_POST );
 
 		if (
-			! isset( $post['email'] ) ||
+			! isset( $post['provider'] ) ||
 			! isset( $post['uid'] ) ||
 			! isset( $post['nonce'] ) ||
 			! wp_verify_nonce( $post['nonce'], $this->frontend_model::AJAX_NONCE )
@@ -214,10 +214,10 @@ class Frontend_Controller extends Base_Controller {
 			wp_die();
 		}
 
-		$email = esc_attr( $post['email'] );
+		$provider = esc_attr( $post['provider'] );
 		$uid   = esc_attr( $post['uid'] );
 
-		$prosessed_user = $this->frontend_model->process_user( $uid, $email );
+		$prosessed_user = $this->frontend_model->process_user( $uid, $provider );
 
 		if ( is_bool( $prosessed_user ) && true === $prosessed_user ) {
 			wp_send_json_success(

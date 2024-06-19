@@ -64,7 +64,7 @@ class UserProfileWP_Controller extends Base_Controller {
 	 *
 	 * @return void
 	 */
-	public function init() : void {
+	public function init(): void {
 		add_action( 'show_user_profile', array( $this, 'provider_user_profile_links' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
 		add_action( 'wp_ajax_' . $this->user_profile_model::AJAX_HANDLE, array( $this, 'provider_link_callback' ) );
@@ -134,7 +134,7 @@ class UserProfileWP_Controller extends Base_Controller {
 	 *
 	 * @return void
 	 */
-	public function provider_link_callback() : void {
+	public function provider_link_callback(): void {
 		$post = wp_unslash( $_POST );
 
 		if ( ! isset( $post['user_id'] ) ||
@@ -187,7 +187,7 @@ class UserProfileWP_Controller extends Base_Controller {
 	 *
 	 * @return void
 	 */
-	public function provider_unlink_callback() : void {
+	public function provider_unlink_callback(): void {
 		$post = wp_unslash( $_POST );
 
 		if (

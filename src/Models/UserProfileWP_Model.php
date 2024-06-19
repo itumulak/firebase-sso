@@ -69,7 +69,7 @@ class UserProfileWP_Model extends Base_Model {
 	 *
 	 * @return string
 	 */
-	public function get_handle() : string {
+	public function get_handle(): string {
 		return $this->handle;
 	}
 
@@ -78,7 +78,7 @@ class UserProfileWP_Model extends Base_Model {
 	 *
 	 * @return string
 	 */
-	public function get_handle_object() : string {
+	public function get_handle_object(): string {
 		return $this->handle_object;
 	}
 
@@ -87,7 +87,7 @@ class UserProfileWP_Model extends Base_Model {
 	 *
 	 * @return array
 	 */
-	public function get_object_data() : array {
+	public function get_object_data(): array {
 		return array(
 			'ajaxurl'       => admin_url( 'admin-ajax.php' ),
 			'config'        => $this->configs->get_all(),
@@ -107,7 +107,7 @@ class UserProfileWP_Model extends Base_Model {
 	 * @param  string $provider Provider type.
 	 * @return bool|WP_Error
 	 */
-	public function check_uid_availability( string $uid, $provider ) : bool|WP_Error {
+	public function check_uid_availability( string $uid, $provider ): bool|WP_Error {
 		if ( $this->provider_model->is_uid_available( $uid, $provider ) ) {
 			return true;
 		} else {
@@ -125,7 +125,7 @@ class UserProfileWP_Model extends Base_Model {
 	 * @param  string $provider Provider type.
 	 * @return bool|WP_Error
 	 */
-	public function link_provider( int $user_id, string $uid, string $provider ) : bool|Error_Model {
+	public function link_provider( int $user_id, string $uid, string $provider ): bool|Error_Model {
 		$linked_status = $this->provider_model->save_provider_meta( $user_id, $uid, $provider );
 
 		if ( $linked_status > 0 ) {
@@ -144,7 +144,7 @@ class UserProfileWP_Model extends Base_Model {
 	 * @param  string $provider Provider type.
 	 * @return bool|WP_Error
 	 */
-	public function unlink_provider( int $user_id, string $provider ) : bool|WP_Error {
+	public function unlink_provider( int $user_id, string $provider ): bool|WP_Error {
 		$unlink_status = $this->provider_model->delete_provider_meta( $user_id, $provider );
 
 		if ( $unlink_status > 0 ) {
@@ -162,7 +162,7 @@ class UserProfileWP_Model extends Base_Model {
 	 * @param  int $user_id User Id.
 	 * @return array
 	 */
-	public function get_linked_providers( int $user_id ) : array {
+	public function get_linked_providers( int $user_id ): array {
 		$active_providers = $this->provider_model->get_all();
 		$linked_providers = $this->provider_model->get_providers();
 

@@ -67,7 +67,7 @@ class Frontend_Controller extends Base_Controller {
 	 *
 	 * @since 1.0.0
 	 */
-	public function init() : void {
+	public function init(): void {
 		add_action( 'login_enqueue_scripts', array( $this, 'scripts' ) );
 		add_filter( 'login_message', array( $this, 'signin_auth_buttons' ) );
 		add_filter( 'wp_login_errors', array( $this, 'modify_incorrect_password' ), 10, 2 );
@@ -84,7 +84,7 @@ class Frontend_Controller extends Base_Controller {
 	 * @use Hook/Action
 	 * @since 1.0.0
 	 */
-	public function scripts() : void {
+	public function scripts(): void {
 		wp_enqueue_script( 'toast', $this->admin_model->get_plugin_url() . 'lib/toast/jquery.toast.min.js', array( 'jquery' ), '1.0.0', 'true' );
 		wp_enqueue_style( 'toast', $this->admin_model->get_plugin_url() . 'lib/toast/jquery.toast.min.css', array(), '1.0.0' );
 		wp_enqueue_style( $this->frontend_model::FIREBASE_LOGIN_HANDLE, $this->frontend_model->get_asset_path_url() . 'styles/login.css', array(), $this->frontend_model->get_version() );
@@ -164,7 +164,7 @@ class Frontend_Controller extends Base_Controller {
 	public function modify_incorrect_password( // phpcs:ignore.
 		WP_Error $errors,
 		string $redirect_to
-	) : mixed {
+	): mixed {
 		if ( isset( $errors->errors['incorrect_password'] ) ) {
 			$tmp = $errors->errors;
 
@@ -186,7 +186,7 @@ class Frontend_Controller extends Base_Controller {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function get_firebase_config_callback() : void {
+	public function get_firebase_config_callback(): void {
 		wp_send_json_success(
 			array(
 				'config'    => $this->admin_model->get_config(),
@@ -202,7 +202,7 @@ class Frontend_Controller extends Base_Controller {
 	 *
 	 * @return void
 	 */
-	public function firebase_login_callback() : void {
+	public function firebase_login_callback(): void {
 		$post = wp_unslash( $_POST );
 
 		if (

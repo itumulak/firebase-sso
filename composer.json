@@ -12,5 +12,12 @@
             "email": "edden87@gmail.com"
         }
     ],
-    "require": {}
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "require-dev": {
+        "phpcsstandards/phpcsutils": "^1.0"
+    }
 }

@@ -41,7 +41,7 @@ class Providers_Model implements Data_Management_Interface {
 	 *
 	 * @return array
 	 */
-	public function get_providers() : array {
+	public function get_providers(): array {
 		return $this->providers;
 	}
 
@@ -51,7 +51,7 @@ class Providers_Model implements Data_Management_Interface {
 	 * @param string $key Provider Key.
 	 * @return string|boolean|array
 	 */
-	public function get( string $key ) : string|bool|array {
+	public function get( string $key ): string|bool|array {
 		return $this->get_all()[ $key ];
 	}
 
@@ -60,7 +60,7 @@ class Providers_Model implements Data_Management_Interface {
 	 *
 	 * @return array
 	 */
-	public function get_all() : array {
+	public function get_all(): array {
 		return wp_parse_args( get_option( self::OPTION_KEY_NAME ), $this->providers );
 	}
 
@@ -70,7 +70,7 @@ class Providers_Model implements Data_Management_Interface {
 	 * @param array $data Providers data.
 	 * @return bool
 	 */
-	public function save( array $data ) : bool {
+	public function save( array $data ): bool {
 		if ( $data ) {
 			foreach ( array_keys( $data ) as $key ) {
 				$this->providers[ $key ] = $data[ $key ];
@@ -87,7 +87,7 @@ class Providers_Model implements Data_Management_Interface {
 	 * @param  string $provider Provider type.
 	 * @return bool
 	 */
-	public function is_uid_available( string $uid, string $provider ) : bool {
+	public function is_uid_available( string $uid, string $provider ): bool {
 		global $wpdb;
 
 		$uid_used_by_user_id = $this->get_account_uid_assoc( $uid, $provider );
@@ -106,7 +106,7 @@ class Providers_Model implements Data_Management_Interface {
 	 * @param  string $provider Provider type.
 	 * @return WP_User|bool
 	 */
-	public function get_account_uid_assoc( string $uid, string $provider ) : WP_User|false {
+	public function get_account_uid_assoc( string $uid, string $provider ): WP_User|false {
 		global $wpdb;
 
 		$meta_key = $this->get_provider_meta_key( $provider );
@@ -135,7 +135,7 @@ class Providers_Model implements Data_Management_Interface {
 	 * @param  string $provider Provider type.
 	 * @return mixed
 	 */
-	public function get_provider_meta( int $user_id, string $provider ) : mixed {
+	public function get_provider_meta( int $user_id, string $provider ): mixed {
 		return get_user_meta( $user_id, $this->get_provider_meta_key( $provider ), true );
 	}
 
@@ -147,7 +147,7 @@ class Providers_Model implements Data_Management_Interface {
 	 * @param  string $provider Provider type.
 	 * @return int|bool
 	 */
-	public function save_provider_meta( int $user_id, string $uid, string $provider ) : int|bool {
+	public function save_provider_meta( int $user_id, string $uid, string $provider ): int|bool {
 		return update_user_meta( $user_id, $this->get_provider_meta_key( $provider ), $uid );
 	}
 
@@ -158,7 +158,7 @@ class Providers_Model implements Data_Management_Interface {
 	 * @param  string $provider Provider type.
 	 * @return int|bool
 	 */
-	public function delete_provider_meta( int $user_id, string $provider ) : int|bool {
+	public function delete_provider_meta( int $user_id, string $provider ): int|bool {
 		return delete_user_meta( $user_id, $this->get_provider_meta_key( $provider ) );
 	}
 
@@ -168,7 +168,7 @@ class Providers_Model implements Data_Management_Interface {
 	 * @param  string $provider Provider type.
 	 * @return string
 	 */
-	private function get_provider_meta_key( string $provider ) : string {
+	private function get_provider_meta_key( string $provider ): string {
 		return sprintf( 'firebase_%s_uid', $provider );
 	}
 }

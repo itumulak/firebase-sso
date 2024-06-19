@@ -61,7 +61,7 @@ class Scripts_Model extends Base_Model {
 	 *
 	 * @return void
 	 */
-	public function enqueue_all() : void {
+	public function enqueue_all(): void {
 		if ( $this->js_handles ) {
 			foreach ( $this->js_handles as $js ) {
 				$this->enqueue( $js );
@@ -80,7 +80,7 @@ class Scripts_Model extends Base_Model {
 	 * @param  string|int|null $version JS version.
 	 * @return void
 	 */
-	public function register( string $handle, string $src, array $deps = array(), array|bool $strategy = array(), string|int|null $version = null ) : void {
+	public function register( string $handle, string $src, array $deps = array(), array|bool $strategy = array(), string|int|null $version = null ): void {
 		if ( is_bool( $strategy ) ) {
 			$strategy = wp_parse_args( array( 'in_footer' => (bool) $strategy ), $this->wpjs_strategies );
 		}
@@ -103,7 +103,7 @@ class Scripts_Model extends Base_Model {
 	 * @param  array  $data Object data.
 	 * @return void
 	 */
-	public function register_localization( string $handle, string $object_name, array $data ) : void {
+	public function register_localization( string $handle, string $object_name, array $data ): void {
 		$this->js_localization[ $handle ] = array(
 			'handle' => $handle,
 			'name'   => $object_name,
@@ -119,7 +119,7 @@ class Scripts_Model extends Base_Model {
 	 * @param  string $src Path to the JS file.
 	 * @return string
 	 */
-	public function add_attributes( string $tag, string $handle, string $src ) : string {
+	public function add_attributes( string $tag, string $handle, string $src ): string {
 		if ( $this->current_js_handler === $handle ) {
 			$strategy_attributes = '';
 			$module_attribute    = '';

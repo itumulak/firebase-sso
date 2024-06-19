@@ -41,7 +41,7 @@ class Firebase_EmailPass_Auth {
 	 *
 	 * @return array JSON
 	 */
-	public function signin_from_email_password( string $email_address, string $password ) : array {
+	public function signin_from_email_password( string $email_address, string $password ): array {
 		$data = array(
 			'email'             => $email_address,
 			'password'          => $password,
@@ -60,7 +60,7 @@ class Firebase_EmailPass_Auth {
 	 *
 	 * @return array
 	 */
-	public function signup_from_email_password( string $email_address, string $password ) : array {
+	public function signup_from_email_password( string $email_address, string $password ): array {
 		$data = array(
 			'email'             => $email_address,
 			'password'          => $password,
@@ -79,7 +79,7 @@ class Firebase_EmailPass_Auth {
 	 *
 	 * @return array
 	 */
-	public function get_providers_from_email( string $email_address, string $continue_uri ) : array {
+	public function get_providers_from_email( string $email_address, string $continue_uri ): array {
 		$data = array(
 			'identifier'  => $email_address,
 			'continueUri' => $continue_uri,
@@ -97,7 +97,7 @@ class Firebase_EmailPass_Auth {
 	 *
 	 * @return array JSON
 	 */
-	protected function handle_request( string $auth, array $data = array() ) : array {
+	protected function handle_request( string $auth, array $data = array() ): array {
 		$args = array(
 			'method'    => 'POST',
 			'headers'   => array( 'Content-Type' => 'application/json' ),

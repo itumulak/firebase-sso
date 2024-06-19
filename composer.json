@@ -1,6 +1,7 @@
 {
     "name": "itumulak/wp-sso-firebase",
-    "type": "project",
+    "description": "Utilize Firebase to sign-in to your website.",
+    "type": "wordpress-plugin",
     "autoload": {
         "psr-4": {
             "Itumulak\\WpSsoFirebase\\": "src/"

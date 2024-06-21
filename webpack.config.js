@@ -3,7 +3,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
+const WatchExternalFilesPlugin = require('webpack-watch-files-plugin').default;
 const isProduction = process.env.NODE_ENV == 'production';
 
 
@@ -12,15 +12,27 @@ const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader
 
 
 const config = {
-    entry: './src/index.js',
+    entry: {
+        admin: './src/View/Admin/index.js'
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),
+        filename: '[name].bundle.js'
+    },
+    watchOptions: {
+        poll: true,
+        ignored: /node_modules/
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './index.html',
+            template: './templates/app.php',
         }),
-
+        new WatchExternalFilesPlugin({
+            files: [
+                './src/**/*.js',
+                '!./src/*.test.js'
+            ]
+        })
         // Add your plugins here
         // Learn more about plugins from https://webpack.js.org/configuration/plugins/
     ],

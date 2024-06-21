@@ -20,6 +20,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require 'vendor/autoload.php';
 
+define('FIREBASE_SSO_DIR', plugin_dir_path(__FILE__));
+define('FIREBASE_SSO_URL', plugin_dir_url(__FILE__));
+
 $admin = new Admin_Controller();
 $admin->init();
 

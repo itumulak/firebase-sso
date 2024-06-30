@@ -1,0 +1,1 @@
+{"version":3,"sourceRoot":"","sources":["admin.scss"],"names":[],"mappings":"AAEQ,yBACI,UACA,kBAEA,2CACI,eACA","sourcesContent":[".MuiTextField {\n    &-root {\n        &>label {\n            z-index: 1;\n            padding-left: 10px;\n\n            &:not(.Mui-focused) {\n                font-size: 12px;\n                padding-top: 5px\n            }\n        }\n    }\n}"]}

@@ -4,6 +4,11 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 
+import Configuration from "./Configuration.jsx";
+import Providers from "./Providers.jsx";
+
+import './admin.css';
+
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -48,15 +53,15 @@ const Admin = () => {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
+          <Tab label="Configuration" {...a11yProps(0)} />
+          <Tab label="Sign-in Providers" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        Item One
+        <Configuration/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        Item Two
+        <Providers/>
       </CustomTabPanel>
     </Box>
   );

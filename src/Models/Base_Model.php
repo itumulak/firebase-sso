@@ -39,7 +39,7 @@ class Base_Model {
 	 * @return string
 	 */
 	public function get_plugin_url(): string {
-		return WP_PLUGIN_URL . '/wp-sso-firebase/';
+		return PLUGIN_URL;
 	}
 
 
@@ -50,7 +50,7 @@ class Base_Model {
 	 * @return string
 	 */
 	public function get_plugin_dir(): string {
-		return WP_PLUGIN_DIR . '/wp-sso-firebase/';
+		return PLUGIN_DIR;
 	}
 
 	/**

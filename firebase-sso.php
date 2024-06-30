@@ -18,6 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
+define('PLUGIN_DIR', plugin_dir_path( __FILE__ ));
+define('PLUGIN_URL', plugin_dir_url( __FILE__ ));
+
 require 'vendor/autoload.php';
 
 $admin = new Admin_Controller();

@@ -25,7 +25,7 @@ const config = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './templates/app.php',
+            template: './src/View/Admin/template-admin.php',
         }),
         new WatchExternalFilesPlugin({
             files: [

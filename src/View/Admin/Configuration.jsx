@@ -4,12 +4,14 @@ import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
+import ErrorIcon from '@mui/icons-material/Error';
 import { useState } from "react";
 
 const Configuration = () => {
-    const [apiKey, setApiKey] = useState('');
-    const [authDomain, setAuthDomain] = useState('');
+    const [apiKey, setApiKey] = useState(sso_object.config.apiKey);
+    const [authDomain, setAuthDomain] = useState(sso_object.config.authDomain);
     const [successDialog, setSuccessDialog] = useState(false);
+    const [infoDialog, setInfoDialog] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -20,19 +22,22 @@ const Configuration = () => {
         formData.append('action', sso_object.config_action);
         formData.append('nonce', sso_object.nonce);
 
-        handleOpenSucessDialog();
-
-        // await fetch(sso_object.ajaxurl, {
-        //     method: "POST",
-        //     body: formData,
-        //     credentials: "same-origin",
-        // })
-        //     .then((response) => {
-        //         return response.json();
-        //     })
-        //     .then((data) => {
-        //         // add pop up notice like toast jquery.
-        //     });
+        await fetch(sso_object.ajaxurl, {
+            method: "POST",
+            body: formData,
+            credentials: "same-origin",
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            if (data.success) {
+                handleOpenSucessDialog();
+            }
+            else {
+                handleOpenSucessDialog();
+            }
+        });
     }
 
     const handleOpenSucessDialog = () => {
@@ -56,15 +61,15 @@ const Configuration = () => {
                     id="apiKey" 
                     label="API Key" 
                     variant="standard"
-                    type="password"
                     onInput={(e) => setApiKey(e.target.value)}
+                    value={sso_object.config.apiKey}
                 />
                 <TextField 
                     id="authDomain" 
                     label="Authorized Domain" 
                     variant="standard"
-                    type="password"
                     onInput={(e) => setAuthDomain(e.target.value)}
+                    value={sso_object.config.authDomain}
                 />
                 <Button variant="contained" size="small" style={{width: 'fit-content'}} color="primary" type="submit">Save Config</Button>
             </Stack>

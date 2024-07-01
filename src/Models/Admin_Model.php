@@ -100,13 +100,14 @@ class Admin_Model extends Base_Model {
 	 * @since 1.0.0
 	 */
 	public function get_config(): array {
-		$data = $this->configuration_model->get_all();
+		// $data = $this->configuration_model->get_all();
 
-		foreach ( $data as $key => $datum ) {
-			$this->configuration_data[ $key ]['value'] = strlen( $datum ) > 0 ? $this->spoof_datum() : '';
-		}
+		// foreach ( $data as $key => $datum ) {
+		// 	$this->configuration_data[ $key ]['value'] = strlen( $datum ) > 0 ? $this->spoof_datum() : '';
+		// }
 
-		return $this->configuration_data;
+		// return $this->configuration_data;
+		return $this->configuration_model->get_all();
 	}
 
 	/**

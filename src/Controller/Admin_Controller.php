@@ -104,42 +104,9 @@ class Admin_Controller {
 					'config_action'   => $this->admin_model::CONFIG_ACTION,
 					'provider_action' => $this->admin_model::PROVIDER_ACTION,
 					'nonce'           => wp_create_nonce( $this->admin_model::AJAX_NONCE ),
+					'config' => $this->admin_model->get_config(),
 				)
 			);
-
-			// $this->js->register(
-			// 	$this->admin_model::JS_ADMIN_HANDLE,
-			// 	$this->admin_model->get_plugin_url() . 'dist/admin.bundle.js',
-			// 	array(),
-			// 	array(
-			// 		'is_module' => true,
-			// 	)
-			// );
-		// 	wp_enqueue_script( 'toast', $this->admin_model->get_plugin_url() . 'lib/toast/jquery.toast.min.js', array( 'jquery' ), '1.0.0', 'true' );
-		// 	wp_enqueue_style( 'toast', $this->admin_model->get_plugin_url() . 'lib/toast/jquery.toast.min.css', array(), '1.0.0' );
-		// 	wp_enqueue_style( $this->admin_model::JS_ADMIN_HANDLE, $this->admin_model->get_plugin_url() . 'src/View/Admin/assets/styles/admin.css', array(), $this->admin_model->get_version() );
-
-		// 	$this->js->register(
-		// 		$this->admin_model::JS_ADMIN_HANDLE,
-		// 		$this->admin_model->get_plugin_url() . 'src/View/Admin/assets/js/admin.js',
-		// 		array( 'toast', 'jquery' ),
-		// 		array(
-		// 			'is_module' => true,
-		// 		)
-		// 	);
-
-		// 	$this->js->register_localization(
-		// 		$this->admin_model::JS_ADMIN_HANDLE,
-		// 		$this->admin_model::JS_ADMIN_OBJECT_NAME,
-		// 		array(
-		// 			'ajaxurl'         => admin_url( 'admin-ajax.php' ),
-		// 			'config_action'   => $this->admin_model::CONFIG_ACTION,
-		// 			'provider_action' => $this->admin_model::PROVIDER_ACTION,
-		// 			'nonce'           => wp_create_nonce( $this->admin_model::AJAX_NONCE ),
-		// 		)
-		// 	);
-
-		// 	$this->js->enqueue_all();
 		}
 	}
 
@@ -172,6 +139,8 @@ class Admin_Controller {
 			$this->handle_callback( false );
 			wp_die();
 		}
+
+		// print_r($post);
 
 		$this->handle_callback( $this->admin_model->save_config( $post ) ); // phpcs:ignore
 

@@ -96,6 +96,17 @@ class Admin_Controller {
 				)
 			);
 
+			wp_localize_script(
+				$this->admin_model::JS_ADMIN_HANDLE,
+				$this->admin_model::JS_ADMIN_OBJECT_NAME,
+				array(
+					'ajaxurl'         => admin_url( 'admin-ajax.php' ),
+					'config_action'   => $this->admin_model::CONFIG_ACTION,
+					'provider_action' => $this->admin_model::PROVIDER_ACTION,
+					'nonce'           => wp_create_nonce( $this->admin_model::AJAX_NONCE ),
+				)
+			);
+
 			// $this->js->register(
 			// 	$this->admin_model::JS_ADMIN_HANDLE,
 			// 	$this->admin_model->get_plugin_url() . 'dist/admin.bundle.js',

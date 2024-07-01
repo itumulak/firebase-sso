@@ -105,6 +105,7 @@ class Admin_Controller {
 					'provider_action' => $this->admin_model::PROVIDER_ACTION,
 					'nonce'           => wp_create_nonce( $this->admin_model::AJAX_NONCE ),
 					'config' => $this->admin_model->get_config(),
+					'providers' => $this->admin_model->get_providers(),
 				)
 			);
 		}

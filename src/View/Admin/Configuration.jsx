@@ -4,14 +4,12 @@ import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
-import ErrorIcon from '@mui/icons-material/Error';
 import { useState } from "react";
 
 const Configuration = () => {
     const [apiKey, setApiKey] = useState(sso_object.config.apiKey);
     const [authDomain, setAuthDomain] = useState(sso_object.config.authDomain);
     const [successDialog, setSuccessDialog] = useState(false);
-    const [infoDialog, setInfoDialog] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -76,7 +74,7 @@ const Configuration = () => {
             <Snackbar
                 open={successDialog}
                 onClose={handleCloseSuccessDialog}
-                autoHideDuration={6000}
+                autoHideDuration={4000}
             >
                 <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">Config successfully saved.</Alert>
             </Snackbar>

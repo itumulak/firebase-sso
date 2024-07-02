@@ -11,7 +11,8 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { useBlockProps } from '@wordpress/block-editor';
+import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
+import { PanelBody, ToggleControl } from "@wordpress/components";
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -29,10 +30,28 @@ import './editor.scss';
  *
  * @return {Element} Element to render.
  */
-export default function Edit() {
+export default function Edit( { attributes, setAttributes } ) {
+	const { showGoogle, showFacebook } = attributes;
+
 	return (
-		<p { ...useBlockProps() }>
-			{ __( 'Gutenburg – hello from the editor!', 'gutenburg' ) }
-		</p>
+		<>
+			<InspectorControls>
+				<PanelBody title={__('Firebase Sign-on Settings', 'firebase-sso')}>
+					<ToggleControl
+						checked={ !! showGoogle }
+						label={ __('Google', 'firebase-sso') }
+						onChange={() => setAttributes({showGoogle: !showGoogle})}
+					/>
+					<ToggleControl
+						checked={ !! showFacebook }
+						label={ __('Facebook', 'firebase-sso') }
+						onChange={() => setAttributes({showFacebook: !showFacebook})}
+					/>
+				</PanelBody>
+			</InspectorControls>
+			<p { ...useBlockProps() }>
+				{ __( 'Gutenburg – hello from the editor!!', 'firebase-sso' ) }
+			</p>
+		</>
 	);
 }

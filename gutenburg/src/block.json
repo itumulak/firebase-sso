@@ -5,9 +5,16 @@
 	"version": "0.1.0",
 	"title": "Firebase Login",
 	"category": "widgets",
-	"icon": "smiley",
 	"description": "Login with Firebase Single Sign-ons.",
 	"example": {},
+	"attributes": {
+		"showGoogle": {
+			"type": "boolean"
+		},
+		"showFacebook": {
+			"type": "boolean"
+		}
+	},
 	"supports": {
 		"html": false
 	},

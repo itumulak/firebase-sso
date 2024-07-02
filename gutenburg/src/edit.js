@@ -21,6 +21,10 @@ import { PanelBody, ToggleControl } from "@wordpress/components";
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
+import '../../src/View/Frontend/assets/styles/login.css';
+import facebookIconSvg from "../../src/assets/images/facebook-logo.svg";
+import googleIconSvg from "../../src/assets/images/google-logo.svg";
+import loginScreenshot from "../../src/assets/images/login.png";
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -49,9 +53,38 @@ export default function Edit( { attributes, setAttributes } ) {
 					/>
 				</PanelBody>
 			</InspectorControls>
-			<p { ...useBlockProps() }>
-				{ __( 'Gutenburg – hello from the editor!!', 'firebase-sso' ) }
-			</p>
+
+			<div {...useBlockProps()}>
+				<div style={{maxWidth: "320px", marginLeft: "auto", marginRight: "auto"}}>
+					{ showGoogle && (
+						<p className="btn-wrapper">
+							<button
+								id="wp-firebase-google-sign-in"
+								className="btn btn-lg btn-google btn-block text-uppercase"
+								type="submit"
+							>
+								<img width={24} src={googleIconSvg} /> Google
+							</button>
+						</p>
+					)}
+
+					{ showFacebook && (
+						<p className="btn-wrapper">
+							<button
+								id="wp-firebase-facebook-sign-in"
+								className="btn btn-lg btn-facebook btn-block text-uppercase"
+								type="submit"
+							>
+								<img width={48} src={facebookIconSvg} /> Facebook
+							</button>
+						</p>
+					)}
+
+					<p>
+						<img src={loginScreenshot}/>
+					</p>
+				</div>
+			</div>
 		</>
 	);
 }

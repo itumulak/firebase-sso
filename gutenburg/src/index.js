@@ -35,10 +35,5 @@ registerBlockType( metadata.name, {
 	/**
 	 * @see ./edit.js
 	 */
-	edit: Edit,
-
-	/**
-	 * @see ./save.js
-	 */
-	save,
+	edit: Edit
 } );

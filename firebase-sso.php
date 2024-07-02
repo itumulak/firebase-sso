@@ -11,6 +11,8 @@
  */
 
 use Itumulak\WpSsoFirebase\Controller\Admin_Controller;
+use Itumulak\WpSsoFirebase\Controller\Gutenburg_Controller;
+
 // use Itumulak\WpSsoFirebase\Controller\UserProfileWP_Controller;
 // use Itumulak\WpSsoFirebase\Controller\Frontend_Controller;
 
@@ -25,6 +27,9 @@ require 'vendor/autoload.php';
 
 $admin = new Admin_Controller();
 $admin->init();
+
+$gutenburg = new Gutenburg_Controller();
+$gutenburg->init();
 
 // $admin_user_profile =  new UserProfileWP_Controller();
 // $admin_user_profile->init();

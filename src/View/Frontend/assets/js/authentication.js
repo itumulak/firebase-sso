@@ -29,17 +29,20 @@ getRedirectResult(auth).then((result) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+
   if (firebase_sso_object.providers) {
     firebase_sso_object.providers.forEach((provider) => {
       const providerBtn = document.getElementById(
         `wp-firebase-${provider}-sign-in`
       );
 
-      providerBtn.addEventListener("click", (event) => {
-        event.preventDefault();
-
-        firebaseAuth(provider);
-      });
+      if ( providerBtn ) {
+        providerBtn.addEventListener("click", (event) => {
+          event.preventDefault();
+  
+          firebaseAuth(provider);
+        });
+      }
     });
   }
 });

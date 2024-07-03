@@ -8,6 +8,8 @@
  namespace Itumulak\WpSsoFirebase\Controller;
 
 use Itumulak\WpSsoFirebase\Models\Base_Model;
+use Itumulak\WpSsoFirebase\Models\Frontend_Model;
+use Itumulak\WpSsoFirebase\Models\Scripts_Model;
 
  if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -18,12 +20,16 @@ use Itumulak\WpSsoFirebase\Models\Base_Model;
  */
 class Gutenburg_Controller {
     private Base_Model $base;
+    private Scripts_Model $js;
+    private Frontend_Model $frontend;
 
     /**
      * Constructor.
      */
     public function __construct() {
         $this->base = new Base_Model();
+        $this->js = new Scripts_Model();
+        $this->frontend = new Frontend_Model();
     }
 
     public function init() : void {
@@ -39,6 +45,23 @@ class Gutenburg_Controller {
                 array(),
                 $this->base->get_version()
             );
+
+            $this->js->register(
+                'firebase-login-block',
+                $this->base->get_plugin_url() . 'src/View/Frontend/assets/js/authentication.js',
+                array(),
+                array(
+                    'is_module' => true,
+                )
+            );
+
+            $this->js->register_localization(
+                'firebase-login-block',
+                $this->frontend::FIREBASE_OBJECT,
+                $this->frontend->get_object_data()
+            );
+
+            $this->js->enqueue_all();
         }
     }
 

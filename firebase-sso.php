@@ -12,9 +12,8 @@
 
 use Itumulak\WpSsoFirebase\Controller\Admin_Controller;
 use Itumulak\WpSsoFirebase\Controller\Gutenburg_Controller;
-
-// use Itumulak\WpSsoFirebase\Controller\UserProfileWP_Controller;
-// use Itumulak\WpSsoFirebase\Controller\Frontend_Controller;
+use Itumulak\WpSsoFirebase\Controller\UserProfileWP_Controller;
+use Itumulak\WpSsoFirebase\Controller\Frontend_Controller;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,11 +30,11 @@ $admin->init();
 $gutenburg = new Gutenburg_Controller();
 $gutenburg->init();
 
-// $admin_user_profile =  new UserProfileWP_Controller();
-// $admin_user_profile->init();
+$admin_user_profile =  new UserProfileWP_Controller();
+$admin_user_profile->init();
 
-// $frontend = new Frontend_Controller();
-// $frontend->init();
+$frontend = new Frontend_Controller();
+$frontend->init();
 
 // add_action( 'admin_menu', 'jobplace_init_menu' );
 

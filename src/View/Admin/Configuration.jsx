@@ -60,14 +60,14 @@ const Configuration = () => {
                     label="API Key" 
                     variant="standard"
                     onInput={(e) => setApiKey(e.target.value)}
-                    value={sso_object.config.apiKey}
+                    defaultValue={sso_object.config.apiKey}
                 />
                 <TextField 
                     id="authDomain" 
                     label="Authorized Domain" 
                     variant="standard"
                     onInput={(e) => setAuthDomain(e.target.value)}
-                    value={sso_object.config.authDomain}
+                    defaultValue={sso_object.config.authDomain}
                 />
                 <Button variant="contained" size="small" style={{width: 'fit-content'}} color="primary" type="submit">Save Config</Button>
             </Stack>

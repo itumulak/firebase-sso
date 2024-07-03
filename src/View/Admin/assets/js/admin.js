@@ -73,27 +73,35 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
 
-      const validConfig = await validateFirebaseConfig(config);
+      const formData = new FormData();
+      formData.append("apiKey", config.apiKey);
+      formData.append("authDomain", config.authDomain);
+      formData.append("action", sso_object.config_action);
+      formData.append("nonce", sso_object.nonce);
 
-      console.log(validConfig);
+      postSettings(formData, "Config Update.");
 
-      if (validConfig) {
-        const formData = new FormData();
-        formData.append("apiKey", config.apiKey);
-        formData.append("authDomain", config.authDomain);
-        formData.append("action", sso_object.config_action);
-        formData.append("nonce", sso_object.nonce);
+      // const validConfig = await validateFirebaseConfig(config);
 
-        postSettings(formData, "Config Update.");
-      } else {
-        jQuery.toast({
-          heading: "Error",
-          text: "API Key and/or Auth Domain are invalid. Please try again.",
-          showHideTransition: "slide",
-          icon: "error",
-          position: { top: 40, right: 80 },
-        });
-      }
+      // console.log(validConfig);
+
+      // if (validConfig) {
+      //   const formData = new FormData();
+      //   formData.append("apiKey", config.apiKey);
+      //   formData.append("authDomain", config.authDomain);
+      //   formData.append("action", sso_object.config_action);
+      //   formData.append("nonce", sso_object.nonce);
+
+      //   postSettings(formData, "Config Update.");
+      // } else {
+      //   jQuery.toast({
+      //     heading: "Error",
+      //     text: "API Key and/or Auth Domain are invalid. Please try again.",
+      //     showHideTransition: "slide",
+      //     icon: "error",
+      //     position: { top: 40, right: 80 },
+      //   });
+      // }
     });
 
   document

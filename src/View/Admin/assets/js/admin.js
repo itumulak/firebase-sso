@@ -3,8 +3,6 @@
  *
  * @since 1.0.0
  */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const navTabsWrapperClassName = "nav-tab-wrapper";
@@ -73,27 +71,35 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
 
-      const validConfig = await validateFirebaseConfig(config);
+      const formData = new FormData();
+      formData.append("apiKey", config.apiKey);
+      formData.append("authDomain", config.authDomain);
+      formData.append("action", sso_object.config_action);
+      formData.append("nonce", sso_object.nonce);
 
-      console.log(validConfig);
+      postSettings(formData, "Config Update.");
 
-      if (validConfig) {
-        const formData = new FormData();
-        formData.append("apiKey", config.apiKey);
-        formData.append("authDomain", config.authDomain);
-        formData.append("action", sso_object.config_action);
-        formData.append("nonce", sso_object.nonce);
+      // const validConfig = await validateFirebaseConfig(config);
 
-        postSettings(formData, "Config Update.");
-      } else {
-        jQuery.toast({
-          heading: "Error",
-          text: "API Key and/or Auth Domain are invalid. Please try again.",
-          showHideTransition: "slide",
-          icon: "error",
-          position: { top: 40, right: 80 },
-        });
-      }
+      // console.log(validConfig, 'hey');
+
+      // if (validConfig) {
+      //   const formData = new FormData();
+      //   formData.append("apiKey", config.apiKey);
+      //   formData.append("authDomain", config.authDomain);
+      //   formData.append("action", sso_object.config_action);
+      //   formData.append("nonce", sso_object.nonce);
+
+      //   postSettings(formData, "Config Update.");
+      // } else {
+      //   jQuery.toast({
+      //     heading: "Error",
+      //     text: "API Key and/or Auth Domain are invalid. Please try again.",
+      //     showHideTransition: "slide",
+      //     icon: "error",
+      //     position: { top: 40, right: 80 },
+      //   });
+      // }
     });
 
   document
@@ -139,13 +145,13 @@ async function postSettings(data, successText = "Updated.") {
     });
 }
 
-const validateFirebaseConfig = async (config) => {
-  const firebaseApp = initializeApp(config);
+// const validateFirebaseConfig = async (config) => {
+//   const firebaseApp = initializeApp(config);
 
-  try {
-    await getAuth(firebaseApp);
-    return true;
-  } catch (e) {
-    return false;
-  }
-};
+//   try {
+//     await getAuth(firebaseApp);
+//     return true;
+//   } catch (e) {
+//     return false;
+//   }
+// };

@@ -10,7 +10,7 @@ import {
   GoogleAuthProvider,
   FacebookAuthProvider,
   signOut,
-  signInWithRedirect,
+  signInWithPopup,
   getRedirectResult,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
@@ -95,8 +95,9 @@ const wpLogin = async (uid, provider, action) => {
 };
 
 const providerLogin = async (auth, provider) => {
-  return await signInWithRedirect(auth, provider)
+  return await signInWithPopup(auth, provider)
     .then((result) => {
+      console.log(result);
       return result.user;
     })
     .catch((error) => {

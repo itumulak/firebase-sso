@@ -51,3 +51,84 @@ button:not(:disabled) {
     }
   }
 }
+
+.wp-block-firebase-sso-gutenburg {
+  max-width: 320px !important;
+  margin-left: auto;
+  margin-right: auto;
+
+  #loginform {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+      "username username"
+      "password password"
+      "remember submit";
+    background-color: white;
+    border-radius: 3px;
+    border: 1px solid #c3c4c7;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .04);
+    margin-left: 0;
+    padding: 26px 24px 34px;
+
+      input[type="text"],
+      input[type="password"] {
+        font-size: 24px;
+        line-height: 1.33333333;
+        width: 100%;
+        border-width: .0625rem;
+        padding: .1875rem .3125rem;
+        min-height: 40px;
+        max-height: none;
+        width: auto;
+        box-shadow: 0 0 0 transparent;
+        border-radius: 4px;
+        border: 1px solid #8c8f94;
+      }
+
+      label {
+        font-size: 14px;
+        line-height: 1.5;
+        display: inline-block;
+        margin-bottom: 3px;
+      }
+
+      .login {
+        &-username {
+          grid-area: username;
+          display: flex;
+          flex-direction: column;
+          row-gap: 10px;
+        }
+
+        &-password {
+          grid-area: password;
+          display: flex;
+          flex-direction: column;
+          row-gap: 10px;
+        }
+
+        &-remember {
+          grid-area: remember;
+        }
+
+        &-submit {
+          grid-area: submit;
+          display: flex;
+          flex-direction: row-reverse;
+
+          & > input#wp-submit {
+            background: #2271b1;
+            color: #fff;
+            text-decoration: none;
+            text-shadow: none;
+            min-height: 32px;
+            line-height: 2.30769231;
+            padding: 0 12px;
+            border-color: transparent;
+            border-radius: 3px;
+          }
+        }
+      }
+  }
+}

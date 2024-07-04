@@ -20,6 +20,5 @@
 	},
 	"textdomain": "firebase-sso",
 	"editorScript": "file:./index.js",
-	"editorStyle": "file:./index.css",
 	"render": "file:./render.php"
 }

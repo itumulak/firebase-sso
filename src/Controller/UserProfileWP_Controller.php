@@ -77,37 +77,57 @@ class UserProfileWP_Controller extends Base_Controller {
 	 * @return void
 	 */
 	public function scripts(): void {
-		wp_enqueue_style( 'toast', $this->user_profile_model->get_plugin_url() . 'lib/toast/jquery.toast.min.css', array(), '1.0.0' );
-		wp_enqueue_style(
-			$this->user_profile_model->get_handle(),
-			$this->user_profile_model->get_plugin_url() . 'src/View/UserProfileWP/assets/styles/linked-providers.css',
-			array( 'toast' ),
-			$this->user_profile_model->get_version()
-		);
+		global $pagenow;
 
-		$this->js->register(
-			'toast',
-			$this->user_profile_model->get_plugin_url() . 'lib/toast/jquery.toast.min.js',
-			array( 'jquery' )
-		);
+		if ( 'profile.php' === $pagenow ) {
+			wp_enqueue_script(
+				$this->user_profile_model->get_handle(),
+				$this->user_profile_model->get_plugin_url() . 'dist/profile.bundle.js',
+				array(),
+				$this->user_profile_model->get_version(),
+				array(
+					'in_footer' => true,
+					'strategy' => 'defer'
+				)
+			);
 
-		$this->js->register(
-			$this->user_profile_model->get_handle(),
-			$this->user_profile_model->get_plugin_url() . 'src/View/UserProfileWP/assets/js/linking.js',
-			array( 'toast' ),
-			array(
-				'strategy'  => 'defer',
-				'is_module' => true,
-			)
-		);
+			wp_localize_script(
+				$this->user_profile_model->get_handle(),
+				$this->user_profile_model->get_handle_object(),
+				$this->user_profile_model->get_object_data()
+			);
+		}
+		// wp_enqueue_style( 'toast', $this->user_profile_model->get_plugin_url() . 'lib/toast/jquery.toast.min.css', array(), '1.0.0' );
+		// wp_enqueue_style(
+		// 	$this->user_profile_model->get_handle(),
+		// 	$this->user_profile_model->get_plugin_url() . 'src/View/UserProfileWP/assets/styles/linked-providers.css',
+		// 	array( 'toast' ),
+		// 	$this->user_profile_model->get_version()
+		// );
 
-		$this->js->register_localization(
-			$this->user_profile_model->get_handle(),
-			$this->user_profile_model->get_handle_object(),
-			$this->user_profile_model->get_object_data()
-		);
+		// $this->js->register(
+		// 	'toast',
+		// 	$this->user_profile_model->get_plugin_url() . 'lib/toast/jquery.toast.min.js',
+		// 	array( 'jquery' )
+		// );
 
-		$this->js->enqueue_all();
+		// $this->js->register(
+		// 	$this->user_profile_model->get_handle(),
+		// 	$this->user_profile_model->get_plugin_url() . 'src/View/UserProfileWP/assets/js/linking.js',
+		// 	array( 'toast' ),
+		// 	array(
+		// 		'strategy'  => 'defer',
+		// 		'is_module' => true,
+		// 	)
+		// );
+
+		// $this->js->register_localization(
+		// 	$this->user_profile_model->get_handle(),
+		// 	$this->user_profile_model->get_handle_object(),
+		// 	$this->user_profile_model->get_object_data()
+		// );
+
+		// $this->js->enqueue_all();
 	}
 
 	/**

@@ -13,7 +13,8 @@ const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader
 
 const config = {
     entry: {
-        admin: './src/View/Admin/index.js'
+        admin: './src/View/Admin/index.js',
+        profile: './src/View/UserProfileWP/index.js',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),

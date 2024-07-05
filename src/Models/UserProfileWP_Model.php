@@ -96,6 +96,7 @@ class UserProfileWP_Model extends Base_Model {
 			'action'        => self::AJAX_HANDLE,
 			'unlink_action' => self::AJAX_UNLINK_HANDLE,
 			'nonce'         => wp_create_nonce( self::AJAX_NONCE ),
+			'linked' => $this->get_linked_providers( get_current_user_id() )
 		);
 	}
 

@@ -52,12 +52,12 @@ const linking = async (userId, provider) => {
         formData.append("action", firebase_sso_object.action);
         formData.append("nonce", firebase_sso_object.nonce);
 
-        await fetch(firebase_sso_object.ajaxurl, {
+        return await fetch(firebase_sso_object.ajaxurl, {
             method: "POST",
             body: formData,
             credentials: "same-origin",
         })
-            then((response) => {
+            .then((response) => {
                 return response.json();
             })
             .then((response) => {
@@ -92,32 +92,30 @@ const Providers = () => {
     const [successLinkDialog, setSuccessLinkDialog] = useState(false);
     const [successUnlinkDialog, setSuccessUnlinkDialog] = useState(false);
 
-    const handleClick = (event) => {
+    const handleClick = async (event) => {
         event.preventDefault();
         const button = event.target;
         const action = button.getAttribute('data-action');
         const provider = button.getAttribute('data-provider');
         const userId = firebase_sso_object.user_id;
 
-        // setSuccessUnlinkDialog(true);
-        // button.querySelector('span').innerHTML = 'Connect';
-        // button.setAttribute('data-action', 'connect');
-
         if ( 'connect' === action ) {
-            const linkStatus = linking(userId, provider)
+            const linkStatus = await linking(userId, provider);
+
+            console.log(linkStatus);
 
             if ( linkStatus ) {
                 setSuccessLinkDialog(true);
-                button.innerHTML = 'Disconnect';
+                button.querySelector('span').innerHTML = 'Disconnect';
                 button.setAttribute('data-action', 'disconnect');
             }
         }
         else if ( 'disconnect' === action ) {
-            const unlinkStatus = unlink(userId, provider);
+            const unlinkStatus = await unlink(userId, provider);
 
             if ( unlinkStatus ) {
                 setSuccessUnlinkDialog(true);
-                button.innerHTML = 'Connect';
+                button.querySelector('span').innerHTML = 'Connect';
                 button.setAttribute('data-action', 'connect');
             }
         }

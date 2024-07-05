@@ -85,20 +85,18 @@ class Admin_Controller {
 	 */
 	public function admin_scripts() {
 		if ( isset( $_GET['page'] ) && $this->admin_model::MENU_SLUG === $_GET['page'] ) { // phpcs:ignore
-			wp_enqueue_script( 'toast', $this->admin_model->get_plugin_url() . 'lib/toast/jquery.toast.min.js', array( 'jquery' ), '1.0.0', 'true' );
-			wp_enqueue_style( 'toast', $this->admin_model->get_plugin_url() . 'lib/toast/jquery.toast.min.css', array(), '1.0.0' );
-			wp_enqueue_style( $this->admin_model::JS_ADMIN_HANDLE, $this->admin_model->get_plugin_url() . 'src/View/Admin/assets/styles/admin.css', array(), $this->admin_model->get_version() );
-
-			$this->js->register(
+			wp_enqueue_script(
 				$this->admin_model::JS_ADMIN_HANDLE,
-				$this->admin_model->get_plugin_url() . 'src/View/Admin/assets/js/admin.js',
-				array( 'toast', 'jquery' ),
+				$this->admin_model->get_plugin_url() . 'dist/admin.bundle.js',
+				array(),
+				$this->admin_model->get_version(),
 				array(
-					'is_module' => true,
+					'in_footer' => true,
+					'strategy' => 'defer'
 				)
 			);
 
-			$this->js->register_localization(
+			wp_localize_script(
 				$this->admin_model::JS_ADMIN_HANDLE,
 				$this->admin_model::JS_ADMIN_OBJECT_NAME,
 				array(
@@ -106,10 +104,10 @@ class Admin_Controller {
 					'config_action'   => $this->admin_model::CONFIG_ACTION,
 					'provider_action' => $this->admin_model::PROVIDER_ACTION,
 					'nonce'           => wp_create_nonce( $this->admin_model::AJAX_NONCE ),
+					'config'          => $this->admin_model->get_config(),
+					'providers'       => $this->admin_model->get_providers(),
 				)
 			);
-
-			$this->js->enqueue_all();
 		}
 	}
 

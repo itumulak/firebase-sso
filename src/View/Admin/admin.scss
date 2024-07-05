@@ -1,0 +1,13 @@
+.MuiTextField {
+    &-root {
+        &>label {
+            z-index: 1;
+            padding-left: 10px;
+
+            &:not(.Mui-focused) {
+                font-size: 12px;
+                padding-top: 5px
+            }
+        }
+    }
+}

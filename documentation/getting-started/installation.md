@@ -1,7 +1,7 @@
 # Installation
 
 {% hint style="info" %}
-As of this writing, this plugin is currently submitted in the WordPress directory and is still pending approval.
+This plugin is currently submitted in the WordPress directory and is still pending approval.
 {% endhint %}
 
 1. Download the [plugin](https://github.com/itumulak/firebase-sso/releases/download/1.1.0/firebase-sso.zip)

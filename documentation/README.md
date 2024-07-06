@@ -1,9 +1,3 @@
----
-description: >-
-  Single Sign-On with Firebase plugin let's you sign-in your user sign-in with
-  Firebase sign-in providers.
----
-
 # Overview
 
 ## Introduction

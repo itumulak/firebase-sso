@@ -4,10 +4,10 @@
 As of this writing, this plugin is currently submitted in the WordPress directory and is still pending approval.
 {% endhint %}
 
-1. Download the plugin
+1. Download the [plugin](https://github.com/itumulak/firebase-sso/releases/download/1.1.0/firebase-sso.zip)
 2.  From your WordPress dashboard
 
-    1. Visit Plugins -> Add New
+    1. Visit Plugins -> Add New -> Upload -> Activate
     2. Search for the plugin name, "Single Sign-On with Firebase"
     3. Activate the plugin
 

@@ -40,7 +40,7 @@ class Configuration_Model implements Data_Management_Interface {
 	 * @param string $key Key.
 	 * @return string|boolean|array
 	 */
-	public function get( string $key ) : string|bool|array {
+	public function get( string $key ): string|bool|array {
 		return $this->get_all()[ $key ];
 	}
 
@@ -49,7 +49,7 @@ class Configuration_Model implements Data_Management_Interface {
 	 *
 	 * @return array
 	 */
-	public function get_all() : array {
+	public function get_all(): array {
 		return wp_parse_args( get_option( self::OPTION_KEY_NAME ), $this->data );
 	}
 
@@ -59,7 +59,7 @@ class Configuration_Model implements Data_Management_Interface {
 	 * @param array $data Configuration data.
 	 * @return bool
 	 */
-	public function save( array $data ) : bool {
+	public function save( array $data ): bool {
 		foreach ( array_keys( $this->data ) as $key ) {
 			$this->data[ $key ] = $data[ $key ];
 		}

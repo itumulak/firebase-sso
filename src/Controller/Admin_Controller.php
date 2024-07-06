@@ -92,7 +92,7 @@ class Admin_Controller {
 				$this->admin_model->get_version(),
 				array(
 					'in_footer' => true,
-					'strategy' => 'defer'
+					'strategy'  => 'defer',
 				)
 			);
 
@@ -128,7 +128,7 @@ class Admin_Controller {
 	 * @return void
 	 * @since 1.0.0
 	 */
-	public function save_config_callback() : void {
+	public function save_config_callback(): void {
 		$post = wp_unslash( $_POST );
 
 		if (
@@ -153,7 +153,7 @@ class Admin_Controller {
 	 * @return void
 	 * @since 1.0.0
 	 */
-	public function save_providers_callback() : void {
+	public function save_providers_callback(): void {
 		$post = wp_unslash( $_POST );
 
 		if (
@@ -182,7 +182,7 @@ class Admin_Controller {
 	 * @return void
 	 * @since 1.0.0
 	 */
-	private function handle_callback( mixed $callback ) : void {
+	private function handle_callback( mixed $callback ): void {
 		if ( $callback ) {
 			wp_send_json_success();
 		} else {

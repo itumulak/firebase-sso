@@ -20,12 +20,12 @@ abstract class Base_Controller {
 	 *
 	 * @return void
 	 */
-	abstract public function init() : void;
+	abstract public function init(): void;
 
 	/**
 	 * Scripts method.
 	 *
 	 * @return void
 	 */
-	abstract public function scripts() : void;
+	abstract public function scripts(): void;
 }

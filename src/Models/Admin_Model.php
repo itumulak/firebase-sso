@@ -109,7 +109,7 @@ class Admin_Model extends Base_Model {
 	 * @return mixed
 	 * @since 1.0.0
 	 */
-	public function get_providers() : array {
+	public function get_providers(): array {
 		$data = $this->providers_model->get_all();
 
 		foreach ( $data as $key => $datum ) {
@@ -136,7 +136,7 @@ class Admin_Model extends Base_Model {
 	 *
 	 * @return string
 	 */
-	private function spoof_datum() : string {
+	private function spoof_datum(): string {
 		return str_repeat( '•', 30 );
 	}
 }

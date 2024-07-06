@@ -63,7 +63,7 @@ class Frontend_Model extends Base_Model {
 	 *
 	 * @return array
 	 */
-	public function get_enabled_providers() : array {
+	public function get_enabled_providers(): array {
 		$enabled_providers = array();
 
 		foreach ( $this->provider_model->get_all() as $provider => $is_enabled ) {
@@ -78,7 +78,7 @@ class Frontend_Model extends Base_Model {
 	 *
 	 * @return array
 	 */
-	public function get_object_data() : array {
+	public function get_object_data(): array {
 		return array(
 			'ajaxurl'        => admin_url( 'admin-ajax.php' ),
 			'config'         => $this->configs->get_all(),
@@ -94,7 +94,7 @@ class Frontend_Model extends Base_Model {
 	 *
 	 * @return string
 	 */
-	public function get_asset_path_url() : string {
+	public function get_asset_path_url(): string {
 		return $this->get_plugin_url() . 'src/View/Frontend/assets/';
 	}
 
@@ -106,7 +106,7 @@ class Frontend_Model extends Base_Model {
 	 * @param  string $provider Provider type.
 	 * @return bool|WP_Error
 	 */
-	public function process_user( string $uid, string $provider ) : bool|Error_Model {
+	public function process_user( string $uid, string $provider ): bool|Error_Model {
 		$user = $this->provider_model->get_account_uid_assoc( $uid, $provider );
 
 		if ( $user ) {
@@ -128,7 +128,7 @@ class Frontend_Model extends Base_Model {
 	 * @param  string $email Email address.
 	 * @return bool
 	 */
-	public function login_user( string $email ) : bool {
+	public function login_user( string $email ): bool {
 		$user = get_user_by( 'email', $email );
 
 		if ( $user && ! is_wp_error( $user ) ) {
@@ -150,7 +150,7 @@ class Frontend_Model extends Base_Model {
 	 * @param  string $email Email address.
 	 * @return bool
 	 */
-	public function create_user( string $email ) : bool {
+	public function create_user( string $email ): bool {
 		if ( $this->is_valid_email( $email ) ) {
 			$username = $this->generate_username( array_shift( explode( '@', $email ) ) );
 			$password = wp_generate_password();
@@ -171,7 +171,7 @@ class Frontend_Model extends Base_Model {
 	 * @param  string $email Email address.
 	 * @return bool
 	 */
-	protected function is_valid_email( string $email ) : bool {
+	protected function is_valid_email( string $email ): bool {
 		if ( ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
 			return false;
 		}
@@ -200,7 +200,7 @@ class Frontend_Model extends Base_Model {
 	 * @param  string $suggested_username Username.
 	 * @return string
 	 */
-	protected function generate_username( string $suggested_username ) : string {
+	protected function generate_username( string $suggested_username ): string {
 		$suggested_username = preg_replace( '/[^a-z0-9]/i', '', $suggested_username );
 
 		if ( ! username_exists( $suggested_username ) ) {
@@ -218,7 +218,7 @@ class Frontend_Model extends Base_Model {
 	 * @param  int $length Length.
 	 * @return string
 	 */
-	protected function random_alphanumeric( int $length = 5 ) : string {
+	protected function random_alphanumeric( int $length = 5 ): string {
 		$chars     = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345689';
 		$my_string = '';
 

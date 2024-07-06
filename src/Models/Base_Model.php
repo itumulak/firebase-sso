@@ -18,7 +18,7 @@ class Base_Model {
 	/**
 	 * Default Firebase slugs for WordPress.
 	 */
-	const PLUGIN_VERSION       = '1.0.0';
+	const PLUGIN_VERSION       = '1.1.0';
 	const MENU_SLUG            = 'wp-firebase';
 	const JS_MAIN              = 'SSO_Firebase_Main';
 	const JS_ADMIN_HANDLE      = 'wp_firebase_admin';

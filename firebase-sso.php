@@ -3,7 +3,7 @@
  * Plugin Name: Single Sign-On with Firebase
  * Plugin URI: https://github.com/itumulak
  * Description: Utilize Firebase to sign-in to your website.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Ian Tumulak
  * Author URI: https://www.linkedin.com/in/itumulak
  * License: GPLv2 or later

@@ -40,6 +40,11 @@ Please email at <a href="mailto:edden87@gmail.com" target="_blank">edden87@gmail
 
 == Changelog ==
 
+= 1.1.0 =
+* Convert admin pages to be React based
+* Fixed some bug issues
+* Fixed an issue to the plugin activation
+
 = 1.0.0 =
 * Initial Release
 

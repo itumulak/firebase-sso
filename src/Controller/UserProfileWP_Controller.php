@@ -80,6 +80,13 @@ class UserProfileWP_Controller extends Base_Controller {
 		global $pagenow;
 
 		if ( 'profile.php' === $pagenow ) {
+			wp_enqueue_style(
+				$this->user_profile_model->get_handle(),
+				$this->user_profile_model->get_plugin_url() . 'src/View/UserProfileWP/assets/styles/linked-providers.css',
+				array(),
+				$this->user_profile_model->get_version(),
+			);
+
 			wp_enqueue_script(
 				$this->user_profile_model->get_handle(),
 				$this->user_profile_model->get_plugin_url() . 'dist/profile.bundle.js',

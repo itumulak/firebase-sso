@@ -5,13 +5,11 @@ import Alert from "@mui/material/Alert";
 import CheckIcon from '@mui/icons-material/Check';
 import facebookIconSvg from "../../assets/images/facebook-logo.svg";
 import googleIconSvg from "../../assets/images/google-logo.svg";
-import "../Frontend/assets/styles/login.css";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
   GoogleAuthProvider,
   FacebookAuthProvider,
-  signOut,
   signInWithPopup,
 } from "firebase/auth";
 import { useState } from "react";

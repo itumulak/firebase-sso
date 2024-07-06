@@ -15,6 +15,10 @@ This plugin let's you sign-in your user with their Google or Facebook account wi
 * Google
 * Facebook
 
+### Documentation
+
+You can find the documentation [here](https://ians-organization-8.gitbook.io/single-sign-on-with-firebase).
+
 ## License
 
 Single Sign-On with Firebase plugin is free software, and is released under the terms of the GNU General Public License version 2 or (at your option) any later version. See [LICENSE](/LICENSE) for complete license.

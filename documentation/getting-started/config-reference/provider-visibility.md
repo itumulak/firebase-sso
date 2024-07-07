@@ -1,7 +1,3 @@
----
-description: You can control the visibility of your providers.
----
-
 # Provider visibility
 
 This will control the visibility of the providers in the frontend and also in the user's profile page.

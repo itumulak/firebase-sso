@@ -1,7 +1,3 @@
----
-description: This plugin requires a Firebase project to work.
----
-
 # Prerequisites
 
 For the plugin to work, you need to have an existing Firebase project or create one if not.

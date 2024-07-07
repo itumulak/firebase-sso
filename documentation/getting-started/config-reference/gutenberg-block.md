@@ -1,7 +1,3 @@
----
-description: This plugin comes with a Gutenberg block!
----
-
 # Gutenberg Block
 
 If you don't feel like using the default WordPress login, you can navigate your user to log in with the Gutenberg block.

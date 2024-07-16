@@ -94,13 +94,13 @@ class Base_Model {
 	 * @param string $path Path.
 	 * @param string $file_name File name.
 	 * @param array  $args Pass additional data as argument.
-	 * @param bool   $require_once Load the file as required once or not.
+	 * @param bool   $load_once Load the file as required once or not.
 	 *
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function get_template( string $path, string $file_name, array $args = array(), bool $require_once = false ) {
-		load_template( $this->get_plugin_dir() . "src/View/{$path}/{$file_name}.php", $require_once, $args );
+	public function get_template( string $path, string $file_name, array $args = array(), bool $load_once = false ) {
+		load_template( $this->get_plugin_dir() . "src/View/{$path}/{$file_name}.php", $load_once, $args );
 	}
 
 	/**

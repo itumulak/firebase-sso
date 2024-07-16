@@ -6,6 +6,7 @@
  * @since 1.0.0
  * @package firebase-sso
  */
+
 ?>
 <div class="providers">
 	<h3 class="providers__headline"><?php esc_html_e( 'Linked Providers', 'firebase-sso' ); ?></h3>

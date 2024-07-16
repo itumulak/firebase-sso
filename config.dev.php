@@ -1,1 +1,1 @@
-<?php return array("development" => true);
+<?php return array( 'development' => true );

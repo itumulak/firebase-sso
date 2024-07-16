@@ -8,6 +8,8 @@
  * Author URI: https://www.linkedin.com/in/itumulak
  * License: GPLv2 or later
  * Text Domain: firebase-sso
+ *
+ * @package firebase-sso
  */
 
 use Itumulak\WpSsoFirebase\Controller\Admin_Controller;
@@ -21,8 +23,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require 'vendor/autoload.php';
 
-define('FIREBASE_SSO_DIR', plugin_dir_path(__FILE__));
-define('FIREBASE_SSO_URL', plugin_dir_url(__FILE__));
+define( 'FIREBASE_SSO_DIR', plugin_dir_path( __FILE__ ) );
+define( 'FIREBASE_SSO_URL', plugin_dir_url( __FILE__ ) );
 
 $admin = new Admin_Controller();
 $admin->init();
@@ -30,7 +32,7 @@ $admin->init();
 $gutenburg = new Gutenburg_Controller();
 $gutenburg->init();
 
-$admin_user_profile =  new UserProfileWP_Controller();
+$admin_user_profile = new UserProfileWP_Controller();
 $admin_user_profile->init();
 
 $frontend = new Frontend_Controller();

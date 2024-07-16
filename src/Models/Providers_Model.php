@@ -110,7 +110,7 @@ class Providers_Model implements Data_Management_Interface {
 		global $wpdb;
 
 		$meta_key = $this->get_provider_meta_key( $provider );
-		$user_id  = $wpdb->get_var(
+		$user_id  = $wpdb->get_var( // phpcs:ignore
 			$wpdb->prepare(
 				"SELECT user_id 
 						FROM $wpdb->usermeta 

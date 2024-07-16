@@ -5,6 +5,7 @@
  * @since 1.0.0
  * @package firebase-sso
  */
+
 ?>
 <div class="wrap">
 	<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
